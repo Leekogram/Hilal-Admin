@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>Bnb Admin / All Messages</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="../../vendors/feather/feather.css" />
+    <link
+      rel="stylesheet"
+      href="../../vendors/ti-icons/css/themify-icons.css"
+    />
+    <link rel="stylesheet" href="../../vendors/css/vendor.bundle.base.css" />
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="../../css/vertical-layout-light/style.css" />
+    <!-- endinject -->
+    <link rel="shortcut icon" href="../../images/favicon.ico" />
+    <style>
+        /* Modal styles */
+        table#myTable td {
+      vertical-align: top;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    #notSpan {
+      visibility: hidden;
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 400px;
+      text-align: center;
+      border-radius: 30px;
+    }
+      #loader {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+     
+        z-index: 9999;
+      }
+      .section-des {
+      max-width: 700px;
+      /* Adjust the maximum width as needed */
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      white-space: pre-wrap;
+      font-size: 14px;
+    }
+      
+    .spinner {
+      position: absolute;
+      top: 120%;
+      /* Adjust the vertical position as needed */
+      left: 50%;
+      /* Adjust the horizontal position as needed */
+      transform: translate(-50%, -50%);
+      /* Center the spinner */
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      overflow: hidden;
+      /* Hide the default border */
+    }
+
+    .spinner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      /* Resize the logo to fit the container */
+      animation: flash 1s alternate infinite;
+    }
+
+    @keyframes flash {
+      from {
+        opacity: 1;
+      }
+
+      to {
+        opacity: 0;
+      }
+    }
+      #instruction{width: 100px !important;}
+
+      input[type="text"],
+        input[type="number"] {
+            float: right;
+            width: 200px;
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 12px;
+            font-family: Arial, sans-serif;
+        }
+
+        input[type="text"],
+        input[type="number"]:focus {
+            outline: none;
+            /* border-color: #FFC100; */
+        }
+   
+      </style>
+  </head>
+
+  <body>
+    <div class="container-scroller">
+      <!-- partial:../../partials/_navbar.html -->
+      <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center"
+          style="background-color:rgba(41, 71, 37, 0.784);">
+          <a class="navbar-brand brand-logo mr-5" href="../../index.html"><img src="../../images//hilal_logo.jpg"
+              class="mr-2" alt="logo" /></a>
+          <a class="navbar-brand brand-logo-mini" href="../../index.html"><img src="../../images//hilal_logo.jpg"
+              alt="logo" /></a>
+        </div>
+        <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end"
+          style="background-color:rgba(41, 71, 37, 0.784);">
+          <button class="navbar-toggler navbar-toggler align-self-center text-white" type="button" data-toggle="minimize">
+            <span class="icon-menu"></span>
+          </button>
+          <ul class="navbar-nav mr-lg-2">
+            <li class="nav-item nav-search d-none d-lg-block">
+  
+  
+              <h4 class="text-white font-weight-bold">Hilal Naturale Spa Admin</h4>
+  
+            </li>
+          </ul>
+          <ul class="navbar-nav navbar-nav-right">
+            <li class="nav-item dropdown">
+              <a class="nav-link  dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+                <i class="icon-bell mx-0 text-white"></i>
+               <span class="count text-white" id="count"></span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
+                aria-labelledby="notificationDropdown" id="notificationTray">
+                <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
+  
+  
+  
+              </div>
+            </li>
+            
+            <li class="nav-item nav-profile dropdown">
+              <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+                <img src="../../images/faces/face28.jpg" alt="profile" />
+              </a>
+              <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+  
+                <a class="dropdown-item" id="sign-out-btn">
+                  <i class="ti-power-off text-primary"></i>
+                  Logout
+                </a>
+              </div>
+            </li>
+            <!--  <li class="nav-item nav-settings d-none d-lg-flex">
+                <a class="nav-link" href="#">
+                  <i class="icon-ellipsis"></i>
+                </a>
+              </li> -->
+          </ul>
+          
+          <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+            data-toggle="offcanvas">
+            
+            <span class="icon-menu text-white"></span>
+          </button>
+        </div>
+      </nav>
+      <!-- partial -->
+           <!-- Modal -->
+    <div id="sign-out-modal" class="modal">
+      <div class="modal-content">
+        <p>Are you sure you want to sign out?</p>
+        <button class="btn secondary-button btn-rounded align-self-center mb-3 w-50" id="confirm-sign-out-btn">Yes, sign me
+          out</button>
+        <button class="btn  primary-button btn-rounded align-self-center w-50" id="cancel-sign-out-btn">Cancel</button>
+      </div>
+    </div>
+    <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+     <!-- partial -->
+        <!-- partial:../../partials/_sidebar.html -->
+        <nav class="sidebar  sidebar-offcanvas" id="sidebar">
+          <ul class="nav">
+            <li class="nav-item">
+              <a class="nav-link" href="../../index.html">
+                <i class="icon-grid menu-icon"></i>
+                <span class="menu-title">Dashboard</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../bookings/booking-page.html">
+                <i class="icon-paper menu-icon"></i>
+                <span class="menu-title">Bookings</span>
+  
+              </a>
+  
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../orders/orders.html">
+                <i class="icon-paper menu-icon"></i>
+                <span class="menu-title">Orders</span>
+  
+              </a>
+  
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+                <i class="icon-layout menu-icon"></i>
+                <span class="menu-title">Inventory</span>
+                <i class="menu-arrow"></i>
+              </a>
+              <div class="collapse" id="ui-basic">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../inventory/viewstock-dashboard.html">View Stock</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="../inventory/add-item.html">Add Stock</a>
+                  </li>
+              
+                  <!-- <li class="nav-item"> <a class="nav-link" href="pages/inventory/log.html">Log</a></li> -->
+                </ul>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../../section.html">
+                <i class="icon-grid menu-icon"></i>
+                <span class="menu-title">Section</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="collapse" href="#ui-service" aria-expanded="false"
+                aria-controls="ui-basic">
+                <i class="icon-contract menu-icon"></i>
+                <span class="menu-title">Services</span>
+                <i class="menu-arrow"></i>
+              </a>
+              <div class="collapse" id="ui-service">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../service/service-dashboard.html">View Services</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="../service/add-service.html">Add Services</a>
+                  </li>
+               
+                  <!-- <li class="nav-item"> <a class="nav-link" href="pages/inventory/log.html">Log</a></li> -->
+                </ul>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="collapse" href="#ui-customer" aria-expanded="false"
+                aria-controls="ui-basic">
+                <i class="icon-head menu-icon"></i>
+                <span class="menu-title">Customers</span>
+                <i class="menu-arrow"></i>
+              </a>
+              <div class="collapse" id="ui-customer">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../customers/registered-customers.html">Customers</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="../customers/customer_loyalty.html">Customer loyalty</a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="collapse" href="#ui-message" aria-expanded="false"
+                aria-controls="ui-basic">
+                <i class="icon-columns menu-icon"></i>
+                <span class="menu-title">Message</span>
+                <i class="menu-arrow"></i>
+              </a>
+              <div class="collapse" id="ui-message">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item"> <a class="nav-link" href="./view_messages.html">View messages</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="../../send-bc-message.html">Send Message</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="../feedbacks/feedbacks.html">Feed backs</a></li>
+  
+                </ul>
+              </div>
+            </li>
+            <!--   <li class="nav-item">
+              <a class="nav-link" href="" >
+                <i class="icon-paper menu-icon"></i>
+                <span class="menu-title">FeedBacks</span>
+  
+              </a>
+            
+            </li> -->
+          </ul>
+        </nav>
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="row">
+              <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+               
+                <h6 class="font-weight-normal mb-0"><span class="text-danger"
+                    id="notSpan"> You have <span id="notCount"></span> unread notification(s) !</span></h6>
+              </div>
+              <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Messages List</h4>
+                    <p class="card-description ">
+
+                 
+                 <input type="text" id="searchInput" placeholder="Search...">
+                    </p>
+                    <div class="table-responsive">
+                      <table class="table" id="myTable">
+                        <thead>
+                          <tr>
+                            <th>S/N</th>
+                            <th>Recipient name</th>
+                            <th>Recipient Email</th>
+                            <th>Recipient Phonenumber</th>
+                            <th>Subject</th>
+                            <th>Message</th>
+                            <th>Optional Link</th>
+                            <th>Date sent</th>
+                         
+                         
+                            <th></th>
+                          </tr>
+                        </thead>
+                        <tbody id="bookingTable">
+                       
+                          <div id="loader">
+                            <div class="spinner">
+                              <img src="../../images/transparent-logo.png" alt="Logo">
+                            </div>
+                          </div>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          <footer class="footer">
+            <div class="d-sm-flex justify-content-center justify-content-sm-between">
+              <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © <span
+                  id="currentYear"></span>.
+                All rights reserved.</span>
+  
+            </div>
+          </footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="../../vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="../../js/off-canvas.js"></script>
+    <script src="../../js/hoverable-collapse.js"></script>
+    <script src="../../js/template.js"></script>
+    <script src="../../js/settings.js"></script>
+    <script src="../../js/todolist.js"></script>
+    <script src="../../js/firebase/firebase-config.js"></script>
+    <script src="../../js/firebase/manage_messages.js" type="module"></script>
+    <script>
+     function searchTable() {
+  var input = document.getElementById("searchInput");
+  var filter = input.value.toUpperCase();
+  var table = document.getElementById("myTable");
+  var rows = table.getElementsByTagName("tr");
+  for (var i = 0; i < rows.length; i++) {
+    var cols = rows[i].getElementsByTagName("td");
+    var found = false;
+    for (var j = 0; j < cols.length; j++) {
+      var data = cols[j].textContent.toUpperCase();
+      if (data.indexOf(filter) > -1) {
+        found = true;
+        break;
+      }
+    }
+    if (found) {
+      rows[i].style.display = "";
+    } else {
+      rows[i].style.display = "none";
+    }
+  }
+}
+
+document.getElementById("searchInput").addEventListener("keyup", searchTable);
+    </script>
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <!-- End custom js for this page-->
+  </body>
+</html>

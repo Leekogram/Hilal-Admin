@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>Bnb Admin / Add item</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="../../vendors/feather/feather.css" />
+
+  <link rel="stylesheet" href="../../vendors/ti-icons/css/themify-icons.css" />
+  <link rel="stylesheet" href="../../vendors/css/vendor.bundle.base.css" />
+  <!-- endinject -->
+  <!-- Plugin css for this page -->
+  <link rel="stylesheet" href="../../vendors/select2/select2.min.css" />
+  <link rel="stylesheet" href="../../vendors/select2-bootstrap-theme/select2-bootstrap.min.css" />
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="../../css/vertical-layout-light/style.css" />
+  <!-- endinject -->
+  <link rel="shortcut icon" href="../../images/favicon.ico" />
+  <link rel="stylesheet" href="../../css/alert-style.css" />
+
+  <Style>
+  /* Remove the absolute positioning for the images */
+.top-left,
+.top-right,
+.bottom-left,
+.bottom-right {
+  width: 50%;
+  pointer-events: none; 
+  /* height: 150%; */
+}
+
+/* Adjust the positioning for the images */
+.top-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.top-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.bottom-left {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.bottom-right {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+/* Rest of your CSS styles */
+
+
+    #snackbar {
+      visibility: hidden;
+      min-width: 250px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 2px;
+      padding: 16px;
+      position: fixed;
+      z-index: 1;
+      left: 50%;
+      bottom: 30px;
+      transform: translateX(-50%);
+    }
+
+    #snackbar.show {
+      visibility: visible;
+      -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+
+    @-webkit-keyframes fadein {
+      from {
+        bottom: 0;
+        opacity: 0;
+      }
+
+      to {
+        bottom: 30px;
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadein {
+      from {
+        bottom: 0;
+        opacity: 0;
+      }
+
+      to {
+        bottom: 30px;
+        opacity: 1;
+      }
+    }
+
+    @-webkit-keyframes fadeout {
+      from {
+        bottom: 30px;
+        opacity: 1;
+      }
+
+      to {
+        bottom: 0;
+        opacity: 0;
+      }
+    }
+
+    @keyframes fadeout {
+      from {
+        bottom: 30px;
+        opacity: 1;
+      }
+
+      to {
+        bottom: 0;
+        opacity: 0;
+      }
+    }
+
+
+    /* Modal styles */
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    #notSpan {
+      visibility: hidden;
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 400px;
+      text-align: center;
+      border-radius: 30px;
+    }
+
+    ul {
+      list-style-type: none;
+
+    }
+    
+
+    #productExist {
+      display: none;
+    }
+  </Style>
+
+</head>
+
+<body>
+  <div class="container-scroller">
+    <!-- partial:../../partials/_navbar.html -->
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center"
+        style="background-color:rgba(41, 71, 37, 0.784);">
+        <a class="navbar-brand brand-logo mr-5" href="../../index.html"><img src="../../images//hilal_logo.jpg"
+            class="mr-2" alt="logo" /></a>
+        <a class="navbar-brand brand-logo-mini" href="../../index.html"><img src="../../images//hilal_logo.jpg"
+            alt="logo" /></a>
+      </div>
+      <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end"
+        style="background-color:rgba(41, 71, 37, 0.784);">
+        <button class="navbar-toggler navbar-toggler align-self-center text-white" type="button" data-toggle="minimize">
+          <span class="icon-menu"></span>
+        </button>
+        <ul class="navbar-nav mr-lg-2">
+          <li class="nav-item nav-search d-none d-lg-block">
+
+
+            <h4 class="text-white font-weight-bold">Hilal Naturale Spa Admin</h4>
+
+          </li>
+        </ul>
+        <ul class="navbar-nav navbar-nav-right">
+          <li class="nav-item dropdown">
+            <a class="nav-link  dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+              <i class="icon-bell mx-0 text-white"></i>
+             <span class="count text-white" id="count"></span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
+              aria-labelledby="notificationDropdown" id="notificationTray">
+              <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
+
+
+
+            </div>
+          </li>
+
+          <li class="nav-item nav-profile dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+              <img src="../../images/faces/face28.jpg" alt="profile" />
+            </a>
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+
+              <a class="dropdown-item" id="sign-out-btn">
+                <i class="ti-power-off text-primary"></i>
+                Logout
+              </a>
+            </div>
+          </li>
+          <!--  <li class="nav-item nav-settings d-none d-lg-flex">
+              <a class="nav-link" href="#">
+                <i class="icon-ellipsis"></i>
+              </a>
+            </li> -->
+        </ul>
+
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+          data-toggle="offcanvas">
+
+          <span class="icon-menu text-white"></span>
+        </button>
+      </div>
+    </nav>
+    <!-- partial -->
+    <!-- Modal -->
+    <div id="sign-out-modal" class="modal">
+      <div class="modal-content">
+        <p>Are you sure you want to sign out?</p>
+        <button class="btn secondary-button btn-rounded align-self-center mb-3 w-50" id="confirm-sign-out-btn">Yes, sign
+          me
+          out</button>
+        <button class="btn  primary-button btn-rounded align-self-center w-50" id="cancel-sign-out-btn">Cancel</button>
+      </div>
+    </div>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial -->
+      <!-- partial:../../partials/_sidebar.html -->
+      <nav class="sidebar  sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="../../index.html">
+              <i class="icon-grid menu-icon"></i>
+              <span class="menu-title">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../bookings/booking-page.html">
+              <i class="icon-paper menu-icon"></i>
+              <span class="menu-title">Bookings</span>
+
+            </a>
+
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../orders/orders.html">
+              <i class="icon-paper menu-icon"></i>
+              <span class="menu-title">Orders</span>
+
+            </a>
+
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+              <i class="icon-layout menu-icon"></i>
+              <span class="menu-title">Inventory</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-basic">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item">
+                  <a class="nav-link" href="./viewstock-dashboard.html">View Stock</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="./add-item.html">Add Stock</a>
+                </li>
+
+                <!-- <li class="nav-item"> <a class="nav-link" href="pages/inventory/log.html">Log</a></li> -->
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../../section.html">
+              <i class="icon-grid menu-icon"></i>
+              <span class="menu-title">Section</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#ui-service" aria-expanded="false"
+              aria-controls="ui-basic">
+              <i class="icon-contract menu-icon"></i>
+              <span class="menu-title">Services</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-service">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item">
+                  <a class="nav-link" href="../service/service-dashboard.html">View Services</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../service/add-service.html">Add Services</a>
+                </li>
+
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#ui-customer" aria-expanded="false"
+              aria-controls="ui-basic">
+              <i class="icon-head menu-icon"></i>
+              <span class="menu-title">Customers</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-customer">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item">
+                  <a class="nav-link" href="../customers/registered-customers.html">Customers</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../customers/customer_loyalty.html">Customer loyalty</a>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#ui-message" aria-expanded="false"
+              aria-controls="ui-basic">
+              <i class="icon-columns menu-icon"></i>
+              <span class="menu-title">Message</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-message">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="../message/view_messages.html">View messages</a></li>
+                <li class="nav-item"> <a class="nav-link" href="../../send-bc-message.html">Send Message</a></li>
+                <li class="nav-item"> <a class="nav-link" href="../feedbacks/feedbacks.html">Feed backs</a></li>
+
+              </ul>
+            </div>
+          </li>
+          <!--   <li class="nav-item">
+              <a class="nav-link" href="" >
+                <i class="icon-paper menu-icon"></i>
+                <span class="menu-title">FeedBacks</span>
+  
+              </a>
+            
+            </li> -->
+        </ul>
+      </nav>
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row align-items-start">
+            <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+
+              <h6 class="font-weight-normal mb-0"><span class="text-danger" id="notSpan"> You have <span
+                    id="notCount"></span> unread notification(s) !</span></h6>
+            </div>
+            <div class="col-2 col-xl-2 mb-4 mb-xl-0">
+
+              <h6 class="font-weight-normal mb-0"><span class="text-danger" id="notSpan"> You have <span
+                    id="notCount"></span> unread notification(s) !</span></h6>
+            </div>
+
+
+
+            <div class="col-md-6 grid-margin grid-margin stretch-card">
+              <div class="card position-relative">
+
+               <!--  <img src="../../images/topright.png" class="top-right" alt="top-right image" />
+                <img src="../../images/bottomleft.png" class="bottom-left" alt="bottom-left image" /> -->
+
+                <div class="card-body">
+
+                  <h4 class="card-title">Add a Product</h4>
+                  <p class="card-description">Fill in appropriately.</p>
+                  <form class="forms-sample" method="post" id="productForm">
+                    <div class="form-group">
+                      <div class="image-preview-container" id="imagePreviewContainer">
+                        <img id="imagePreview" class="image-preview" style="height: 10%;">
+                      </div>
+
+                      <label>
+                        Product image</label>
+                      <input type="file" name="img[]" class="file-upload-default" id="product-image" />
+                      <div class="input-group col-xs-12">
+                        <input type="text" class="form-control file-upload-info" disabled
+                          placeholder="Upload Product Image" />
+                        <span class="input-group-append">
+                          <button class="file-upload-browse btn btn-primary" type="button">
+                            Upload
+                          </button>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="productTitle">Product Title</label>
+                      <input type="text" class="form-control" autocomplete="off" id="productTitle"
+                        placeholder="Naturale beauty cream" required />
+
+                      <div id="matchingValuesContainer"></div>
+                    </div>
+                    <div class="form-group">
+                      <label for="productCat">Product Category</label>
+                      <select class="form-control" id="productCat" required>
+                        <option value="beautyProduct">Beauty Product</option>
+                        <option value="fashionProduct">Fashion Product</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="productPrice">Product Price</label>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text bg-primary text-white">₦</span>
+                        </div>
+                        <input type="text" class="form-control" id="productPrice"
+                          aria-label="Amount (to the nearest naira)" required />
+                        <div class="input-group-append">
+                          <span class="input-group-text">.00</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="productQuantiy">Product Qauntity</label>
+                      <input type="number" class="form-control" id="productQuantiy" placeholder="100" min="1"
+                        required />
+                    </div>
+                    <div class="form-group  ">
+                      <label for="productDescription">Product Description</label>
+                      <textarea class="form-control" id="productDescription" rows="4" required></textarea>
+                    </div>
+                    <p class="text-danger" id="productExist">Product listed above already exist in stock, please update
+                      it or add a new product</p>
+                    <button type="submit" class="btn btn-md btn-primary float-right ml-2" id="addProductBtn">
+                      Submit
+                    </button>
+                    <button class="btn btn-light float-right" type="reset" id="resetBtn">Reset</button>
+
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 grid-margin mb-4 mb-xl-0">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Manage Delivery Fee</h4>
+
+                  <form class="forms-sample" method="post" id="deliveryFeeForm">
+
+
+                    <div class="form-group">
+                      <label for="productPrice">Delivery Price</label>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text bg-dark text-white">₦</span>
+                        </div>
+                        <input type="text" class="form-control" id="deliveryPrice"
+                          aria-label="Amount (to the nearest naira)" required />
+                        <div class="input-group-append">
+                          <span class="input-group-text">.00</span>
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <button type="submit" class="btn btn-md btn-dark " id="updateDeliveryFeeBtn">
+                      Update
+                    </button>
+
+
+                  </form>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+        <div id="snackbar"></div>
+        <!-- content-wrapper ends -->
+        <!-- partial:../../partials/_footer.html -->
+        <footer class="footer">
+          <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © <span
+                id="currentYear"></span>.
+              All rights reserved.</span>
+
+          </div>
+        </footer>
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+  <!-- plugins:js -->
+  <script src="../../vendors/js/vendor.bundle.base.js"></script>
+  <!-- endinject -->
+  <!-- Plugin js for this page -->
+  <script src="../../vendors/typeahead.js/typeahead.bundle.min.js"></script>
+  <script src="../../vendors/select2/select2.min.js"></script>
+  <!-- End plugin js for this page -->
+  <!-- inject:js -->
+  <script src="../../js/off-canvas.js"></script>
+  <script src="../../js/hoverable-collapse.js"></script>
+  <script src="../../js/template.js"></script>
+  <script src="../../js/settings.js"></script>
+  <script src="../../js/todolist.js"></script>
+  <!-- endinject -->
+  <!-- Custom js for this page-->
+  <script src="../../js/file-upload.js"></script>
+  <script src="../../js/typeahead.js"></script>
+  <script src="../../js/select2.js"></script>
+  <script src="../../js/alert-file.js"></script>
+  <!-- End custom js for this page-->
+  <script src="../../js/firebase/firebase-config.js"></script>
+  <script src="../../js/firebase/manage_inventory.js" type="module"></script>
+
+</body>
+
+</html>

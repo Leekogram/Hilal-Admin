@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>Bnb Admin / Send Broadcast Message</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="./vendors/feather/feather.css" />
+
+  <link rel="stylesheet" href="./vendors/ti-icons/css/themify-icons.css" />
+  <link rel="stylesheet" href="./vendors/css/vendor.bundle.base.css" />
+  <!-- endinject -->
+  <!-- Plugin css for this page -->
+  <link rel="stylesheet" href="./vendors/select2/select2.min.css" />
+  <link rel="stylesheet" href="./vendors/select2-bootstrap-theme/select2-bootstrap.min.css" />
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="./css/vertical-layout-light/style.css" />
+  <!-- endinject -->
+  <link rel="shortcut icon" href="./images/favicon.ico" />
+  <link rel="stylesheet" href="./css/alert-style.css" />
+  <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+  <style>
+    #snackbar {
+      visibility: hidden;
+      min-width: 250px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 2px;
+      padding: 16px;
+      position: fixed;
+      z-index: 1;
+      left: 50%;
+      bottom: 30px;
+      transform: translateX(-50%);
+    }
+
+    #snackbar.show {
+      visibility: visible;
+      -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+
+    @-webkit-keyframes fadein {
+      from {
+        bottom: 0;
+        opacity: 0;
+      }
+
+      to {
+        bottom: 30px;
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadein {
+      from {
+        bottom: 0;
+        opacity: 0;
+      }
+
+      to {
+        bottom: 30px;
+        opacity: 1;
+      }
+    }
+
+    @-webkit-keyframes fadeout {
+      from {
+        bottom: 30px;
+        opacity: 1;
+      }
+
+      to {
+        bottom: 0;
+        opacity: 0;
+      }
+    }
+
+    @keyframes fadeout {
+      from {
+        bottom: 30px;
+        opacity: 1;
+      }
+
+      to {
+        bottom: 0;
+        opacity: 0;
+      }
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    #notSpan {
+      visibility: hidden;
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 400px;
+      text-align: center;
+      border-radius: 30px;
+    }
+
+    #loader {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+
+      z-index: 9999;
+    }
+
+    .spinner {
+      position: absolute;
+      top: 120%;
+      /* Adjust the vertical position as needed */
+      left: 50%;
+      /* Adjust the horizontal position as needed */
+      transform: translate(-50%, -50%);
+      /* Center the spinner */
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      overflow: hidden;
+      /* Hide the default border */
+    }
+
+    .spinner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      /* Resize the logo to fit the container */
+      animation: flash 1s alternate infinite;
+    }
+
+    @keyframes flash {
+      from {
+        opacity: 1;
+      }
+
+      to {
+        opacity: 0;
+      }
+    }
+
+   
+    #importButton{
+      margin-top: 10px;
+    }
+
+    #searchInput {
+      float: right;
+      width: 200px;
+      padding-left: 10px;
+      padding-right: 10px;
+      padding-top: 8px;
+      padding-bottom: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 12px;
+      font-family: Arial, sans-serif;
+    }
+
+    #searchInput:focus {
+      outline: none;
+      /* border-color: #FFC100; */
+    }
+
+   
+  </style>
+
+</head>
+
+<body>
+  <div class="container-scroller">
+    <!-- partial:../../partials/_navbar.html -->
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center"
+        style="background-color:rgba(41, 71, 37, 0.784);">
+        <a class="navbar-brand brand-logo mr-5" href="../index.html"><img src="./images//hilal_logo.jpg"
+            class="mr-2" alt="logo" /></a>
+        <a class="navbar-brand brand-logo-mini" href="./index.html"><img src="./images//hilal_logo.jpg"
+            alt="logo" /></a>
+      </div>
+      <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end"
+        style="background-color:rgba(41, 71, 37, 0.784);">
+        <button class="navbar-toggler navbar-toggler align-self-center text-white" type="button" data-toggle="minimize">
+          <span class="icon-menu"></span>
+        </button>
+        <ul class="navbar-nav mr-lg-2">
+          <li class="nav-item nav-search d-none d-lg-block">
+
+
+            <h4 class="text-white font-weight-bold">Hilal Naturale Spa Admin</h4>
+
+          </li>
+        </ul>
+        <ul class="navbar-nav navbar-nav-right">
+          <li class="nav-item dropdown">
+            <a class="nav-link  dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+              <i class="icon-bell mx-0 text-white"></i>
+             <span class="count text-white" id="count"></span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
+              aria-labelledby="notificationDropdown" id="notificationTray">
+              <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
+
+
+
+            </div>
+          </li>
+          
+          <li class="nav-item nav-profile dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+              <img src="./images/faces/face28.jpg" alt="profile" />
+            </a>
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+
+              <a class="dropdown-item" id="sign-out-btn">
+                <i class="ti-power-off text-primary"></i>
+                Logout
+              </a>
+            </div>
+          </li>
+          <!--  <li class="nav-item nav-settings d-none d-lg-flex">
+              <a class="nav-link" href="#">
+                <i class="icon-ellipsis"></i>
+              </a>
+            </li> -->
+        </ul>
+        
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+          data-toggle="offcanvas">
+          
+          <span class="icon-menu text-white"></span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Modal -->
+    <div id="sign-out-modal" class="modal">
+      <div class="modal-content">
+        <p>Are you sure you want to sign out?</p>
+        <button class="btn btn-danger btn-rounded align-self-center mb-3 w-50" id="confirm-sign-out-btn">Yes, sign me
+          out</button>
+        <button class="btn  btn-success btn-rounded align-self-center w-50" id="cancel-sign-out-btn">Cancel</button>
+      </div>
+    </div>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+
+
+      <!-- partial:partials/_sidebar.html -->
+      <nav class="sidebar  sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">
+              <i class="icon-grid menu-icon"></i>
+              <span class="menu-title">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="pages/bookings/booking-page.html">
+              <i class="icon-paper menu-icon"></i>
+              <span class="menu-title">Bookings</span>
+
+            </a>
+
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="pages/orders/orders.html">
+              <i class="icon-paper menu-icon"></i>
+              <span class="menu-title">Orders</span>
+
+            </a>
+
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+              <i class="icon-layout menu-icon"></i>
+              <span class="menu-title">Inventory</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-basic">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item">
+                  <a class="nav-link" href="./pages/inventory/viewstock-dashboard.html">View Stock</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="./pages/inventory/add-item.html">Add Stock</a>
+                </li>
+
+                <!-- <li class="nav-item"> <a class="nav-link" href="pages/inventory/log.html">Log</a></li> -->
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="./section.html">
+              <i class="icon-grid menu-icon"></i>
+              <span class="menu-title">Section</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#ui-service" aria-expanded="false"
+              aria-controls="ui-basic">
+              <i class="icon-contract menu-icon"></i>
+              <span class="menu-title">Services</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-service">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item">
+                  <a class="nav-link" href="./pages/service/service-dashboard.html">View Services</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="./pages/service/add-service.html">Add Services</a>
+
+                  <!-- <li class="nav-item"> <a class="nav-link" href="pages/inventory/log.html">Log</a></li> -->
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#ui-customer" aria-expanded="false"
+              aria-controls="ui-basic">
+              <i class="icon-head menu-icon"></i>
+              <span class="menu-title">Customers</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-customer">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item">
+                  <a class="nav-link" href="pages/customers/registered-customers.html">Customers</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="pages/customers/customer_loyalty.html">Customer loyalty</a>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#ui-message" aria-expanded="false"
+              aria-controls="ui-basic">
+              <i class="icon-columns menu-icon"></i>
+              <span class="menu-title">Message</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-message">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="./pages/message/view_messages.html">View messages</a>
+                </li>
+                <li class="nav-item"> <a class="nav-link" href="./send-bc-message.html">Send Message</a></li>
+                <li class="nav-item"> <a class="nav-link" href="./pages/feedbacks/feedbacks.html">Feed backs</a></li>
+
+              </ul>
+            </div>
+          </li>
+
+        </ul>
+      </nav>
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-md-10 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Send Message</h4>
+                  <p class="card-description">Fill in appropriately.
+
+
+                  </p>
+                  <form class="forms-sample" method="post" id="messageForm">
+                    <input type="file" id="importFile" accept=".xlsx, .xls" />
+                    <button type="button" id="importButton" class="btn btn-dark">Import Recipients</button>
+                    <div class="form-group">
+                      <label for="messageSubject">Subject <span style="font-size: 12px;color: #ccc;">(Required
+                          *)</span></label>
+                      <input type="text" class="form-control" required id="messageSubject" placeholder="Subject...." />
+                    </div>
+
+
+                    <div class="form-group">
+                      <label for="messageContent">Message Content <span style="font-size: 12px;color: #ccc;">(Required
+                          *)</label>
+                      <textarea class="form-control" id="messageContent" required rows="6"
+                        placeholder="Type here....."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="optionalLink">Optional Link</label>
+                      <input type="text" class="form-control" id="optionalLink"
+                        placeholder="E.g To learn more visit Wwww.bnb.com for more info" />
+                    </div>
+                    <button type="submit" class="btn btn-md btn-primary mr-2" id="sendMessageBtn">
+                      Send
+                    </button>
+                    <button class="btn btn-light" type="reset">Reset</button>
+
+
+                  </form>
+                  <br>
+                  <h4 class="card-title">Add Recipients</h4>
+                  <p><input type="text" id="searchInput" placeholder="Search..."></p>
+                  <div class="table-responsive">
+                    <table class="table" id="myTable">
+                      <thead id="tableHead">
+                        <tr>
+                          <th><input type="checkbox" id="select-all"></th>
+                          <th>S/n</th>
+                          <th>Customer name</th>
+                          <th>Email</th>
+                          <th>Phone number</th>
+
+                        </tr>
+                      </thead>
+                      <tbody id="customerTable">
+
+                        <div id="loader">
+                          <div class="spinner">
+                            <img src="./images/transparent-logo.png" alt="Logo">
+                          </div>
+                        </div>
+                      </tbody>
+                    </table>
+
+                    <div id="loader">
+                      <img src="./images/transparent-logo.png" alt="Logo">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+
+        <div id="snackbar"></div>
+        <!-- content-wrapper ends -->
+        <!-- partial:../../partials/_footer.html -->
+        <footer class="footer">
+          <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © <span
+                id="currentYear"></span>.
+              All rights reserved.</span>
+
+          </div>
+        </footer>
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+  <!-- plugins:js -->
+  <script src="./vendors/js/vendor.bundle.base.js"></script>
+  <!-- endinject -->
+  <!-- Plugin js for this page -->
+  <script src="./vendors/typeahead.js/typeahead.bundle.min.js"></script>
+  <script src="./vendors/select2/select2.min.js"></script>
+  <!-- End plugin js for this page -->
+  <!-- inject:js -->
+  <script src="./js/off-canvas.js"></script>
+  <script src="./js/hoverable-collapse.js"></script>
+  <script src="./js/template.js"></script>
+  <script src="./js/settings.js"></script>
+  <script src="./js/todolist.js"></script>
+  <!-- endinject -->
+  <!-- Custom js for this page-->
+  <script src="./js/file-upload.js"></script>
+  <script src="./js/typeahead.js"></script>
+  <script src="./js/select2.js"></script>
+  <script src="./js/alert-file.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <script src="js/firebase/firebase-config.js"></script>
+
+  <!-- End custom js for this page-->
+  <script src="js/firebase/manage_bc_message.js" type="module"></script>
+
+  <script>
+    function searchTable() {
+      var input = document.getElementById("searchInput");
+      var filter = input.value.toUpperCase();
+      var table = document.getElementById("myTable");
+      var rows = table.getElementsByTagName("tr");
+      for (var i = 0; i < rows.length; i++) {
+        var cols = rows[i].getElementsByTagName("td");
+        var found = false;
+        for (var j = 0; j < cols.length; j++) {
+          var data = cols[j].textContent.toUpperCase();
+          if (data.indexOf(filter) > -1) {
+            found = true;
+            break;
+          }
+        }
+        if (found) {
+          rows[i].style.display = "";
+        } else {
+          rows[i].style.display = "none";
+        }
+      }
+    }
+
+    document.getElementById("searchInput").addEventListener("keyup", searchTable);
+  </script>
+
+</body>
+
+</html>

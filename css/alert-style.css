@@ -1,0 +1,55 @@
+#pageMessages {
+    position: fixed;
+    top: 10%;
+    right: 15px;
+    width: 30%;
+  }
+  
+  .alert {
+    position: relative;
+  }
+  
+  .alert .close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 1em;
+  }
+  
+  .alert .fa {
+    margin-right:.3em;
+  }
+ 
+
+  .image-label {
+    position: relative;
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .image-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-image: url('https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-image-512.png');
+    background-size: cover;
+    margin-right: 10px;
+  }
+  
+  .image-preview-container {
+    margin-top: 20px;
+ 
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  
+  .image-preview {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+  

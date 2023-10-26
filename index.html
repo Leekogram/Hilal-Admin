@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Hilal Admin</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="vendors/feather/feather.css">
+  <link rel="stylesheet" href="vendors/ti-icons/css/themify-icons.css">
+  <link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;1,500&display=swap"
+    rel="stylesheet">
+  <!-- endinject -->
+  <!-- Plugin css for this page -->
+  <link rel="stylesheet" href="vendors/datatables.net-bs4/dataTables.bootstrap4.css">
+  <link rel="stylesheet" href="vendors/ti-icons/css/themify-icons.css">
+  <link rel="stylesheet" type="text/css" href="js/select.dataTables.min.css">
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="css/vertical-layout-light/style.css">
+  <!-- endinject -->
+  <link rel="shortcut icon" href="images/favicon.ico" />
+
+
+
+  <style>
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    #notSpan {
+      visibility: hidden;
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 400px;
+      text-align: center;
+      border-radius: 30px;
+    }
+
+
+
+    #bookingloader,
+    stockloader,
+    customeloader,
+    orderloader {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+
+      z-index: 9999;
+    }
+
+    .spinner {
+      position: absolute;
+      top: 120%;
+      /* Adjust the vertical position as needed */
+      left: 50%;
+      /* Adjust the horizontal position as needed */
+      transform: translate(-50%, -50%);
+      /* Center the spinner */
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      overflow: hidden;
+      /* Hide the default border */
+    }
+
+    .spinner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      /* Resize the logo to fit the container */
+      animation: flash 1s alternate infinite;
+    }
+
+    @keyframes flash {
+      from {
+        opacity: 1;
+      }
+
+      to {
+        opacity: 0;
+      }
+    }
+
+    .top-left {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 50%;
+      height: 150%;
+    }
+
+    .top-right {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 50%;
+      height: 150%;
+    }
+
+    .bottom-left {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 20%;
+      /* height: 150%; */
+    }
+
+    .bottom-right {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 50%;
+      /* height: 150%; */
+    }
+
+    /* body,.menu-title{  font-family: 'Montserrat', sans-serif;font-size: 14px;} */
+  </style>
+
+</head>
+
+<body>
+  <div class="container-scroller">
+    <!-- partial:partials/_navbar.html -->
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center"
+        style="background-color:rgba(41, 71, 37, 0.784);">
+        <a class="navbar-brand brand-logo mr-5" href="index.html"><img src="images/hilal_logo.jpg" class="mr-2"
+            alt="logo" /></a>
+        <a class="navbar-brand brand-logo-mini" href="index.html"><img src="images/hilal_logo.jpg" alt="logo" /></a>
+      </div>
+      <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end" style="background-color:rgba(41, 71, 37, 0.784);">
+        <button class="navbar-toggler navbar-toggler align-self-center text-white" type="button" data-toggle="minimize">
+          <span class="icon-menu"></span>
+        </button>
+        <ul class="navbar-nav mr-lg-2">
+          <li class="nav-item nav-search d-none d-lg-block">
+            <div class="input-group">
+              <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
+                <h4 class="text-white font-weight-bold">Hilal Naturale Spa Admin</h4>
+              </div>
+          </li>
+        </ul>
+        <ul class="navbar-nav navbar-nav-right">
+          <li class="nav-item dropdown">
+            <a class="nav-link  dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+              <i class="icon-bell text-white mx-0"></i>
+              <span class="count text-white" id="count"></span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
+              aria-labelledby="notificationDropdown" id="notificationTray">
+              <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
+
+
+
+            </div>
+          </li>
+          <li class="nav-item nav-profile dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+              <img src="images/faces/face28.jpg" alt="profile" />
+            </a>
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+
+              <a class="dropdown-item" id="sign-out-btn">
+                <i class="ti-power-off text-primary"></i>
+                Logout
+              </a>
+            </div>
+          </li>
+          <!--  <li class="nav-item nav-settings d-none d-lg-flex">
+            <a class="nav-link" href="#">
+              <i class="icon-ellipsis"></i>
+            </a>
+          </li> -->
+        </ul>
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+          data-toggle="offcanvas">
+          <span class="icon-menu"></span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Modal -->
+    <div id="sign-out-modal" class="modal">
+      <div class="modal-content">
+        <p>Are you sure you want to sign out?</p>
+        <button class="btn secondary-button btn-rounded align-self-center mb-3 w-50" id="confirm-sign-out-btn">Yes, sign
+          me
+          out</button>
+        <button class="btn  primary-button btn-rounded align-self-center w-50" id="cancel-sign-out-btn">Cancel</button>
+      </div>
+    </div>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+
+      <!-- partial -->
+      <!-- partial:partials/_sidebar.html -->
+      <nav class="sidebar  sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">
+              <i class="icon-grid menu-icon"></i>
+              <span class="menu-title">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="pages/bookings/booking-page.html">
+              <i class="icon-paper menu-icon"></i>
+              <span class="menu-title">Bookings</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="pages/orders/orders.html">
+              <i class="icon-paper menu-icon"></i>
+              <span class="menu-title">Orders</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+              <i class="icon-layout menu-icon"></i>
+              <span class="menu-title">Inventory</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-basic">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item">
+                  <a class="nav-link" href="./pages/inventory/viewstock-dashboard.html">View Stock</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="./pages/inventory/add-item.html">Add Stock</a>
+                </li>
+
+                <!-- <li class="nav-item"> <a class="nav-link" href="pages/inventory/log.html">Log</a></li> -->
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="./section.html">
+              <i class="icon-grid menu-icon"></i>
+              <span class="menu-title">Section</span>
+
+            </a>
+
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#ui-service" aria-expanded="false"
+              aria-controls="ui-basic">
+              <i class="icon-contract menu-icon"></i>
+              <span class="menu-title">Services</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-service">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item">
+                  <a class="nav-link" href="./pages/service/service-dashboard.html">View Services</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="./pages/service/add-service.html">Add Services</a>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#ui-customer" aria-expanded="false"
+              aria-controls="ui-basic">
+              <i class="icon-head menu-icon"></i>
+              <span class="menu-title">Customers</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-customer">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item">
+                  <a class="nav-link" href="pages/customers/registered-customers.html">Customers</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="pages/customers/customer_loyalty.html">Customer loyalty</a>
+                </li>
+              </ul>
+            </div>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#ui-message" aria-expanded="false"
+              aria-controls="ui-basic">
+              <i class="icon-columns menu-icon"></i>
+              <span class="menu-title">Message</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-message">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="./pages/message/view_messages.html">View messages</a>
+                </li>
+                <li class="nav-item"> <a class="nav-link" href="./send-bc-message.html">Send Message</a></li>
+                <li class="nav-item"> <a class="nav-link" href="./pages/feedbacks/feedbacks.html">Feed backs</a></li>
+                <!-- <li class="nav-item"> <a class="nav-link" href="./live_chat.html">Live chat</a></li> -->
+
+              </ul>
+            </div>
+          </li>
+          <!-- <img src="./images/bottomleft.png" class="bottom-left" alt="bottom-left image" /> -->
+          <!--   <li class="nav-item">
+            <a class="nav-link" href="" >
+              <i class="icon-paper menu-icon"></i>
+              <span class="menu-title">FeedBacks</span>
+
+            </a>
+          
+          </li> -->
+        </ul>
+      </nav>
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-md-12 grid-margin">
+              <div class="row">
+                <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+                  <h3 class="font-weight-bold">Welcome Admin</h3>
+                  <h6 class="font-weight-normal mb-0">All systems are running smoothly! <span class="text-danger"
+                      id="notSpan"> You have <span id="notCount"></span> unread notification(s) !</span></h6>
+                </div>
+                <div class="col-12 col-xl-4">
+                  <div class="justify-content-end d-flex">
+                    <div class=" flex-md-grow-1 flex-xl-grow-0">
+                      <button class="btn btn-sm btn-light" aria-expanded="true">
+                        <i class="mdi mdi-calendar"></i> <span id="today"></span>
+                      </button>
+                      <!--   <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuDate2">
+                        <a class="dropdown-item" href="#">January - March</a>
+                        <a class="dropdown-item" href="#">March - June</a>
+                        <a class="dropdown-item" href="#">June - August</a>
+                        <a class="dropdown-item" href="#">August - November</a>
+                      </div>  -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <!--   <div class="col-md-6 grid-margin stretch-card">
+              <div class="card tale-bg">
+                <div class="card-people mt-auto">
+                  <img src="images/dashboard/people.svg" alt="people">
+                  <div class="weather-info">
+                    <div class="d-flex">
+                      <div>
+                        <h2 class="mb-0 font-weight-normal"><i class="icon-sun mr-2"></i>31<sup>C</sup></h2>
+                      </div>
+                      <div class="ml-2">
+                        <h4 class="location font-weight-normal">FCT-Abuja</h4>
+                        <h6 class="font-weight-normal">Nigeria</h6>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+            <div class="col-md-6 grid-margin transparent">
+              <div class="row">
+                <div class="col-md-6 mb-4 stretch-card transparent">
+                  <div class="card "  style="background-color: #ffe9e1;" >
+                    <div class="card-body">
+                      <p class="mb-4">Total Bookings</p>
+                      <p class="fs-30 mb-2" id="totalBooking"></p>
+                      <!-- <p>22.00% (30 days)</p> -->
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="col-md-6 mb-4 stretch-card transparent" >
+                  <div class="card  " style="background-color: #f0d7ed;">
+                    <div class="card-body  ">
+                      <p class="mb-4">Total Orders</p>
+                      <p class="fs-30 mb-2" id="totalOrders"></p>
+                      <!-- <p>22.00% (30 days)</p> -->
+                    </div>
+                  </div>
+                </div>
+
+
+
+
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-4 mb-lg-0 stretch-card transparent">
+                  <div class="card" style="background-color: #eaefe7;">
+                    <div class="card-body">
+                      <p class="mb-4">Total Registered Customers</p>
+                      <p class="fs-30 mb-2" id="registeredCustomer"></p>
+                      <!-- <p>2.00% (30 days)</p> -->
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-4 mb-lg-0 stretch-card transparent">
+                  <div class="card ">
+                    <div class="card-body">
+                      <p class="mb-4">Total Products</p>
+                      <p class="fs-30 mb-2" id="ourProducts"></p>
+                      <!-- <p>2.00% (30 days)</p> -->
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+            <div class="col-md-6 grid-margin transparent">
+              <div class="row">
+
+                <div class="col-md-6 mb-4 stretch-card transparent">
+                  <div class="card text-white" style="background-color: #5a4542;">
+                    <div class="card-body">
+                      <p class="mb-4">Today’s Bookings</p>
+                      <p class="fs-30 mb-2" id="todaysBookings"></p>
+                      <!-- <p>10.00% (30 days)</p> -->
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-4 stretch-card transparent">
+                  <div class="card text-white" style="background-color:rgba(41, 71, 37, 0.784);">
+                    <div class="card-body">
+                      <p class="mb-4">Today’s Orders</p>
+                      <p class="fs-30 mb-2" id="todaysOrders"></p>
+                      <!-- <p>10.00% (30 days)</p> -->
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div class="row">
+                <div class="col-md-6 stretch-card transparent">
+                  <div class="card " style="background-color: #333333;">
+                    <div class="card-body text-white">
+                      <p class="mb-4">Today's Registered Customers</p>
+                      <p class="fs-30 mb-2" id="todaysRegCustomer"></p>
+                      <!-- <p>0.22% (30 days)</p> -->
+                    </div>
+                  </div>
+                </div>
+
+
+
+                <div class="col-md-6 stretch-card transparent">
+                  <div class="card ">
+                    <div class="card-body">
+                      <p class="mb-4">Today's Added Products</p>
+                      <p class="fs-30 mb-2 " id="todayaddedProducts"></p>
+                      <!-- <p>0.22% (30 days)</p> -->
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="content-wrapper">
+              <div class="row">
+                <div class="col-lg-12 grid-margin stretch-card">
+                  <div class="card">
+                    <div class="card-body">
+                      <h4 class="card-title">Bookings</h4>
+                      <p class="card-description ">
+                        <label class="badge badge-info"><span id="totalNewBookings"></span> New</label>
+                        <label class="badge badge-danger"><span id="totalCancelledBookings"></span> Cancelled</label>
+                        <label class="badge badge-dark"><span id="totalCompletedBookings"></span> Completed</label>
+                        <label class="badge " style="background-color: #537d3c;color: #fff;"><span id="totalAcceptedBookings"></span> Accepted</label>
+                        <!-- Note: No action can be performed on a completed booking  <span class="text-danger">(Take note when choosing this action)</span>. -->
+                      </p>
+                      <div class="table-responsive">
+                        <table class="table expandable-table" id="mytable">
+                          <thead>
+                            <tr>
+                              <th>S/N</th>
+                              <th>Created DateTime</th>
+                              <th>Customer name</th>
+                              <th>Service</th>
+                              <th>Phone number</th>
+                              <th>Email</th>
+
+
+
+                              <th>Booking Status</th>
+
+                              <th></th>
+                            </tr>
+                          </thead>
+                          <tbody id="bookingTable">
+
+                            <div id="bookingloader">
+                              <div class="spinner">
+                                <img src="./images/transparent-logo.png" alt="Logo">
+                              </div>
+                            </div>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div id="pagination"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="row">
+            <div class="content-wrapper">
+              <div class="row">
+                <div class="col-lg-12 grid-margin stretch-card">
+                  <div class="card">
+                    <div class="card-body">
+                      <h4 class="card-title">Orders</h4>
+                      <p class="card-description ">
+                        <label class="badge badge-info"><span id="totalNewOrders"></span> New</label>
+                        <label class="badge badge-danger"><span id="totalCancelledOrders"></span> Cancelled</label>
+                        <label class="badge badge-dark"><span id="totalCompletedOrders"></span> Completed</label>
+                        <label class="badge" style="background-color: #537d3c;color: #fff;"><span id="totalAcceptedOrders"></span> Comfirmed</label>
+                      </p>
+                      <div class="table-responsive">
+                        <table class="table expandable-table ">
+                          <thead>
+                            <tr>
+                              <th>S/N</th>
+                              <th>Created DateTime</th>
+                              <th>Customer name</th>
+                              <th>Product</th>
+                              <th>Quantity</th>
+                              <th>Price</th>
+                              <th>Delivery Fee</th>
+                              <th>Amount Paid</th>
+                              <th>Payment Status</th>
+                              <th>Order Status</th>
+
+                              <th></th>
+                            </tr>
+                          </thead>
+                          <tbody id="orderTable">
+
+                            <div id="orderloader">
+                              <div class="spinner">
+                                <img src="./images/transparent-logo.png" alt="Logo">
+                              </div>
+                            </div>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div id="pagination"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row">
+            <div class="col-md-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4>Products</h4>
+                  <div class="table-responsive">
+                    <table class="table  expandable-table table-striped table-borderless" id="productTable">
+                      <thead>
+                        <tr>
+                          <th>S/n</th>
+                          <th>Created DateTime</th>
+                          <th>Product</th>
+                          <th>Price</th>
+                          <th>Unit</th>
+                          <th>Status</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody id="stockTable">
+
+                        <div id="stockloader">
+                          <div class="spinner">
+                            <img src="./images/transparent-logo.png" alt="Logo">
+                          </div>
+                        </div>
+                      </tbody>
+
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row">
+            <div class="content-wrapper">
+              <div class="row">
+                <div class="col-lg-12 grid-margin stretch-card">
+                  <div class="card">
+                    <div class="card-body">
+                      <h4 class="card-title">Registered Customers</h4>
+                      <p class="card-description">
+                        <!-- Add class <code>.table-striped</code> -->
+                      </p>
+                      <div class="table-responsive">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th>S/n</th>
+                              <th>Created DateTime</th>
+                              <th>Customer name</th>
+                              <th>Phone number</th>
+                              <th>Email</th>
+
+
+                              <th></th>
+                            </tr>
+                          </thead>
+                          <tbody id="customerTable">
+
+                            <div id="customerloader">
+                              <div class="spinner">
+                                <img src="./images/transparent-logo.png" alt="Logo">
+                              </div>
+                            </div>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:partials/_footer.html -->
+        <footer class="footer">
+          <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © <span
+                id="currentYear"></span>.
+              All rights reserved.</span>
+
+          </div>
+        </footer>
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+
+  <!-- plugins:js -->
+  <script src="vendors/js/vendor.bundle.base.js"></script>
+  <!-- endinject -->
+  <!-- Plugin js for this page -->
+  <script src="vendors/chart.js/Chart.min.js"></script>
+  <script src="vendors/datatables.net/jquery.dataTables.js"></script>
+  <script src="vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+  <script src="js/dataTables.select.min.js"></script>
+
+  <!-- End plugin js for this page -->
+  <!-- inject:js -->
+  <script src="js/off-canvas.js"></script>
+  <script src="js/hoverable-collapse.js"></script>
+  <script src="js/template.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/todolist.js"></script>
+  <!-- endinject -->
+  <!-- Custom js for this page-->
+  <script src="js/dashboard.js"></script>
+  <script src="js/Chart.roundedBarCharts.js"></script>
+  <script src="js/firebase/firebase-config.js"></script>
+  <script src="js/firebase/manage_indexpage.js" type="module"></script>
+
+
+
+
+  <!-- End custom js for this page-->
+</body>
+
+</html>
