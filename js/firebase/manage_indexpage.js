@@ -812,7 +812,7 @@
            
           
            <td>
-             <a href="./pages/customers/registered-customers.html" style="text-decoration:none;color:black">
+             <a href="./pages/customers/" style="text-decoration:none;color:black">
              <i
                class="icon-eye"
               aria-haspopup="true" aria-expanded="false"
@@ -939,7 +939,7 @@ return date.toLocaleString('en-US', options);
            
           
            <td>
-             <a href="./pages/inventory/viewstock-dashboard.html" style="text-decoration:none;color:black">
+             <a href="./pages/inventory/" style="text-decoration:none;color:black">
              <i
                class="icon-eye"
               aria-haspopup="true" aria-expanded="false"
