@@ -5,182 +5,31 @@
   <!-- Required meta tags -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <title>Bnb Admin / Service</title>
+  <title>Bnb Admin / All Bookings</title>
   <!-- plugins:css -->
   <link rel="stylesheet" href="../../vendors/feather/feather.css" />
-
   <link rel="stylesheet" href="../../vendors/ti-icons/css/themify-icons.css" />
   <link rel="stylesheet" href="../../vendors/css/vendor.bundle.base.css" />
   <!-- endinject -->
   <!-- Plugin css for this page -->
-  <link rel="stylesheet" href="../../vendors/select2/select2.min.css" />
-  <link rel="stylesheet" href="../../vendors/select2-bootstrap-theme/select2-bootstrap.min.css" />
   <!-- End plugin css for this page -->
   <!-- inject:css -->
   <link rel="stylesheet" href="../../css/vertical-layout-light/style.css" />
   <!-- endinject -->
   <link rel="shortcut icon" href="../../images/favicon.ico" />
-  <link rel="stylesheet" href="../../css/alert-style.css" />
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
   <style>
-    .image-zoom {
-      transform: scale(1);
-      transition: transform 0.3s;
-    }
-
-    .image-zoom:hover {
-      transform: scale(3);
-    }
-
     table#myTable td {
       vertical-align: top;
     }
-    #snackbar {
-      visibility: hidden;
-      min-width: 250px;
-      background-color: #333;
-      color: #fff;
-      text-align: center;
-      border-radius: 2px;
-      padding: 16px;
-      position: fixed;
-      z-index: 1;
-      left: 50%;
-      bottom: 30px;
-      transform: translateX(-50%);
-    }
-
-    #snackbar.show {
-      visibility: visible;
-      -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-      animation: fadein 0.5s, fadeout 0.5s 2.5s;
-    }
-
-    @-webkit-keyframes fadein {
-      from {
-        bottom: 0;
-        opacity: 0;
-      }
-
-      to {
-        bottom: 30px;
-        opacity: 1;
-      }
-    }
-
-    @keyframes fadein {
-      from {
-        bottom: 0;
-        opacity: 0;
-      }
-
-      to {
-        bottom: 30px;
-        opacity: 1;
-      }
-    }
-
-    @-webkit-keyframes fadeout {
-      from {
-        bottom: 30px;
-        opacity: 1;
-      }
-
-      to {
-        bottom: 0;
-        opacity: 0;
-      }
-    }
-
-    @keyframes fadeout {
-      from {
-        bottom: 30px;
-        opacity: 1;
-      }
-
-      to {
-        bottom: 0;
-        opacity: 0;
-      }
-    }
-
-
-
-
-    #close {
-      cursor: pointer;
-    }
-
-    .modfiy-modal-nodal {
-      display: none;
-      /* Hide the modal by default */
-      position: fixed;
-      z-index: 9999;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0, 0, 0, 0.5);
-      /* Remove the opacity */
-    }
-
-    .modfiy-modal-content {
-      background-color: #fff;
-      margin: 10% auto;
-      /* Adjust the modal's vertical position */
-      padding: 20px;
-      border: none;
-      border-radius: 20px;
-      width: 100%;
-      max-width: 700px;
-      position: relative;
-      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-    }
-
-
 
     .section-des {
-      max-width: 700px;
+      max-width: 500px;
       /* Adjust the maximum width as needed */
       word-wrap: break-word;
       overflow-wrap: break-word;
       white-space: pre-wrap;
-      font-size: 14px;
     }
-
-    .spinner {
-      position: absolute;
-      top: 120%;
-      /* Adjust the vertical position as needed */
-      left: 50%;
-      /* Adjust the horizontal position as needed */
-      transform: translate(-50%, -50%);
-      /* Center the spinner */
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      overflow: hidden;
-      /* Hide the default border */
-    }
-
-    .spinner img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      /* Resize the logo to fit the container */
-      animation: flash 1s alternate infinite;
-    }
-
-    @keyframes flash {
-      from {
-        opacity: 1;
-      }
-
-      to {
-        opacity: 0;
-      }
-    }
-
 
     /* Modal styles */
     .modal {
@@ -222,9 +71,42 @@
       z-index: 9999;
     }
 
-    
+    .spinner {
+      position: absolute;
+      top: 120%;
+      /* Adjust the vertical position as needed */
+      left: 50%;
+      /* Adjust the horizontal position as needed */
+      transform: translate(-50%, -50%);
+      /* Center the spinner */
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      overflow: hidden;
+      /* Hide the default border */
+    }
 
-    #searchInput {
+    .spinner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      /* Resize the logo to fit the container */
+      animation: flash 1s alternate infinite;
+    }
+
+    @keyframes flash {
+      from {
+        opacity: 1;
+      }
+
+      to {
+        opacity: 0;
+      }
+    }
+
+
+    input[type="text"],
+    input[type="number"] {
       float: right;
       width: 200px;
       padding-left: 10px;
@@ -243,9 +125,38 @@
       /* border-color: #FFC100; */
     }
 
-   
-  </style>
 
+    .top-left {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 50%;
+      height: 150%;
+    }
+
+    .top-right {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 50%;
+      height: 150%;
+    }
+
+    .bottom-left {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 20%;
+      /* height: 150%; */
+    }
+
+    .bottom-right {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 50%;
+    }
+  </style>
 </head>
 
 <body>
@@ -254,9 +165,9 @@
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center"
         style="background-color:rgba(41, 71, 37, 0.784);">
-        <a class="navbar-brand brand-logo mr-5" href="../../index.html"><img src="../../images//hilal_logo.jpg"
+        <a class="navbar-brand brand-logo mr-5" href="../../"><img src="../../images//hilal_logo.jpg"
             class="mr-2" alt="logo" /></a>
-        <a class="navbar-brand brand-logo-mini" href="../../index.html"><img src="../../images//hilal_logo.jpg"
+        <a class="navbar-brand brand-logo-mini" href="../../"><img src="../../images//hilal_logo.jpg"
             alt="logo" /></a>
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end"
@@ -313,103 +224,82 @@
         </button>
       </div>
     </nav>
-    <!-- partial -->
+
     <!-- Modal -->
     <div id="sign-out-modal" class="modal">
       <div class="modal-content">
         <p>Are you sure you want to sign out?</p>
-        <button class="btn secondary-button btn-rounded align-self-center mb-3 w-50" id="confirm-sign-out-btn">Yes, sign me
+        <button class="btn btn-danger btn-rounded align-self-center mb-3 w-50" id="confirm-sign-out-btn">Yes, sign
+          me
           out</button>
         <button class="btn  primary-button btn-rounded align-self-center w-50" id="cancel-sign-out-btn">Cancel</button>
       </div>
     </div>
+    <!-- partial -->
 
+    <!-- edit confirmation modal -->
+    <div id="accept-modal" class="modal">
+      <div class="modal-content">
+        <iconify-icon icon="octicon:info-16" width="100" height="100"  style="color: #ebeaef;" class="align-self-center pb-3"></iconify-icon>
+        <p class="h5 pb-3">Do you really want to accept this booking ?</p>
+        <button class="btn btn-info btn-rounded align-self-center mb-3 w-50" id="yes-btn">Yes</button>
+        <button class="btn  primary-button btn-rounded align-self-center w-50" id="no-btn">No</button>
+      </div>
+    </div>
 
-    <!-- Example modal structure -->
-    <div id="modifyModal" class="modfiy-modal-nodal">
-      <div class="modfiy-modal-content">
-        <span class="close" id="close">&times;</span>
-        <h4>Edit Service</h4><i class="fas fas-edit"></i>
-        <form class="forms-sample" method="post" id="serviceForm">
-          <div class="form-group">
-            <div class="image-preview-container">
-              <img id="imagePreview" class="image-preview" style="height: 200px;width: 200px;">
-            </div>
-            <label>Service Image</label>
-            <input type="file" name="img[]" class="file-upload-default" id="service-image" />
-            <div class="input-group col-xs-12">
-              <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Service Image" />
-              <span class="input-group-append">
-                <button class="file-upload-browse btn btn-dark" type="button">
-                  Change Image
-                </button>
-              </span>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="serviceName">Service Name</label>
-            <input type="text" class="form-control" id="serviceName" placeholder="HairStyling" required />
-            <div id="matchingValuesContainer"></div>
-          </div>
-          <div class="form-group">
-            <label for="servicePrice">Service Price</label>
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text bg-dark text-white">₦</span>
-              </div>
-              <input type="text" class="form-control" id="servicePrice" aria-label="Amount (to the nearest naira)"
-                required />
-              <div class="input-group-append">
-                <span class="input-group-text">.00</span>
-              </div>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="serviceCategory">Section Category</label>
-            <div class="input-group">
-              <select class="form-control" id="serviceCat" required>
-            
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="serviceDuration">Duration</label>
-            <input type="text" class="form-control" id="serviceDuration" placeholder="12:00 Mins" required />
-            <input type="hidden" class="form-control" autocomplete="off" id="documentId" />
-          </div>
-          <div class="form-group">
-            <label for="serviceDescription">Service Description</label>
-            <textarea class="form-control" id="serviceDescription" rows="4" required></textarea>
-          </div>
-
-          <button type="submit" class="btn btn-dark mr-1" id="updateServiceBtn">
-            Update
-          </button>
-          <button class="btn btn-light" type="reset" id="resetBtn">Reset</button>
-
-        </form>
+    <div id="completed-modal" class="modal">
+      <div class="modal-content">
+        <iconify-icon icon="octicon:info-16" width="100" height="100"  style="color: #ebeaef;" class="align-self-center pb-3"></iconify-icon>
+        <p class="h5 pb-3">Do you really want to set this booking status to completed?</p>
+        <button class="btn btn-info btn-rounded align-self-center mb-3 w-50" id="completed-yes-btn">Yes</button>
+        <button class="btn  primary-button btn-rounded align-self-center w-50" id="completed-no-btn">No</button>
+      </div>
+    </div>
+    <!-- delete confirmation modal -->
+    <div id="cancel-modal" class="modal">
+      <div class="modal-content">
+        <iconify-icon icon="octicon:info-16" width="100" height="100"  style="color: #ebeaef;" class="align-self-center pb-3"></iconify-icon>
+        <p class="h5 pb-3">Do you really want to cancel this booking ?</p>
+        <button class="btn btn-info btn-rounded align-self-center mb-3 w-50" id="cancel-yes-btn">Yes</button>
+        <button class="btn  primary-button btn-rounded align-self-center w-50" id="cancel-no-btn">No</button>
+      </div>
+    </div>
+    <!-- alert modal -->
+    <div id="success-alert-modal" class="modal">
+      <div class="modal-content">
+        <iconify-icon icon="octicon:check-circle-fill-16" style="color: green;" width="100" height="100" class="align-self-center pb-3"></iconify-icon>
+        <p class="h5 pb-3"><span id="success-alertMessage"></span></p>
+       
+        <button class="btn  primary-button btn-rounded align-self-center w-50" id="succees-ok-btn">Okay</button>
+      </div>
+    </div>
+    <div id="failure-alert-modal" class="modal">
+      <div class="modal-content">
+        <iconify-icon icon="octicon:x-circle-fill-16" style="color: indianred;" width="100" height="100" class="align-self-center pb-3"></iconify-icon>
+        <p class="h5 pb-3"><span id="failure-alertMessage"></span></p>
+       
+        <button class="btn  primary-button btn-rounded align-self-center w-50" id="failure-ok-btn">Okay</button>
       </div>
     </div>
 
 
+
     <!-- partial -->
     <div class="container-fluid page-body-wrapper">
-      <!-- partial:../../partials/_settings-panel.html -->
-      <!-- partial -->
+
+
       <!-- partial -->
       <!-- partial:../../partials/_sidebar.html -->
       <nav class="sidebar  sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           <li class="nav-item">
-            <a class="nav-link" href="../../index.html">
+            <a class="nav-link" href="../../">
               <i class="icon-grid menu-icon"></i>
               <span class="menu-title">Dashboard</span>
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="../bookings/booking-page.html">
+          <li class="nav-item active">
+            <a class="nav-link" href="./">
               <i class="icon-paper menu-icon"></i>
               <span class="menu-title">Bookings</span>
 
@@ -417,7 +307,7 @@
 
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="../orders/orders.html">
+            <a class="nav-link" href="../orders/">
               <i class="icon-paper menu-icon"></i>
               <span class="menu-title">Orders</span>
 
@@ -433,15 +323,21 @@
             <div class="collapse" id="ui-basic">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item">
-                  <a class="nav-link" href="../inventory/viewstock-dashboard.html">View Stock</a>
+                  <a class="nav-link" href="../inventory/">View Stock</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="../inventory/add-item.html">Add Stock</a>
+                  <a class="nav-link" href="../inventory/add-item/">Add Stock</a>
                 </li>
-              
+
                 <!-- <li class="nav-item"> <a class="nav-link" href="pages/inventory/log.html">Log</a></li> -->
               </ul>
             </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../../section/">
+              <i class="icon-grid menu-icon"></i>
+              <span class="menu-title">Section</span>
+            </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#ui-service" aria-expanded="false"
@@ -453,12 +349,11 @@
             <div class="collapse" id="ui-service">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item">
-                  <a class="nav-link" href="./service-service-dashboard.html">View Services</a>
+                  <a class="nav-link" href="../service/">View Services</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="./add-service.html">Add Services</a>
+                  <a class="nav-link" href="../service/add-service/">Add Services</a>
                 </li>
-         
                 <!-- <li class="nav-item"> <a class="nav-link" href="pages/inventory/log.html">Log</a></li> -->
               </ul>
             </div>
@@ -473,10 +368,10 @@
             <div class="collapse" id="ui-customer">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item">
-                  <a class="nav-link" href="../customers/registered-customers.html">Customers</a>
+                  <a class="nav-link" href="../customers/">Customers</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="../customers/customer_loyalty.html">Customer loyalty</a>
+                  <a class="nav-link" href="../customers/customers-loyalty/">Customer loyalty</a>
                 </li>
               </ul>
             </div>
@@ -490,9 +385,9 @@
             </a>
             <div class="collapse" id="ui-message">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="../message/view_messages.html">View messages</a></li>
-                <li class="nav-item"> <a class="nav-link" href="../../send-bc-message.html">Send Message</a></li>
-                <li class="nav-item"> <a class="nav-link" href="../feedbacks/feedbacks.html">Feed backs</a></li>
+                <li class="nav-item"> <a class="nav-link" href="../message/"">View messages</a></li>
+                <li class="nav-item"> <a class="nav-link" href="../../send-bc/">Send Message</a></li>
+                <li class="nav-item"> <a class="nav-link" href="../feedbacks/">Feed backs</a></li>
 
               </ul>
             </div>
@@ -507,6 +402,7 @@
             </li> -->
         </ul>
       </nav>
+      <!-- partial -->
       <div class="main-panel">
         <div class="content-wrapper">
           <div class="row">
@@ -518,29 +414,33 @@
             <div class="col-lg-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title">Service List</h4>
-                  <p class="card-description ">
+                  <h4 class="card-title">Booking List</h4>
+                  <p class="card-description text-dark ">
+                    <span class="text-danger font-weight-bold"> Note:</span> No action can be performed on a completed
+                    or cancelled booking. Please proceed with caution.
+                  </p>
 
-                    <input type="text" id="searchInput" placeholder="Search...">
+                  <input type="text" id="searchInput" placeholder="Search...">
                   </p>
                   <div class="table-responsive">
                     <table class="table" id="myTable">
                       <thead>
                         <tr>
                           <th>S/N</th>
-
-                          <th>Service Image</th>
-                          <th>Service name</th>
-                          <th>Service Description</th>
-                          <th>Service Price</th>
-                          <th>Duration</th>
-                          <th>Section</th>
-
+                          <th>BookingId</th>
+                          <th>Customer name</th>
+                          <th>Service</th>
+                          <th>Phone number</th>
+                          <th>Email</th>
+                          <th>Date of Visit</th>
+                          <th>Source Type</th>
+                          <th>Instruction</th>
+                          <th>Booking Status</th>
 
                           <th></th>
                         </tr>
                       </thead>
-                      <tbody id="stockTable">
+                      <tbody id="bookingTable">
 
                         <div id="loader">
                           <div class="spinner">
@@ -555,7 +455,6 @@
             </div>
           </div>
         </div>
-        <div id="snackbar"></div>
         <!-- content-wrapper ends -->
         <!-- partial:../../partials/_footer.html -->
         <footer class="footer">
@@ -570,17 +469,13 @@
       </div>
       <!-- main-panel ends -->
     </div>
-    <!-- main-panel ends -->
-  </div>
-  <!-- page-body-wrapper ends -->
+    <!-- page-body-wrapper ends -->
   </div>
   <!-- container-scroller -->
   <!-- plugins:js -->
   <script src="../../vendors/js/vendor.bundle.base.js"></script>
   <!-- endinject -->
   <!-- Plugin js for this page -->
-  <script src="../../vendors/typeahead.js/typeahead.bundle.min.js"></script>
-  <script src="../../vendors/select2/select2.min.js"></script>
   <!-- End plugin js for this page -->
   <!-- inject:js -->
   <script src="../../js/off-canvas.js"></script>
@@ -588,17 +483,8 @@
   <script src="../../js/template.js"></script>
   <script src="../../js/settings.js"></script>
   <script src="../../js/todolist.js"></script>
-  <!-- endinject -->
-  <!-- Custom js for this page-->
-  <script src="../../js/file-upload.js"></script>
-  <script src="../../js/typeahead.js"></script>
-  <script src="../../js/select2.js"></script>
-  <script src="../../js/alert-file.js"></script>
-  <!-- End custom js for this page-->
   <script src="../../js/firebase/firebase-config.js"></script>
-  <script src="../../js/firebase/manage_services_dashboard.js" type="module"></script>
-
-
+  <script src="../../js/firebase/manage_bookings.js" type="module"></script>
   <script>
     function searchTable() {
       var input = document.getElementById("searchInput");
@@ -625,7 +511,9 @@
 
     document.getElementById("searchInput").addEventListener("keyup", searchTable);
   </script>
-
+  <!-- endinject -->
+  <!-- Custom js for this page-->
+  <!-- End custom js for this page-->
 </body>
 
 </html>

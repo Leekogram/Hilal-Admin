@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Bnb Admin / Sections</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="../vendors/feather/feather.css" />
+
+    <link rel="stylesheet" href="../vendors/ti-icons/css/themify-icons.css" />
+    <link rel="stylesheet" href="../vendors/css/vendor.bundle.base.css" />
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="../vendors/select2/select2.min.css" />
+    <link rel="stylesheet" href="../vendors/select2-bootstrap-theme/select2-bootstrap.min.css" />
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="../css/vertical-layout-light/style.css" />
+    <!-- endinject -->
+    <link rel="shortcut icon" href="../images/favicon.ico" />
+    <link rel="stylesheet" href="../css/alert-style.css" />
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <style>
+
+.top-left {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 150%;
+        }
+
+        .top-right {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 150%;
+        }
+
+        .bottom-left {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50%;
+            /* height: 150%; */
+        }
+
+        .bottom-right {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 50%;
+            /* height: 150%; */
+        }
+        .image-zoom {
+            transform: scale(1);
+            transition: transform 0.3s;
+        }
+
+        .image-zoom:hover {
+            transform: scale(3);
+        }
+
+
+
+
+        @-webkit-keyframes fadein {
+            from {
+                bottom: 0;
+                opacity: 0;
+            }
+
+            to {
+                bottom: 30px;
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadein {
+            from {
+                bottom: 0;
+                opacity: 0;
+            }
+
+            to {
+                bottom: 30px;
+                opacity: 1;
+            }
+        }
+
+        @-webkit-keyframes fadeout {
+            from {
+                bottom: 30px;
+                opacity: 1;
+            }
+
+            to {
+                bottom: 0;
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeout {
+            from {
+                bottom: 30px;
+                opacity: 1;
+            }
+
+            to {
+                bottom: 0;
+                opacity: 0;
+            }
+        }
+
+
+
+
+        #close {
+            cursor: pointer;
+        }
+
+        .modfiy-modal-nodal {
+            display: none;
+            /* Hide the modal by default */
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Remove the opacity */
+        }
+
+        .modfiy-modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            /* Adjust the modal's vertical position */
+            padding: 20px;
+            border: none;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 700px;
+            position: relative;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        table#myTable td {
+            vertical-align: top;
+        }
+
+        .section-des {
+            max-width: 500px;
+            /* Adjust the maximum width as needed */
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: pre-wrap;
+        }
+
+        #addSectionModal {
+            display: none;
+            /* Hide the modal by default */
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Remove the opacity */
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            /* Adjust the modal's vertical position */
+            padding: 10px;
+            border: none;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-content label {
+            text-align: left;
+            /* Align labels to the left */
+        }
+
+
+        .modal {
+      display: none;
+      position: fixed;
+      z-index: 10;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    #notSpan {
+      visibility: hidden;
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 400px;
+      text-align: left;
+      border-radius: 30px;
+    }
+
+
+        #loader {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            z-index: 9999;
+        }
+
+
+
+        .spinner {
+      position: absolute;
+      top: 120%;
+      /* Adjust the vertical position as needed */
+      left: 50%;
+      /* Adjust the horizontal position as needed */
+      transform: translate(-50%, -50%);
+      /* Center the spinner */
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      overflow: hidden;
+      /* Hide the default border */
+    }
+
+    .spinner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      /* Resize the logo to fit the container */
+      animation: flash 1s alternate infinite;
+    }
+
+    @keyframes flash {
+      from {
+        opacity: 1;
+      }
+
+      to {
+        opacity: 0;
+      }
+    }
+
+        #searchInput {
+            float: right;
+            width: 200px;
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 12px;
+            font-family: Arial, sans-serif;
+        }
+
+        #searchInput:focus {
+            outline: none;
+            /* border-color: #FFC100; */
+        }
+
+     
+
+        #sectionExist {
+            display: none;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container-scroller">
+        <!-- partial:../../partials/_navbar.html -->
+        <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+            <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center"
+              style="background-color:rgba(41, 71, 37, 0.784);">
+              <a class="navbar-brand brand-logo mr-5" href="../"><img src="../images//hilal_logo.jpg"
+                  class="mr-2" alt="logo" /></a>
+              <a class="navbar-brand brand-logo-mini" href="../"><img src="../images//hilal_logo.jpg"
+                  alt="logo" /></a>
+            </div>
+            <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end"
+              style="background-color:rgba(41, 71, 37, 0.784);">
+              <button class="navbar-toggler navbar-toggler align-self-center text-white" type="button" data-toggle="minimize">
+                <span class="icon-menu"></span>
+              </button>
+              <ul class="navbar-nav mr-lg-2">
+                <li class="nav-item nav-search d-none d-lg-block">
+      
+      
+                  <h4 class="text-white font-weight-bold">Hilal Naturale Spa Admin</h4>
+      
+                </li>
+              </ul>
+              <ul class="navbar-nav navbar-nav-right">
+                <li class="nav-item dropdown">
+                  <a class="nav-link  dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+                    <i class="icon-bell mx-0 text-white"></i>
+                   <span class="count text-white" id="count"></span>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
+                    aria-labelledby="notificationDropdown" id="notificationTray">
+                    <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
+      
+      
+      
+                  </div>
+                </li>
+                
+                <li class="nav-item nav-profile dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+                    <img src="../images/faces/face28.jpg" alt="profile" />
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+      
+                    <a class="dropdown-item" id="sign-out-btn">
+                      <i class="ti-power-off text-primary"></i>
+                      Logout
+                    </a>
+                  </div>
+                </li>
+                <!--  <li class="nav-item nav-settings d-none d-lg-flex">
+                    <a class="nav-link" href="#">
+                      <i class="icon-ellipsis"></i>
+                    </a>
+                  </li> -->
+              </ul>
+              
+              <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+                data-toggle="offcanvas">
+                
+                <span class="icon-menu text-white"></span>
+              </button>
+            </div>
+          </nav>
+
+          <!-- edit confirmation modal -->
+    <div id="confirmation-modal" class="modal">
+        <div class="modal-content">
+          <iconify-icon icon="octicon:info-16" width="100" height="100"  style="color: #ebeaef;" class="align-self-center pb-3"></iconify-icon>
+          <p class="h5 pb-3">Do you really want to modify <span id="itemName"></span> ?</p>
+          <button class="btn btn-info btn-rounded align-self-center mb-3 w-50" id="yes-btn">Yes</button>
+          <button class="btn  primary-button btn-rounded align-self-center w-50" id="no-btn">No</button>
+        </div>
+      </div>
+      <!-- delete confirmation modal -->
+      <div id="delete-confirmation-modal" class="modal">
+        <div class="modal-content">
+          <iconify-icon icon="octicon:info-16" width="100" height="100"  style="color: #ebeaef;" class="align-self-center pb-3"></iconify-icon>
+          <p class="h5 pb-3 text-center">Do you really want to delete <span id="deleteItemName"></span> ?</p>
+          <button class="btn btn-info btn-rounded align-self-center mb-3 w-50" id="delete-yes-btn">Yes</button>
+          <button class="btn  primary-button btn-rounded align-self-center w-50" id="delete-no-btn">No</button>
+        </div>
+      </div>
+      <!-- confirmation modal -->
+      <div id="success-alert-modal" class="modal">
+        <div class="modal-content">
+          <iconify-icon icon="octicon:check-circle-fill-16" style="color: green;" width="100" height="100" class="align-self-center pb-3"></iconify-icon>
+          <p class="h5 pb-3"><span id="success-alertMessage"></span></p>
+         
+          <button class="btn  primary-button btn-rounded align-self-center w-50" id="succees-ok-btn">Okay</button>
+        </div>
+      </div>
+      <div id="failure-alert-modal" class="modal">
+        <div class="modal-content">
+          <iconify-icon icon="octicon:x-circle-fill-16" style="color: indianred;" width="100" height="100" class="align-self-center pb-3"></iconify-icon>
+          <p class="h5 pb-3"><span id="failure-alertMessage"></span></p>
+         
+          <button class="btn  primary-button btn-rounded align-self-center w-50" id="failure-ok-btn">Okay</button>
+        </div>
+      </div>
+
+        <!-- Modal -->
+        <div id="sign-out-modal" class="modal">
+            <div class="modal-content">
+                <p>Are you sure you want to sign out?</p>
+                <button class="btn btn-danger btn-rounded align-self-center mb-3 w-50" id="confirm-sign-out-btn">Yes,
+                    sign me
+                    out</button>
+                <button class="btn  btn-success btn-rounded align-self-center w-50"
+                    id="cancel-sign-out-btn">Cancel</button>
+            </div>
+        </div>
+
+
+        <!-- Example modal structure -->
+        <div id="modifyModal" class="modfiy-modal-nodal">
+            <div class="modfiy-modal-content position-relative">
+                <img src="../../images/topright.png" class="top-right" alt="top-right image" />
+                <!-- <img src="../../images/bottomleft.png" class="bottom-left" alt="bottom-left image" /> -->
+                <span class="close" id="close">&times;</span>
+                <h4>Edit Product</h4><i class="fas fas-edit"></i>
+                <form class="forms-sample" id="updatesectionForm">
+                    <div class="form-group">
+                        <div class="image-preview-container" id="updateimagePreviewContainer">
+                            <img id="updateimagePreview" class="image-preview" style="height: 100px;">
+                        </div>
+                        <label>Section Image</label>
+                        <input type="file" name="img[]" class="file-upload-default" id="section-picture" />
+                        <div class="input-group col-xs-12">
+                            <input type="text" class="form-control file-upload-info" disabled
+                                placeholder="Upload Section Image" />
+                            <span class="input-group-append">
+                                <button class="file-upload-browse btn btn-dark" type="button">Upload</button>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sectionName">Section Name</label>
+                        <input type="text" class="form-control" id="sectionTitle" placeholder="HairStyling" />
+                        <input type="hidden" class="form-control" autocomplete="off" id="documentId" />
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sectionDescription">About Section</label>
+                        <textarea class="form-control" id="sectionDescript" rows="4"></textarea>
+                    </div>
+
+                    <button class="btn btn-dark mr-2 ml-2 " type="submit" id="updateBtn">Update</button>
+                    <button class="btn btn-light " type="reset" data-dismiss="modal">Reset</button>
+                </form>
+            </div>
+        </div>
+
+
+
+
+        <div class="container-fluid page-body-wrapper">
+            <!-- partial:partials/_sidebar.html -->
+            <nav class="sidebar  sidebar-offcanvas" id="sidebar">
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../">
+                            <i class="icon-grid menu-icon"></i>
+                            <span class="menu-title">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../pages/bookings/">
+                            <i class="icon-paper menu-icon"></i>
+                            <span class="menu-title">Bookings</span>
+
+                        </a>
+
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../pages/orders/">
+                            <i class="icon-paper menu-icon"></i>
+                            <span class="menu-title">Orders</span>
+
+                        </a>
+
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false"
+                            aria-controls="ui-basic">
+                            <i class="icon-layout menu-icon"></i>
+                            <span class="menu-title">Inventory</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <div class="collapse" id="ui-basic">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="../pages/inventory/>View Stock</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="../pages/inventory/add-item">Add Stock</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="./">
+                          <i class="icon-grid menu-icon"></i>
+                          <span class="menu-title">Section</span>
+                        </a>
+                      </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="collapse" href="#ui-service" aria-expanded="false"
+                            aria-controls="ui-basic">
+                            <i class="icon-contract menu-icon"></i>
+                            <span class="menu-title">Services</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <div class="collapse" id="ui-service">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="../pages/service/">View Services</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="../pages/service/add-service">Add Services</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="collapse" href="#ui-customer" aria-expanded="false"
+                            aria-controls="ui-basic">
+                            <i class="icon-head menu-icon"></i>
+                            <span class="menu-title">Customers</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <div class="collapse" id="ui-customer">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="../pages/customers/">Customers</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="../pages/customers/customers-loyalty/">Customer
+                                        loyalty</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="collapse" href="#ui-message" aria-expanded="false"
+                            aria-controls="ui-basic">
+                            <i class="icon-columns menu-icon"></i>
+                            <span class="menu-title">Message</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <div class="collapse" id="ui-message">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item"> <a class="nav-link" href="../pages/message/">View
+                                        messages</a></li>
+                                <li class="nav-item"> <a class="nav-link" href="../send-bc/">Send Message</a>
+                                </li>
+                                <li class="nav-item"> <a class="nav-link" href="../pages/feedbacks/">Feed
+                                        backs</a></li>
+
+                            </ul>
+                        </div>
+                    </li>
+
+                </ul>
+            </nav>
+            <!-- partial -->
+            <div class="main-panel">
+                <div class="content-wrapper">
+
+                    <div class="row">
+
+                        <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+
+                        </div>
+                        <div class="col-12 col-xl-4">
+                            <div class="justify-content-end d-flex">
+                                <div class="dropdown flex-md-grow-1 flex-xl-grow-0">
+                                    <!-- Button to trigger the modal -->
+                                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                                        data-target="#addSectionModal">
+                                        + Add a section
+                                    </button>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6 mb-4 stretch-card " id="cardContainer">
+                            <!-- The dynamically created cards will be inserted here -->
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-xl-10 mb-4 mb-xl-0">
+                            <!-- Modal -->
+                            <div class="modal fade" id="addSectionModal" tabindex="-1" role="dialog"
+                                aria-labelledby="addSectionModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content position-relative">
+
+                                     <img src="../../images/topright.png" class="top-right" alt="top-right image" />
+                                      <img src="../../images/bottomleft.png" class="bottom-left" alt="bottom-left image" />
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="addSectionModalLabel">Add a Section</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form class="forms-sample" id="sectionForm">
+                                                <div class="form-group">
+                                                    <div class="image-preview-container" id="imagePreviewContainer">
+                                                        <img id="imagePreview" class="image-preview">
+                                                    </div>
+                                                    <label>Section Image</label>
+                                                    <input type="file" name="img[]" class="file-upload-default"
+                                                        id="section-image" />
+                                                    <div class="input-group col-xs-12">
+                                                        <input type="text" class="form-control file-upload-info"
+                                                            disabled placeholder="Upload Section Image" />
+                                                        <span class="input-group-append">
+                                                            <button class="file-upload-browse btn btn-dark"
+                                                                type="button">Upload</button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="sectionName">Section Name</label>
+                                                    <input type="text" class="form-control" id="sectionName"
+                                                        placeholder="HairStyling" />
+                                                    <div id="matchingValuesContainer"></div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="sectionDescription">About Section</label>
+                                                    <textarea class="form-control" id="sectionDescription"
+                                                        rows="4"></textarea>
+                                                </div>
+                                                <h5 class="text-danger" id="sectionExist">Section listed above already exist,
+                                                    please add a new section or update it.</h5>
+                                                <button class="btn btn-dark mr-2" type="submit"
+                                                    id="addProductBtn">Submit</button>
+                                                <button class="btn btn-light" type="button"
+                                                    data-dismiss="modal">Cancel</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+
+                            <!--  <h6 class="font-weight-normal mb-0"><span class="text-danger" id="notSpan"> You have <span
+                                        id="notCount"></span> unread notification(s) !</span></h6> -->
+
+                        </div>
+                        <div class="col-lg-12 grid-margin stretch-card mt-2">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title">Section List</h4>
+                                    <p class="card-description ">
+
+                                        <input type="text" id="searchInput" placeholder="Search...">
+                                    </p>
+                                    <div class="table-responsive">
+                                        <table class="table" id="myTable">
+                                            <thead>
+                                                <tr>
+                                                    <th>S/N</th>
+
+                                                    <th>Section Image</th>
+                                                    <th>Section name</th>
+                                                    <th>Section Description</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="sectionTable">
+
+                                                <div id="loader">
+                                                    <div class="spinner">
+                                                      <img src="../../images/transparent-logo.png" alt="Logo">
+                                                    </div>
+                                                  </div>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div id="snackbar"></div>
+
+                <!-- content-wrapper ends -->
+                <!-- partial:../../partials/_footer.html -->
+                <footer class="footer">
+                    <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © <span
+                                id="currentYear"></span>.
+                            All rights reserved.</span>
+
+                    </div>
+                </footer>
+                <!-- partial -->
+            </div>
+            <!-- main-panel ends -->
+        </div>
+        <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="../vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="../vendors/typeahead.js/typeahead.bundle.min.js"></script>
+    <script src="../vendors/select2/select2.min.js"></script>
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="../js/off-canvas.js"></script>
+    <script src="../js/hoverable-collapse.js"></script>
+    <script src="../js/template.js"></script>
+    <script src="../js/settings.js"></script>
+    <script src="../js/todolist.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <script src="../js/file-upload.js"></script>
+    <script src="../js/typeahead.js"></script>
+    <script src="../js/select2.js"></script>
+    <script src="../js/alert-file.js"></script>
+
+
+    <!-- JavaScript code -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Get the modal element
+            var modal = document.getElementById("addSectionModal");
+
+            // Get the button that triggers the modal
+            var modalButton = document.querySelector("[data-target='#addSectionModal']");
+
+            // Add a click event listener to the button
+            modalButton.addEventListener("click", function () {
+                // Show the modal
+                modal.style.display = "block";
+            });
+
+            // Add a click event listener to the modal's close button
+            var closeButton = modal.querySelector(".close");
+            closeButton.addEventListener("click", function () {
+                // Hide the modal
+                modal.style.display = "none";
+                document.getElementById("sectionForm").reset
+                document.getElementById("imagePreview").setAttribute("src", "");
+                imagePreview.style.height = '0px';
+                imagePreviewContainer.style.height = '0px'
+            });
+        });
+    </script>
+     <script src="../js/firebase/firebase-config.js"></script>
+    <script src="../js/firebase/manage_section.js" type="module"></script>
+
+
+</body>
+
+</html>

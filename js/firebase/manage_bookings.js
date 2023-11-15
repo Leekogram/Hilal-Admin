@@ -59,6 +59,26 @@ async function updateNotificationStatus() {
   // unsubscribe();
 }
 
+
+const successOkBtn = document.getElementById("succees-ok-btn");
+successOkBtn.addEventListener("click", () => {
+  document.getElementById("success-alert-modal").style.display = "none";
+});
+const failureOkBtn = document.getElementById("failure-ok-btn");
+failureOkBtn.addEventListener("click", () => {
+  failureOkBtn.getElementById("failure-alert-modal").style.display = "none";
+});
+
+
+const confirmBtn = document.getElementById("yes-btn");
+const declineBtn = document.getElementById("no-btn");
+const acceptModal = document.getElementById("accept-modal");
+
+
+declineBtn.addEventListener("click", () => {
+  acceptModal.style.display = "none";
+});
+
 const signOutBtn = document.getElementById("sign-out-btn");
 const signOutModal = document.getElementById("sign-out-modal");
 const confirmSignOutBtn = document.getElementById("confirm-sign-out-btn");
@@ -104,7 +124,7 @@ async function getBooking() {
     if (user) {
       const uid = user.uid;
     } else {
-      window.location.href = "../../../login.html";
+      window.location.href = "../../../login/";
     }
   });
 
@@ -182,10 +202,13 @@ async function getBooking() {
           const customerEmail = event.target.dataset.customeremail;
 
           // Show confirmation alert
-          const confirmation = window.confirm("Do you really want to accept this booking?");
-          if (confirmation) {
+          acceptModal.style.display = "block";
+
+          confirmBtn.addEventListener("click", () => {
+            acceptModal.style.display = "none";
             acceptFunction(docId, serviceName, customerEmail);
-          }
+          });
+       
         });
       });
 
@@ -197,11 +220,28 @@ async function getBooking() {
           const serviceName = event.target.dataset.servicename;
           const customerEmail = event.target.dataset.customeremail;
 
-          // Show confirmation alert
-          const confirmation = window.confirm("Do you really want to set this booking status to completed?");
-          if (confirmation) {
+          const  completedConfirmationModal = document.getElementById("completed-modal");
+          const completedConfirmBtn = document.getElementById("completed-yes-btn");
+          const completeNoBtn = document.getElementById("completed-no-btn");
+
+          
+        
+          completedConfirmationModal.style.display="block";
+        
+
+
+          completedConfirmBtn.addEventListener("click", () => {
+           
             completeFunction(docId, serviceName, customerEmail);
-          }
+            completedConfirmationModal.style.display = "none";
+          });
+
+          completeNoBtn.addEventListener("click", () => {
+            completedConfirmationModal.style.display = "none";
+           
+          });
+
+        
         });
       });
 
@@ -213,10 +253,27 @@ async function getBooking() {
           const serviceName = event.target.dataset.servicename;
           const customerEmail = event.target.dataset.customeremail;
           // Show confirmation alert
-          const confirmation = window.confirm("Do you really want to cancel this booking?");
-          if (confirmation) {
+
+          const  cancelConfirmationModal = document.getElementById("cancel-modal");
+          const cancelConfirmBtn = document.getElementById("cancel-yes-btn");
+          const cancelBtn = document.getElementById("cancel-no-btn");
+
+          
+        
+          cancelConfirmationModal.style.display="block";
+        
+
+
+          cancelConfirmBtn.addEventListener("click", () => {
+            cancelConfirmationModal.style.display = "none";
             cancelFunction(docId, serviceName, customerEmail);
-          }
+          });
+
+          cancelBtn.addEventListener("click", () => {
+            cancelConfirmationModal.style.display = "none";
+           
+          });
+        
         });
       });
 
@@ -342,11 +399,11 @@ async function getBooking() {
               const notificationLink = document.createElement('a');
               notificationLink.classList.add('dropdown-item', 'preview-item');
               if (notification.type == "service") {
-                notificationLink.setAttribute('href', './booking-page.html');
+                notificationLink.setAttribute('href', '../../');
               } else if (notification.type == "feedback") {
-                notificationLink.setAttribute('href', '../feedbacks/feedbacks.html');
+                notificationLink.setAttribute('href', '../feedbacks/');
               } else {
-                notificationLink.setAttribute('href', '../orders/orders.html');
+                notificationLink.setAttribute('href', '../orders/');
               }
 
 

@@ -50,6 +50,17 @@ const colRef = collection(database, "orders");
   }
 
 
+
+
+const confirmBtn = document.getElementById("yes-btn");
+const declineBtn = document.getElementById("no-btn");
+const acceptModal = document.getElementById("accept-modal");
+
+
+declineBtn.addEventListener("click", () => {
+  acceptModal.style.display = "none";
+});
+
 const signOutBtn = document.getElementById("sign-out-btn");
 const signOutModal = document.getElementById("sign-out-modal");
 const confirmSignOutBtn = document.getElementById("confirm-sign-out-btn");
@@ -158,7 +169,7 @@ aria-haspopup="true" aria-expanded="false"
 <div class="dropdown-menu" aria-labelledby="dropdownMenuSplitButton1">
 <h6 class="dropdown-header">Action</h6>
 ${data.orderStatus === 'New' ? `
- <a class="dropdown-item accept-action" data-docid="${doc.id}" data-itemname="${doc.data().productName}" data-customeremail="${doc.data().customerEmail}">Confirm</a>
+ <a class="dropdown-item accept-action" data-docid="${doc.id}" data-itemname="${doc.data().productName}" data-customeremail="${doc.data().customerEmail}">Accept</a>
 ` : ''}
 ${data.orderStatus === 'Confirmed' ? `
  <a class="dropdown-item complete-action" data-docid="${doc.id}" data-itemname="${doc.data().productName}" data-customeremail="${doc.data().customerEmail}" data-itemprice="${doc.data().productPrice}" data-qty="${doc.data().productQuantity}">Complete</a>
@@ -182,10 +193,14 @@ ${data.orderStatus === 'New' || data.orderStatus === 'Confirmed' ? `
      const customaEmail = event.target.dataset.customeremail;
 
      // Show confirmation alert
-     const confirmation = window.confirm("Do you really want to confirm this order?");
-     if (confirmation) {
+
+     acceptModal.style.display = "block";
+
+     confirmBtn.addEventListener("click", () => {
+       acceptModal.style.display = "none";
        confirmOrderFunction(docId, customaEmail, itemName);
-     }
+     });
+   
 
    });
  });
@@ -199,11 +214,29 @@ ${data.orderStatus === 'New' || data.orderStatus === 'Confirmed' ? `
       const customaEmail = event.target.dataset.customeremail;
       const itemPrice = event.target.dataset.itemprice;
       const qtyPurchased = event.target.dataset.qty;
-      // Show confirmation alert
-      const confirmation = window.confirm("Do you really want to set this order status to completed?");
-      if (confirmation) {
+
+
+      const  completedConfirmationModal = document.getElementById("completed-modal");
+      const completedConfirmBtn = document.getElementById("completed-yes-btn");
+      const completeNoBtn = document.getElementById("completed-no-btn");
+
+      
+    
+      completedConfirmationModal.style.display="block";
+    
+
+
+      completedConfirmBtn.addEventListener("click", () => {
+       
         completeFunction(docId, customaEmail, itemName, itemPrice, qtyPurchased);
-      }
+        completedConfirmationModal.style.display = "none";
+      });
+
+      completeNoBtn.addEventListener("click", () => {
+        completedConfirmationModal.style.display = "none";
+       
+      });
+    
 
     });
   });
@@ -216,11 +249,27 @@ ${data.orderStatus === 'New' || data.orderStatus === 'Confirmed' ? `
      const itemName = event.target.dataset.itemname;
      const customaEmail = event.target.dataset.customeremail;
      // Show confirmation alert
-     const confirmation = window.confirm("Do you really want to cancel this order?");
-     if (confirmation) {
-       cancelFunction(docId, customaEmail, itemName);
-     }
 
+     const  cancelConfirmationModal = document.getElementById("cancel-modal");
+     const cancelConfirmBtn = document.getElementById("cancel-yes-btn");
+     const cancelBtn = document.getElementById("cancel-no-btn");
+
+     
+   
+     cancelConfirmationModal.style.display="block";
+   
+
+
+     cancelConfirmBtn.addEventListener("click", () => {
+       cancelConfirmationModal.style.display = "none";
+       cancelFunction(docId, customaEmail, itemName);
+     });
+
+     cancelBtn.addEventListener("click", () => {
+       cancelConfirmationModal.style.display = "none";
+      
+     });
+   
    });
  });
 
@@ -429,11 +478,11 @@ ${data.orderStatus === 'New' || data.orderStatus === 'Confirmed' ? `
             const notificationLink = document.createElement('a');
             notificationLink.classList.add('dropdown-item', 'preview-item');
             if (notification.type == "service") {
-              notificationLink.setAttribute('href', './booking-page.html');
+              notificationLink.setAttribute('href', '../services/');
             } else if (notification.type == "feedback") {
-              notificationLink.setAttribute('href', '../feedbacks/feedbacks.html');
+              notificationLink.setAttribute('href', '../feedbacks/');
             } else {
-              notificationLink.setAttribute('href', '../orders/orders.html');
+              notificationLink.setAttribute('href', './');
             }
 
 

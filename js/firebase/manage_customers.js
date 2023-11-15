@@ -133,30 +133,37 @@ async function getCustomer(startDate,endDate) {
             </tr>`;
 
         rows += row;
-
+        
         // Query the "orders" collection for the user's orders
         const ordersSnapshot = await getDocs(query(collection(database, 'orders'), where('customerEmail', '==', userEmail) , where('timestamp', '>=', startDate),
-        where('timestamp', '<=', endDate)));
+        where('timestamp', '<=', endDate),where('orderStatus','==', 'Completed'),where('paymentStatus','==', 'Paid')));
 
         let totalOrderSpending = 0;
         ordersSnapshot.forEach((orderDoc) => {
           const orderData = orderDoc.data();
-          totalOrderSpending += orderData.amountPaid;
+          const amountPaid = parseFloat(orderData.amountPaid);
+          totalOrderSpending += amountPaid;
         });
+        console.log("Total Order Spending:", totalOrderSpending);
 
         // Query the "bookings" collection for the user's bookings
         const bookingsSnapshot = await getDocs(query(collection(database, 'bookings'), where('email', '==', userEmail),where('timestamp', '>=', startDate),
-        where('timestamp', '<=', endDate)));
+        where('timestamp', '<=', endDate),where('status','==', 'Completed')));
 
         let totalBookingSpending = 0;
         bookingsSnapshot.forEach((bookingDoc) => {
           const bookingData = bookingDoc.data();
-          totalBookingSpending += bookingData.amountPaid;
+          const amountPaid = parseFloat(bookingData.serviceAmount);
+          totalBookingSpending += amountPaid;
+        
         });
-
+        console.log("Total Booking Spending:", totalBookingSpending);
         // Calculate the total spending for the user
-        const totalSpending = totalOrderSpending + totalBookingSpending;
+        const totalSpending = Number(totalOrderSpending)  + Number(totalBookingSpending); 
         // Update the table row with the total spending information
+        console.log("Total Spending:", totalSpending);
+        
+    
         const tableRow = document.getElementById(`user-row-${userEmail}`);
         if (tableRow) {
           const totalSpendingCell = tableRow.querySelector('.total-spending');
@@ -179,9 +186,7 @@ async function getCustomer(startDate,endDate) {
       });
       tableRow.innerHTML = rows;
       // Add event listener to accept dropdown item
-      function formatTotalSpending(amount) {
-        return amount.toLocaleString(undefined, { minimumFractionDigits: 2 });
-      }
+    
       
       // Add click event listener to each row
       const rowsElements = document.querySelectorAll("#customerTable tr");
@@ -227,6 +232,10 @@ confirmSignOutBtn.addEventListener("click", () => {
       signOutModal.style.display = "none";
     });
 });
+function formatTotalSpending(amount) {
+  return amount.toLocaleString(undefined, { minimumFractionDigits: 2 });
+}
+
 
 
 async function showUserDetails(userEmail,startDate,endDate) {
@@ -246,10 +255,10 @@ async function showUserDetails(userEmail,startDate,endDate) {
 
     const userDetails = {};
 
-    userDetails.totalSpent = calculateTotalSpent(ordersSnapshot);
+    userDetails.totalSpent = (calculateOrderTotalSpent(ordersSnapshot,"Completed")+ calculateBookingTotalSpent(bookingsSnapshot, "Completed")).toLocaleString();
     userDetails.totalOrders = ordersSnapshot.size;
     userDetails.totalBookings = bookingsSnapshot.size;
-    userDetails.pendingBookings = countBookingsByStatus(bookingsSnapshot, "Pending");
+    userDetails.pendingBookings = countBookingsByStatus(bookingsSnapshot, "New");
     userDetails.completedBookings = countBookingsByStatus(bookingsSnapshot, "Completed");
     userDetails.cancelledBookings = countBookingsByStatus(bookingsSnapshot, "Cancelled");
     userDetails.pendingOrders = countOrdersByStatus(ordersSnapshot, "New");
@@ -283,16 +292,33 @@ updateProgressBars(userDetails.totalOrders, userDetails.totalBookings,  userDeta
   }
 }
 
-function calculateTotalSpent(ordersSnapshot) {
+function calculateOrderTotalSpent(ordersSnapshot,status) {
   let totalSpent = 0;
   ordersSnapshot.forEach((doc) => {
     const orderData = doc.data();
     const amountPaid = parseFloat(orderData.amountPaid);
     if (!isNaN(amountPaid)) {
-      totalSpent += amountPaid;
+      if (orderData.orderStatus === status) {
+        totalSpent += amountPaid;
+      }
+  
     }
   });
-  return totalSpent.toLocaleString();
+  return totalSpent;
+}
+function calculateBookingTotalSpent(bookingSnapshot,status) {
+  let totalSpent = 0;
+  bookingSnapshot.forEach((doc) => {
+    const bookingData = doc.data();
+    const amountPaid = parseFloat(bookingData.serviceAmount);
+    if (!isNaN(amountPaid)) {
+      if (bookingData.status === status) {
+        totalSpent += amountPaid;
+      }
+  
+    }
+  });
+  return totalSpent;
 }
 
 
@@ -374,11 +400,11 @@ function updateProgressBars(totalOrder, totalBookings, totalCompletedOrder, tota
             const notificationLink = document.createElement('a');
             notificationLink.classList.add('dropdown-item', 'preview-item');
             if (notification.type == "service") {
-              notificationLink.setAttribute('href', './booking-page.html');
+              notificationLink.setAttribute('href', '../../bookings/');
             } else if (notification.type == "feedback") {
-              notificationLink.setAttribute('href', '../feedbacks/feedbacks.html');
+              notificationLink.setAttribute('href', '../../feedbacks/');
             } else {
-              notificationLink.setAttribute('href', '../orders/orders.html');
+              notificationLink.setAttribute('href', '../../orders/');
             }
 
 

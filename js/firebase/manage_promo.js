@@ -43,28 +43,10 @@
          const uid = user.uid;
      } else {
 
-         window.location.href = "../login/";
+         window.location.href = "../../../login.html";
      }
  });
 
-
- const successOkBtn = document.getElementById("succees-ok-btn");
- successOkBtn.addEventListener("click", () => {
-   document.getElementById("success-alert-modal").style.display = "none";
- });
- const failureOkBtn = document.getElementById("failure-ok-btn");
- failureOkBtn.addEventListener("click", () => {
-   failureOkBtn.getElementById("failure-alert-modal").style.display = "none";
- });
-
- const confirmBtn = document.getElementById("yes-btn");
- const declineBtn = document.getElementById("no-btn");
- const confirmationModal = document.getElementById("confirmation-modal");
-
-
- declineBtn.addEventListener("click", () => {
-    confirmationModal.style.display = "none";
-  });
  let pictureUrl;
 
  const currentYear = new Date().getFullYear();
@@ -72,9 +54,9 @@
 
  const addProductBtn = document.getElementById("addProductBtn");
 
- document.getElementById("sectionForm").addEventListener("submit", addSection);
+ document.getElementById("promoForm").addEventListener("submit", addpromo);
 
- const imageInput = document.getElementById("section-image");
+ const imageInput = document.getElementById("promo-image");
  const imagePreview = document.getElementById("imagePreview");
  const imagePreviewContainer = document.getElementById("imagePreviewContainer");
  imageInput.addEventListener("change", () => {
@@ -94,7 +76,7 @@
  });
 
 
- var inputField = document.getElementById("sectionName");
+ var inputField = document.getElementById("promoName");
  var matchingValuesList = document.createElement("ul");
  document.getElementById("matchingValuesContainer").appendChild(matchingValuesList);
 
@@ -109,8 +91,8 @@
 
      // Query the Firestore collection for matching values
      const q = query(
-         collection(database, "section"),
-         orderBy("sectionName"),
+         collection(database, "promo"),
+         orderBy("promoName"),
          startAt(enteredValue),
          endAt(enteredValue + "\uf8ff")
      );
@@ -119,8 +101,8 @@
          .then((querySnapshot) => {
              // Get the matching values
              var matchingValues = querySnapshot.docs.map(function (doc) {
-                 console.log(doc.data().sectionName);
-                 return doc.data().sectionName;
+                 console.log(doc.data().promoName);
+                 return doc.data().promoName;
              });
 
              // Clear the existing list items
@@ -142,12 +124,12 @@
 
                  // Display the list of matching values
                  document.getElementById("matchingValuesContainer").style.display = "block";
-                 document.getElementById("sectionExist").style.display = "block";
+                 document.getElementById("promoExist").style.display = "block";
                  document.getElementById("addProductBtn").style.display = "none";
              } else {
                  // Hide the matching values container if there are no matching values
                  document.getElementById("matchingValuesContainer").style.display = "none";
-                 document.getElementById("sectionExist").style.display = "none";
+                 document.getElementById("promoExist").style.display = "none";
                  document.getElementById("addProductBtn").style.display = "block";
              }
          })
@@ -157,7 +139,9 @@
  }
 
 
- function addSection(e) {
+
+
+ function addpromo(e) {
      e.preventDefault();
 
      // Change submit button to spinner
@@ -165,19 +149,19 @@
 
      // Get values
 
-     var sectionName = getInputVal("sectionName");
+     var promoName = getInputVal("promoName");
 
-     var sectionDescription = getInputVal("sectionDescription");
+     var promoDescription = getInputVal("promoDescription");
 
      // const storRef = sRef(storage,'products');
-     const file = document.querySelector("#section-image").files[0];
+     const file = document.querySelector("#promo-image").files[0];
      if (!file) {
-         alert("Section image is required");
+         alert("promo image is required");
          addProductBtn.innerHTML = "Submit";
          return;
      }
 
-     const storageRef = sRef(storage, `sectionImages/${file.name}` + new Date());
+     const storageRef = sRef(storage, `promoImages/${file.name}` + new Date());
      const uploadTask = uploadBytesResumable(storageRef, file);
 
      uploadTask.on(
@@ -196,10 +180,10 @@
                  // setImgUrl(downloadURL)
                  pictureUrl = downloadURL;
                  setTimeout(
-                     addSect(
+                     addpromot(
                          pictureUrl,
-                         sectionName,
-                         sectionDescription
+                         promoName,
+                         promoDescription
                      ),
                      5000
                  );
@@ -208,12 +192,13 @@
      );
  }
 
- 
 
  const signOutBtn = document.getElementById("sign-out-btn");
  const signOutModal = document.getElementById("sign-out-modal");
  const confirmSignOutBtn = document.getElementById("confirm-sign-out-btn");
  const cancelSignOutBtn = document.getElementById("cancel-sign-out-btn");
+
+ 
 
  // Show the modal when the sign-out button is clicked
  signOutBtn.addEventListener("click", () => {
@@ -238,38 +223,57 @@
          });
  });
 
+ function showModal(success, message) {
+    const responseModal = document.getElementById("responseModal");
+    const responseIcon = document.getElementById("responseIcon");
+    const responseMessage = document.getElementById("responseMessage");
+    
+    if (success) {
+      responseIcon.className = "fas fa-check-circle success";
+    } else {
+      responseIcon.className = "fas fa-times-circle failure";
+    }
+  
+    responseMessage.textContent = message;
+    responseModal.style.display = "block";
+  }
 
+  // Function to close the modal
+document.getElementById("closeModalButton").addEventListener("click", function() {
+    const responseModal = document.getElementById("responseModal");
+    responseModal.style.display = "none";
+  });
  // Function to get form values
  function getInputVal(id) {
      return document.getElementById(id).value;
  }
 
  // Save products to firebase
- async function addSect(
-     sectionPicture,
-     sectionName,
-     sectionDes
+ async function addpromot(
+     promoPicture,
+     promoName,
+     promoDes
  ) {
      // Add a new document with a generated id.
        // Add a new document with a generated id.
 try {
- const docRef = await addDoc(collection(database, "section"), {
-     sectionPicture: sectionPicture,
-     sectionName: sectionName,
-     sectionDes: sectionDes,
+ const docRef = await addDoc(collection(database, "promo"), {
+     promoPicture: promoPicture,
+     promoName: promoName,
+     promoStatus: "new",
+     promoDes: promoDes,
      timestamp: serverTimestamp(),
  });
 
  addProductBtn.innerHTML = "Submit";
 
  // Data sent successfully!
- document.getElementById("addSectionModal").style.display = "none";
+ document.getElementById("addpromoModal").style.display = "none";
+ //showSnackbar(`Success! ${promoName} was created successfully`, true);
+ showModal(true, `Success! ${promoName} was created successfully`);
 
- document.getElementById("success-alertMessage").innerHTML = `${sectionName} section was created successfully`;
- document.getElementById("success-alert-modal").style.display = "block";
-
- console.log("Section has been added successfully");
- document.getElementById("sectionForm").reset();
+ console.log("promo has been added successfully");
+ document.getElementById("promoForm").reset();
  imagePreview.setAttribute("src", "");
 
  // Remove the dimmed background
@@ -280,53 +284,27 @@ try {
 } catch (error) {
  // Data sent failed...
  addProductBtn.innerHTML = "Submit";
- document.getElementById("addSectionModal").style.display = "none";
- document.getElementById("failure-alertMessage").innerHTML = `Oh no! Operation Failed ${error}`;
- document.getElementById("failure-alert-modal").style.display = "block";
-
+ document.getElementById("addpromoModal").style.display = "none";
+// showSnackbar(`Oh no! Operation Failed ${error}`, false);
+showModal(false, `Oh no! Operation Failed ${error}`);
  console.log(error);
 }
-/*      await addDoc(collection(database, "section"), {
-         sectionPicture: sectionPicture,
-         sectionName: sectionName,
-         sectionDes: sectionDes,
-         timestamp: serverTimestamp(),
-     })
-         .then((docRef) => {
-             addProductBtn.innerHTML = "Submit";
-             // Data sent successfully!
-             document.getElementById("addSectionModal").style.display = "none";
-             document.body.classList.remove("modal-open"); 
-             showSnackbar(`Success! ${sectionName} was created successfully`, true);
-           
-             console.log("Section has been added successfully");
-             document.getElementById("sectionForm").reset();
-             imagePreview.setAttribute("src", "");
-         })
-         .catch((error) => {
-             // Data sent failed...
-             addProductBtn.innerHTML = "Submit";
-             document.getElementById("addSectionModal").style.display = "none";
-             document.body.classList.remove("modal-open"); 
-             showSnackbar(`Oh no ! Operation  Failed ${error}`, false);
-             console.log(error);
-             // document.getElementById("sectionForm").reset();
-         }); */
+
 
      addDoc(collection(database, "log"), {
-         comment: "Added " + sectionName,
+         comment: "Added " + promoName,
          timestamp: serverTimestamp(),
      });
  }
 
 
- let tableRow = document.getElementById("sectionTable");
+ let tableRow = document.getElementById("promoTable");
  const loader = document.getElementById("loader");
  // show the loader initially
  loader.style.display = "block";
- const colRef = collection(database, "section");
- //  const sectionContainer = document.getElementById("sectionContainer");
- async function getSections() {
+ const colRef = collection(database, "promo");
+ //  const promoContainer = document.getElementById("promoContainer");
+ async function getpromos() {
      try {
          const q = query(colRef, orderBy("timestamp", "desc"));
 
@@ -339,10 +317,10 @@ try {
                  let data = doc.data();
                  let row = `<tr>
        <td>${index}</td>
-       <td><img src="${data.sectionPicture}"  style="border-radius:0px;width:50px;heigth:50px"/></td>
-       <td>${data.sectionName} </td>
+       <td><img src="${data.promoPicture}"  style="border-radius:0px;width:50px;heigth:50px"/></td>
+       <td>${data.promoName} </td>
        <td>
-         <div class="section-des">  ${data.sectionDes}</div>
+         <div class="promo-des">  ${data.promoDes}</div>
       
        </td>
     
@@ -360,8 +338,8 @@ try {
          >
            <h5 class="dropdown-header">Action</h5>
                   
-<a class="dropdown-item update-action" data-docid="${doc.id}" data-sectionpic="${doc.data().sectionPicture}" data-sectionname="${doc.data().sectionName}"  data-sectiondesc="${doc.data().sectionDes}" )">Edit</a>
-<a class="dropdown-item delete-action " data-docid="${doc.id}" data-sectionpic="${doc.data().sectionPicture}" data-sectionname="${doc.data().sectionName}"  data-sectiondesc="${doc.data().sectionDes}")">Delete</a>
+<a class="dropdown-item update-action" data-docid="${doc.id}" data-promopic="${doc.data().promoPicture}" data-promoname="${doc.data().promoName}"  data-promodesc="${doc.data().promoDes}" )">Edit</a>
+<a class="dropdown-item delete-action " data-docid="${doc.id}" data-promopic="${doc.data().promoPicture}" data-promoname="${doc.data().promoName}"  data-promodesc="${doc.data().promoDes}")">Delete</a>
           
          </div>
        </td>
@@ -377,18 +355,15 @@ try {
                  item.addEventListener("click", (event) => {
 
                      const docId = event.target.dataset.docid;
-                     const sectionPicture = event.target.dataset.sectionpic;
-                     const sectionTitle = event.target.dataset.sectionname;
-                     const sectionDescription = event.target.dataset.sectiondesc;
+                     const promoPicture = event.target.dataset.promopic;
+                     const promoTitle = event.target.dataset.promoname;
+                     const promoDescription = event.target.dataset.promodesc;
 
-                     document.getElementById("itemName").innerHTML=sectionTitle;
-                     confirmationModal.style.display = "block";
-         
-                     confirmBtn.addEventListener("click", () => {
-                       confirmationModal.style.display = "none";
-                       openModal(docId, sectionPicture, sectionTitle, sectionDescription);
-                     });
-                  
+                     // Show confirmation alert
+                     const confirmation = window.confirm(`Do you really want to modify ${promoTitle} ?`);
+                     if (confirmation) {
+                         openModal(docId, promoPicture, promoTitle, promoDescription);
+                     }
                  });
              });
              // Add event listener to delete dropdown item
@@ -397,31 +372,16 @@ try {
                  item.addEventListener("click", (event) => {
 
                      const docId = event.target.dataset.docid;
-                     const sectionTitle = event.target.dataset.sectionname;
-
-                     const  deleteConfirmationModal = document.getElementById("delete-confirmation-modal");
-                     const deleteConfirmBtn = document.getElementById("delete-yes-btn");
-                     const deletedeclineBtn = document.getElementById("delete-no-btn");
-         
-                     
-                     document.getElementById("deleteItemName").innerHTML=sectionTitle;
-                     deleteConfirmationModal.style.display="block";
-                   
-         
-         
-                     deleteConfirmBtn.addEventListener("click", () => {
-                       deleteConfirmationModal.style.display = "none";
-                       deleteDocument("section", docId, sectionTitle);
-                       deleteOldImage(docId); 
-                     });
-         
-                     deletedeclineBtn.addEventListener("click", () => {
-                       deleteConfirmationModal.style.display = "none";
-                      
-                     });
+                     const promoTitle = event.target.dataset.promoname;
 
 
-                    
+
+                     // Show confirmation alert
+                     const confirmation = window.confirm(`Do you really want to delete ${promoTitle} ? `);
+                     if (confirmation) {
+                         deleteDocument("promo", docId, promoTitle);
+                         deleteOldImage(docId); 
+                     }
                  });
              });
          });
@@ -432,40 +392,40 @@ try {
  }
 
 
- const updateSectionBtn = document.getElementById("updateBtn");
+ const updatepromoBtn = document.getElementById("updateBtn");
 
- document.getElementById("updatesectionForm").addEventListener("submit", updateSect);
- const updateSectImageInput = document.getElementById("section-picture");
- const updateSectImagePreview = document.getElementById("updateimagePreview");
- updateSectImageInput.addEventListener("change", () => {
-     const file = updateSectImageInput.files[0];
+ document.getElementById("updatepromoForm").addEventListener("submit", updatepromot);
+ const updatepromotImageInput = document.getElementById("promo-picture");
+ const updatepromotImagePreview = document.getElementById("updateimagePreview");
+ updatepromotImageInput.addEventListener("change", () => {
+     const file = updatepromotImageInput.files[0];
 
      if (file) {
          const reader = new FileReader();
 
          reader.addEventListener("load", () => {
-             updateSectImagePreview.setAttribute("src", reader.result);
+             updatepromotImagePreview.setAttribute("src", reader.result);
          });
 
          reader.readAsDataURL(file);
      }
  });
 
- function updateSect(e) {
+ function updatepromot(e) {
      e.preventDefault();
 
      // Change submit button to spinner
-     updateSectionBtn.innerHTML = '<span class="spinner"></span> Updating...';
+     updatepromoBtn.innerHTML = '<span class="spinner"></span> Updating...';
 
      // Get values
-     var sectionTitle = getInputVal("sectionTitle");
-     var sectionDescription = getInputVal("sectionDescript");
+     var promoTitle = getInputVal("promoTitle");
+     var promoDescription = getInputVal("promoDescript");
      var documentId = getInputVal("documentId");
 
-     const file = document.querySelector("#section-picture").files[0];
+     const file = document.querySelector("#promo-picture").files[0];
 
      if (file) {
-         const storageRef = sRef(storage, `sectionImages/${file.name}` + new Date());
+         const storageRef = sRef(storage, `promoImages/${file.name}` + new Date());
 
          const deleteOldImagePromise = deleteOldImage(documentId); // Delete old image
          const uploadNewImagePromise = uploadNewImage(storageRef, file); // Upload new image
@@ -475,7 +435,7 @@ try {
                  // Update image fields and other corresponding fields
                  if (oldImageDeleted) {
                      // Old image deleted successfully
-                     updateSections(documentId, downloadURL, sectionTitle, sectionDescription);
+                     updatepromos(documentId, downloadURL, promoTitle, promoDescription);
                  } else {
                      // Failed to delete old image
                      console.error("Failed to delete old image");
@@ -486,79 +446,73 @@ try {
              })
              .finally(() => {
                  // Change submit button back to normal text
-                 updateSectionBtn.innerHTML = "Update Product";
+                 updatepromoBtn.innerHTML = "Update Product";
              });
      } else {
          // No new image selected, update other fields only
-         updateSections(documentId, null, sectionTitle, sectionDescription);
+         updatepromos(documentId, null, promoTitle, promoDescription);
      }
  }
 
 
- function updateSections(documentId, downloadURL, sectTitle, sectDescript) {
+ function updatepromos(documentId, downloadURL, promotTitle, promotDescript) {
 
 
 
-     const sectionRef = doc(database, "section", documentId);
+     const promoRef = doc(database, "promo", documentId);
 
      if (downloadURL != null) {
-         updateDoc(sectionRef, {
-             sectionPicture: downloadURL,
-             sectionName: sectTitle,
-             sectionDes: sectDescript
+         updateDoc(promoRef, {
+             promoPicture: downloadURL,
+             promoName: promotTitle,
+             promoDes: promotDescript
          })
              .then(() => {
                  // Product updated successfully
                  // Show success message or perform any additional actions
                  addDoc(collection(database, "log"), {
-                     comment: `${sectTitle} was modified`,
+                     comment: `${promotTitle} was modified`,
                      timestamp: serverTimestamp(),
                  });
                  document.getElementById("modifyModal").style.display = "none";
-                 document.getElementById("success-alertMessage").innerHTML = `${sectTitle} section has been updated successfully`;
-                 document.getElementById("success-alert-modal").style.display = "block";
-               
+                 showSnackbar(`${promotTitle} promo updated successfully`, true);
              })
              .catch((error) => {
                  // Error occurred while updating the product
                  console.error("Error updating product:", error);
                  // Show error message or perform any error handling
                  document.getElementById("modifyModal").style.display = "none";
-                 document.getElementById("failure-alertMessage").innerHTML = `${sectTitle} update Failed, please try again`;
-                 document.getElementById("failure-alert-modal").style.display = "block";
-                
+                 showSnackbar("Failed to update promo, please try again", false);
              })
              .finally(() => {
                  // Reset the submit button
-                 updateSectionBtn.innerHTML = "Update Section";
+                 updatepromoBtn.innerHTML = "Update promo";
              });
      } else {
-         updateDoc(sectionRef, {
-             sectionName: sectTitle,
-             sectionDes: sectDescript
+         updateDoc(promoRef, {
+             promoName: promotTitle,
+             promoDes: promotDescript
          })
              .then(() => {
                  // Product updated successfully
                  // Show success message or perform any additional actions
                  addDoc(collection(database, "log"), {
-                     comment: `${sectTitle} was modified`,
+                     comment: `${promotTitle} was modified`,
                      timestamp: serverTimestamp(),
                  });
                  document.getElementById("modifyModal").style.display = "none";
-                 document.getElementById("success-alertMessage").innerHTML = `${sectTitle} section has been updated successfully`;
-                 document.getElementById("success-alert-modal").style.display = "block";
+                 showSnackbar(`${promotTitle} promo updated successfully`, true);
              })
              .catch((error) => {
                  // Error occurred while updating the product
                  console.error("Error updating product:", error);
                  // Show error message or perform any error handling
                  document.getElementById("modifyModal").style.display = "none";
-                 document.getElementById("failure-alertMessage").innerHTML = `${sectTitle} update Failed, please try again`;
-                 document.getElementById("failure-alert-modal").style.display = "block";
+                 showSnackbar("Failed to update promo, please try again", false);
              })
              .finally(() => {
                  // Reset the submit button
-                 updateSectionBtn.innerHTML = "Update Section";
+                 updatepromoBtn.innerHTML = "Update promo";
              });
      }
 
@@ -568,7 +522,7 @@ try {
      // Assuming you have initialized the Firebase Storage instance as `storage`
      // Extract the storage path from the URL
      const storagePath = url.replace(
-         "https://firebasestorage.googleapis.com/v0/b/sectionImages/o/",
+         "https://firebasestorage.googleapis.com/v0/b/promoImages/o/",
          ""
      );
 
@@ -640,12 +594,12 @@ try {
 
 
  function getOldImageURL(documentId) {
-     const docRef = doc(database, "section", documentId);
+     const docRef = doc(database, "promo", documentId);
      return getDoc(docRef)
          .then((doc) => {
              if (doc.exists()) {
                  const data = doc.data();
-                 return data.sectionPicture; // Assuming the field storing the image URL is named 'productPicture'
+                 return data.promoPicture; // Assuming the field storing the image URL is named 'productPicture'
              } else {
                  return null;
              }
@@ -670,7 +624,7 @@ try {
 
 
  // Function to delete a document from Firestore
- async function deleteDocument(collectionName, documentId, sectionName) {
+ async function deleteDocument(collectionName, documentId, promoName) {
      try {
 
          const documentRef = doc(database, collectionName, documentId);
@@ -678,29 +632,41 @@ try {
          await deleteDoc(documentRef);
          console.log("Document deleted successfully");
          addDoc(collection(database, "log"), {
-             comment: `${sectionName} was deleted`,
+             comment: `${promoName} was deleted`,
              timestamp: serverTimestamp(),
          });
-         document.getElementById("success-alertMessage").innerHTML = `${sectionName} was deleted successfully`;
-         document.getElementById("success-alert-modal").style.display = "block";
-
+         showSnackbar(`${promoName} was deleted successfully`, true);
      } catch (error) {
          console.error("Error deleting document:", error);
-         document.getElementById("success-alertMessage").innerHTML = `Failed to delete ${sectionName}, try again`;
-         document.getElementById("success-alert-modal").style.display = "block";
-       
+         showSnackbar(`Failed to delete ${promoName}, try again`, false);
      }
+ }
+ function showSnackbar(message, isSuccess) {
+     const snackbar = document.getElementById("snackbar");
+     snackbar.textContent = message;
+
+     if (isSuccess) {
+         snackbar.style.backgroundColor = "#4CAF50";
+     } else {
+         snackbar.style.backgroundColor = "#F44336";
+     }
+
+     snackbar.classList.add("show");
+
+     setTimeout(() => {
+         snackbar.classList.remove("show");
+     }, 2000);
  }
 
 
  // Add the openModal and closeModal functions
- function openModal(docId, sectionPicture, sectionTitle, sectionDescription) {
+ function openModal(docId, promoPicture, promoTitle, promoDescription) {
 
      // Populate the modal with the data
-     document.getElementById("sectionTitle").value = sectionTitle;
-     document.getElementById("sectionDescript").value = sectionDescription;
+     document.getElementById("promoTitle").value = promoTitle;
+     document.getElementById("promoDescript").value = promoDescription;
      document.getElementById("documentId").value = docId;
-     document.getElementById("updateimagePreview").setAttribute("src", sectionPicture);
+     document.getElementById("updateimagePreview").setAttribute("src", promoPicture);
 
 
 
@@ -720,5 +686,5 @@ try {
 
  window.onload = function () {
 
-     getSections();
+     getpromos();
  }

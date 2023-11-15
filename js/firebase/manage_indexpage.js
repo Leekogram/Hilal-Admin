@@ -39,7 +39,7 @@
      if (user) {
        const uid = user.uid;
      } else {
-       window.location.href = "login.html";
+       window.location.href = "./login/";
      }
    });
 
@@ -688,11 +688,11 @@
            const notificationLink = document.createElement('a');
            notificationLink.classList.add('dropdown-item', 'preview-item');
            if (notification.type == "service") {
-             notificationLink.setAttribute('href', './pages/bookings/booking-page.html');
+             notificationLink.setAttribute('href', './pages/bookings/');
            } else if (notification.type == "feedback") {
-             notificationLink.setAttribute('href', './pages/feedbacks/feedbacks.html');
+             notificationLink.setAttribute('href', './pages/feedbacks/');
            } else {
-             notificationLink.setAttribute('href', './pages/orders/orders.html');
+             notificationLink.setAttribute('href', './pages/orders/');
            }
 
 

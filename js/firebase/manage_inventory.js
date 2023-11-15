@@ -37,6 +37,38 @@ const database = getFirestore(app);
 
 const auth = getAuth(app);
 
+
+  //handlemodals
+  const signOutBtn = document.getElementById("sign-out-btn");
+  const signOutModal = document.getElementById("sign-out-modal");
+
+  const confirmSignOutBtn = document.getElementById("confirm-sign-out-btn");
+  const cancelSignOutBtn = document.getElementById("cancel-sign-out-btn");
+ 
+  
+
+  // Show the modal when the sign-out button is clicked
+  signOutBtn.addEventListener("click", () => {
+    signOutModal.style.display = "block";
+  });
+
+  // Hide the modal when the cancel button is clicked
+  cancelSignOutBtn.addEventListener("click", () => {
+    signOutModal.style.display = "none";
+  });
+
+  // Sign the user out of Firebase when the confirm button is clicked
+  confirmSignOutBtn.addEventListener("click", () => {
+    auth.signOut()
+      .then(() => {
+        console.log("User signed out successfully");
+        signOutModal.style.display = "none";
+      })
+      .catch((error) => {
+        console.error("Error signing out:", error);
+        signOutModal.style.display = "none";
+      });
+  });
 //check if user is logged in or not
 onAuthStateChanged(auth, (user) => {
   if (user) {
@@ -44,7 +76,7 @@ onAuthStateChanged(auth, (user) => {
 
   } else {
 
-    window.location.href = "../../../login.html";
+    window.location.href = "../../../login/";
   }
 });
 
@@ -75,6 +107,12 @@ imageInput.addEventListener("change", () => {
     reader.readAsDataURL(file);
   }
 });
+
+
+
+
+
+
 
 
 var inputField = document.getElementById("productTitle");
@@ -170,6 +208,7 @@ function addProduct(e) {
   var productCat = getInputVal("productCat");
   var productQty = getInputVal("productQuantiy");
   var productDescription = getInputVal("productDescription");
+  var isTopProduct = document.querySelector("input[type='radio'][name=topProductRadios]:checked").value;
 
   // const storRef = sRef(storage,'products');
   const file = document.querySelector("#product-image").files[0];
@@ -200,7 +239,8 @@ function addProduct(e) {
             productPrice,
             productCat,
             productQty,
-            productDescription
+            productDescription,
+            isTopProduct
           ),
           5000
         );
@@ -208,6 +248,17 @@ function addProduct(e) {
     }
   );
 }
+
+
+const successOkBtn = document.getElementById("succees-ok-btn");
+successOkBtn.addEventListener("click", () => {
+  document.getElementById("success-alert-modal").style.display = "none";
+});
+const failureOkBtn = document.getElementById("failure-ok-btn");
+failureOkBtn.addEventListener("click", () => {
+  failureOkBtn.getElementById("failure-alert-modal").style.display = "none";
+});
+
 
 // Function to get form values
 function getInputVal(id) {
@@ -221,7 +272,8 @@ async function addProducts(
   productPrice,
   productCat,
   productQty,
-  productDesc
+  productDesc,
+  isTopProduct
 ) {
   // Add a new document with a generated id.
   await addDoc(collection(database, "products"), {
@@ -231,12 +283,15 @@ async function addProducts(
     productCategory: productCat,
     productQty: productQty,
     productDesc: productDesc,
+    isTopProduct: isTopProduct,
     timestamp: serverTimestamp(),
   })
     .then((docRef) => {
       addProductBtn.innerHTML = "Submit";
       // Data sent successfully!
-      showSnackbar(`Success ${productName} was added successfully`, true);
+    
+      document.getElementById("success-alertMessage").innerHTML = `${productName} was added successfully`;
+      document.getElementById("success-alert-modal").style.display = "block";
     
       console.log("Product has been added successfully");
       document.getElementById("productForm").reset();
@@ -247,8 +302,9 @@ async function addProducts(
     .catch((error) => {
       // Data sent failed...
       addProductBtn.innerHTML = "Submit";
-      showSnackbar(`Opps! Something went wrong ${error} was added successfully`, false);
-    
+
+      document.getElementById("failure-alertMessage").innerHTML = `An error Occured while trying to add ${productName}, please try again`;
+      document.getElementById("failure-alert-modal").style.display = "block";
       document.getElementById("productExist").style.display = "none";
       document.getElementById("addProductBtn").style.display = "block";
       console.log(error);
@@ -267,28 +323,14 @@ async function addProducts(
       // document.getElementById("productForm").reset();
     });
 }
-function showSnackbar(message, isSuccess) {
-  const snackbar = document.getElementById("snackbar");
-  snackbar.textContent = message;
 
-  if (isSuccess) {
-    snackbar.style.backgroundColor = "#4CAF50";
-  } else {
-    snackbar.style.backgroundColor = "#F44336";
-  }
-
-  snackbar.classList.add("show");
-
-  setTimeout(() => {
-    snackbar.classList.remove("show");
-  }, 2000);
-}
 
 
 // Add an event listener to the form submit event
 const updateDeliveryFeeBtn = document.getElementById("updateDeliveryFeeBtn");
 updateDeliveryFeeBtn.addEventListener("click", function (event) {
-  event.preventDefault(); // Prevent the default form submission
+  event.preventDefault();
+  document.getElementById("updateDeliveryFeeBtn").innerHTML="Updating..."; // Prevent the default form submission
   updateDeliveryPrice(); // Call the update function
 });
 
@@ -306,14 +348,18 @@ function updateDeliveryPrice() {
       comment: `delivery price was modified to ${deliveryPrice}`,
       timestamp: serverTimestamp(),
     });
- 
-    showSnackbar("Price updated successfully", true);
+    document.getElementById("success-alertMessage").innerHTML = `Price has been updated successfully`;
+    document.getElementById("success-alert-modal").style.display = "block";
+    document.getElementById("updateDeliveryFeeBtn").innerHTML="Update";
+   
   })
   .catch((error) => {
     // Error occurred while updating the product
     console.error("Error updating price:", error);
+    document.getElementById("failure-alertMessage").innerHTML = `Price update Failed, please try again`;
+    document.getElementById("failure-alert-modal").style.display = "block";
+    document.getElementById("updateDeliveryFeeBtn").innerHTML="Update";
 
-    showSnackbar("Failed to update price, please try again", false);
   })
 
 
@@ -355,11 +401,11 @@ async function getNotifications() {
           const notificationLink = document.createElement('a');
           notificationLink.classList.add('dropdown-item', 'preview-item');
           if (notification.type == "service") {
-            notificationLink.setAttribute('href', './booking-page.html');
+            notificationLink.setAttribute('href', '../services/');
           } else if (notification.type == "feedback") {
-            notificationLink.setAttribute('href', '../feedbacks/feedbacks.html');
+            notificationLink.setAttribute('href', '../feedbacks/');
           } else {
-            notificationLink.setAttribute('href', '../orders/orders.html');
+            notificationLink.setAttribute('href', '../orders/');
           }
 
 

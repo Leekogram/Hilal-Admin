@@ -100,170 +100,12 @@ onAuthStateChanged(auth, (user) => {
       });
       tableRow.innerHTML = rows;
       // Add event listener to accept dropdown item
-      const acceptItems = document.querySelectorAll(".accept-action");
-      acceptItems.forEach((item) => {
-        item.addEventListener("click", (event) => {
-          const docId = event.target.dataset.docid;
-          acceptFunction(docId);
-        });
-      });
 
-      // Add event listener to complete dropdown item
-      const completeItems = document.querySelectorAll(".complete-action");
-      completeItems.forEach((item) => {
-        item.addEventListener("click", (event) => {
-          const docId = event.target.dataset.docid;
-          completeFunction(docId);
-        });
-      });
-
-      // Add event listener to cancel dropdown item
-      const cancelItems = document.querySelectorAll(".cancel-action");
-      cancelItems.forEach((item) => {
-        item.addEventListener("click", (event) => {
-          const docId = event.target.dataset.docid;
-          cancelFunction(docId);
-        });
-      });
-
-      // Add event listener to reject dropdown item
-      const rejectItems = document.querySelectorAll(".reject-action");
-      rejectItems.forEach((item) => {
-        item.addEventListener("click", (event) => {
-          const docId = event.target.dataset.docid;
-          rejectFunction(docId);
-        });
-      });
     });
 
     
 
-    function acceptFunction(docId) {
-      // Execute your accept function here with the docId parameter
-      console.log("Accept function executed for docId", docId);
 
-      const docRef = doc(database, "bookings", docId);
-
-      const data = {
-        status: "Accepted",
-      };
-      updateDoc(docRef, data)
-        .then((docRef) => {
-          console.log(
-            "A New Document Field has been added to an existing document"
-          );
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-
-      addDoc(collection(database, "log"), {
-        comment: "Booking status has been updated to accepted.",
-
-        timestamp: serverTimestamp(),
-      })
-        .then((docRef) => {
-          console.log("Product has been updated successfully");
-        })
-        .catch((error) => {
-          console.log(error);
-          // document.getElementById("productForm").reset();
-        });
-    }
-
-    function completeFunction(docId) {
-      // Execute your complete function here with the docId parameter
-      console.log("Complete function executed for docId", docId);
-      const docRef = doc(database, "bookings", docId);
-
-      const data = {
-        status: "Completed",
-      };
-      updateDoc(docRef, data)
-        .then((docRef) => {
-          console.log(
-            "A New Document Field has been added to an existing document"
-          );
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-
-      addDoc(collection(database, "log"), {
-        comment: "Booking status has been update to completed.",
-
-        timestamp: serverTimestamp(),
-      })
-        .then((docRef) => {
-          console.log("Product has been updated successfully");
-        })
-        .catch((error) => {
-          console.log(error);
-          // document.getElementById("productForm").reset();
-        });
-    }
-    function cancelFunction(docId) {
-      // Execute your complete function here with the docId parameter
-      console.log("Complete function executed for docId", docId);
-      const docRef = doc(database, "bookings", docId);
-
-      const data = {
-        status: "Cancelled",
-      };
-      updateDoc(docRef, data)
-        .then((docRef) => {
-          console.log(
-            "A New Document Field has been added to an existing document"
-          );
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-
-      addDoc(collection(database, "log"), {
-        comment: "Booking status has been updated to cancelled.",
-
-        timestamp: serverTimestamp(),
-      })
-        .then((docRef) => {
-          console.log("Product has been updated successfully");
-        })
-        .catch((error) => {
-          console.log(error);
-          // document.getElementById("productForm").reset();
-        });
-    }
-    function rejectFunction(docId) {
-      // Execute your complete function here with the docId parameter
-      console.log("Complete function executed for docId", docId);
-      const docRef = doc(database, "bookings", docId);
-
-      const data = {
-        status: "Rejected",
-      };
-      updateDoc(docRef, data)
-        .then((docRef) => {
-          console.log(
-            "A New Document Field has been added to an existing document"
-          );
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-
-      addDoc(collection(database, "log"), {
-        comment: "Booking status has been update to rejected.",
-
-        timestamp: serverTimestamp(),
-      })
-        .then((docRef) => {
-          console.log("Product has been updated successfully");
-        })
-        .catch((error) => {
-          console.log(error);
-          // document.getElementById("productForm").reset();
-        });
-    }
   } catch (error) {
     console.log(error);
   }
@@ -331,11 +173,11 @@ confirmSignOutBtn.addEventListener("click", () => {
             const notificationLink = document.createElement('a');
             notificationLink.classList.add('dropdown-item', 'preview-item');
             if (notification.type == "service") {
-              notificationLink.setAttribute('href', './booking-page.html');
+              notificationLink.setAttribute('href', '../services/');
             } else if (notification.type == "feedback") {
-              notificationLink.setAttribute('href', '../feedbacks/feedbacks.html');
+              notificationLink.setAttribute('href', '../feedbacks/');
             } else {
-              notificationLink.setAttribute('href', '../orders/orders.html');
+              notificationLink.setAttribute('href', '../orders/');
             }
 
 

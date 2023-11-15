@@ -11054,7 +11054,7 @@ textarea.is-invalid.tt-hint {
 }
 
 .btn:hover, .fc button:hover, .ajax-upload-dragdrop .ajax-file-upload:hover, .swal2-modal .swal2-buttonswrapper .swal2-styled:hover, .wizard > .actions a:hover {
-  color: #1F1F1F;
+  color: #FFF;
   text-decoration: none;
 }
 
@@ -30596,6 +30596,11 @@ div.tagsinput span.tag a {
 }
 
 /*# sourceMappingURL=../maps/vertical-layout-light/style.css.map */
+.primary-button{
+  background:linear-gradient(to bottom right, #498b33, rgba(41, 71, 37, 0.784)) ;
+  font-size: 14px;
+  color:#ffffff;
+}
 .primary-button{
   background:linear-gradient(to bottom right, #498b33, rgba(41, 71, 37, 0.784)) ;
   font-size: 14px;

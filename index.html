@@ -200,7 +200,7 @@
         </ul>
         <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
           data-toggle="offcanvas">
-          <span class="icon-menu"></span>
+          <span class="icon-menu text-white"></span>
         </button>
       </div>
     </nav>
@@ -209,7 +209,7 @@
     <div id="sign-out-modal" class="modal">
       <div class="modal-content">
         <p>Are you sure you want to sign out?</p>
-        <button class="btn secondary-button btn-rounded align-self-center mb-3 w-50" id="confirm-sign-out-btn">Yes, sign
+        <button class="btn btn-rounded align-self-center mb-3 w-50" id="confirm-sign-out-btn" style="background-color: red;color:white">Yes, sign
           me
           out</button>
         <button class="btn  primary-button btn-rounded align-self-center w-50" id="cancel-sign-out-btn">Cancel</button>
@@ -222,20 +222,20 @@
       <!-- partial:partials/_sidebar.html -->
       <nav class="sidebar  sidebar-offcanvas" id="sidebar">
         <ul class="nav">
-          <li class="nav-item">
-            <a class="nav-link" href="index.html">
+          <li class="nav-item active">
+            <a class="nav-link " href="./">
               <i class="icon-grid menu-icon"></i>
               <span class="menu-title">Dashboard</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="pages/bookings/booking-page.html">
+            <a class="nav-link" href="./pages/bookings">
               <i class="icon-paper menu-icon"></i>
               <span class="menu-title">Bookings</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="pages/orders/orders.html">
+            <a class="nav-link" href="./pages/orders">
               <i class="icon-paper menu-icon"></i>
               <span class="menu-title">Orders</span>
             </a>
@@ -249,10 +249,10 @@
             <div class="collapse" id="ui-basic">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item">
-                  <a class="nav-link" href="./pages/inventory/viewstock-dashboard.html">View Stock</a>
+                  <a class="nav-link" href="./pages/inventory">View Stock</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="./pages/inventory/add-item.html">Add Stock</a>
+                  <a class="nav-link" href="./pages/inventory/add-item">Add Stock</a>
                 </li>
 
                 <!-- <li class="nav-item"> <a class="nav-link" href="pages/inventory/log.html">Log</a></li> -->
@@ -260,7 +260,7 @@
             </div>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="./section.html">
+            <a class="nav-link" href="./section/">
               <i class="icon-grid menu-icon"></i>
               <span class="menu-title">Section</span>
 
@@ -277,10 +277,10 @@
             <div class="collapse" id="ui-service">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item">
-                  <a class="nav-link" href="./pages/service/service-dashboard.html">View Services</a>
+                  <a class="nav-link" href="./pages/service/">View Services</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="./pages/service/add-service.html">Add Services</a>
+                  <a class="nav-link" href="./pages/service/add-service/">Add Services</a>
                 </li>
               </ul>
             </div>
@@ -295,13 +295,21 @@
             <div class="collapse" id="ui-customer">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item">
-                  <a class="nav-link" href="pages/customers/registered-customers.html">Customers</a>
+                  <a class="nav-link" href="pages/customers/">Customers</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="pages/customers/customer_loyalty.html">Customer loyalty</a>
+                  <a class="nav-link" href="pages/customers/customers-loyalty/">Customer loyalty</a>
                 </li>
               </ul>
             </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="./new-features/">
+              <i class="icon-star menu-icon"></i>
+              <span class="menu-title">Promo/Feature Ad</span>
+
+            </a>
+
           </li>
 
           <li class="nav-item">
@@ -313,10 +321,10 @@
             </a>
             <div class="collapse" id="ui-message">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="./pages/message/view_messages.html">View messages</a>
+                <li class="nav-item"> <a class="nav-link" href="./pages/message/">View messages</a>
                 </li>
-                <li class="nav-item"> <a class="nav-link" href="./send-bc-message.html">Send Message</a></li>
-                <li class="nav-item"> <a class="nav-link" href="./pages/feedbacks/feedbacks.html">Feed backs</a></li>
+                <li class="nav-item"> <a class="nav-link" href="./send-bc/">Send Message</a></li>
+                <li class="nav-item"> <a class="nav-link" href="./pages/feedbacks/">Feed backs</a></li>
                 <!-- <li class="nav-item"> <a class="nav-link" href="./live_chat.html">Live chat</a></li> -->
 
               </ul>
@@ -347,7 +355,7 @@
                 <div class="col-12 col-xl-4">
                   <div class="justify-content-end d-flex">
                     <div class=" flex-md-grow-1 flex-xl-grow-0">
-                      <button class="btn btn-sm btn-light" aria-expanded="true">
+                      <button class="btn btn-sm btn-inverse-secondary text-dark" aria-expanded="true">
                         <i class="mdi mdi-calendar"></i> <span id="today"></span>
                       </button>
                       <!--   <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuDate2">
@@ -420,9 +428,9 @@
                 </div>
 
                 <div class="col-md-6 mb-4 mb-lg-0 stretch-card transparent">
-                  <div class="card ">
+                  <div class="card bg-info text-white ">
                     <div class="card-body">
-                      <p class="mb-4">Total Products</p>
+                      <p class="mb-4 ">Total Products</p>
                       <p class="fs-30 mb-2" id="ourProducts"></p>
                       <!-- <p>2.00% (30 days)</p> -->
                     </div>
@@ -457,9 +465,9 @@
 
               </div>
               <div class="row">
-                <div class="col-md-6 stretch-card transparent">
-                  <div class="card " style="background-color: #333333;">
-                    <div class="card-body text-white">
+                <div class="col-md-6 mb-4 stretch-card transparent">
+                  <div class="card text-white" style="background-color: indianred;">
+                    <div class="card-body">
                       <p class="mb-4">Today's Registered Customers</p>
                       <p class="fs-30 mb-2" id="todaysRegCustomer"></p>
                       <!-- <p>0.22% (30 days)</p> -->
@@ -470,7 +478,7 @@
 
 
                 <div class="col-md-6 stretch-card transparent">
-                  <div class="card ">
+                  <div class="card bg-dark text-white ">
                     <div class="card-body">
                       <p class="mb-4">Today's Added Products</p>
                       <p class="fs-30 mb-2 " id="todayaddedProducts"></p>

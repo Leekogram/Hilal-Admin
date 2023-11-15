@@ -11,23 +11,7 @@ import {
   updateDoc,
 } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js";
 import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-auth.js"
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-/* const firebaseConfig = {
-  apiKey: "AIzaSyAjW8pGmsL9l5olUhU5je0zKD8hkrQThZw",
-  authDomain: "boldandbeautifulsalon-89023.firebaseapp.com",
-  projectId: "boldandbeautifulsalon-89023",
-  storageBucket: "boldandbeautifulsalon-89023.appspot.com",
-  messagingSenderId: "466649288397",
-  appId: "1:466649288397:web:150d344db30d3f2185a384",
-  measurementId: "G-0V7GXFY5ZP",
-  databaseURL:
-    "https://boldandbeautifulsalon-89023-default-rtdb.firebaseio.com/",
-};
- */
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -57,7 +41,7 @@ async function login(userEmail,userPassword) {
 .then((userCredential) => {
 // Signed in 
 const user = userCredential.user;
-window.location.href = "index.html";
+window.location.href = "../";
 })
 .catch((error) => {
 const errorCode = error.code;

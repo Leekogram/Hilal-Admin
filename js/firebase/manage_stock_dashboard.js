@@ -35,6 +35,18 @@
   const auth = getAuth(app);
   const colRef = collection(database, "products");
 
+  const confirmBtn = document.getElementById("yes-btn");
+  const declineBtn = document.getElementById("no-btn");
+  const confirmationModal = document.getElementById("confirmation-modal");
+ 
+
+  declineBtn.addEventListener("click", () => {
+    confirmationModal.style.display = "none";
+  });
+
+
+  
+
   async function getStock() {
     const currentYear = new Date().getFullYear();
     document.getElementById("currentYear").textContent = currentYear;
@@ -44,7 +56,7 @@
       if (user) {
         const uid = user.uid;
       } else {
-        window.location.href = "../../../login.html";
+        window.location.href = "../../../login/";
       }
     });
     let tableRow = document.getElementById("stockTable");
@@ -69,8 +81,9 @@
             <td>${data.productPrice}</td>
             <td>${data.productQty}</td>
             <td><div class="section-des">${data.productDesc}</div> </td>
+            <td><div class="section-des">${data.isTopProduct}</div> </td>
             <td>
-              <label class="badge ${data.productQty == 0
+              <label class="badge  text-white ${data.productQty == 0
               ? "badge-secondary"
               : data.productQty <= 2
                 ? "badge-warning"
@@ -99,8 +112,8 @@
                 <h3 class="dropdown-header text-dark">Action</h3>
           
               
-<a class="dropdown-item update-action" data-docid="${doc.id}" data-productpic="${doc.data().productPicture}" data-productname="${doc.data().productName}" data-productcat="${doc.data().productCategory}" data-productprice="${doc.data().productPrice}" data-productdesc="${doc.data().productDesc}" data-productqty="${doc.data().productQty}")">Edit</a>
-<a class="dropdown-item delete-action " data-docid="${doc.id}" data-productpic="${doc.data().productPicture}" data-productname="${doc.data().productName}" data-productcat="${doc.data().productCategory}" data-productprice="${doc.data().productPrice}" data-productdesc="${doc.data().productDesc}" data-productqty="${doc.data().productQty}")">Delete</a>
+<a class="dropdown-item update-action" data-docid="${doc.id}" data-productpic="${doc.data().productPicture}" data-productname="${doc.data().productName}" data-productcat="${doc.data().productCategory}" data-productprice="${doc.data().productPrice}" data-productdesc="${doc.data().productDesc}" data-topproduct="${doc.data().isTopProduct}" data-productqty="${doc.data().productQty}")">Edit</a>
+<a class="dropdown-item delete-action " data-docid="${doc.id}" data-productpic="${doc.data().productPicture}" data-productname="${doc.data().productName}" data-productcat="${doc.data().productCategory}" data-productprice="${doc.data().productPrice}" data-productdesc="${doc.data().productDesc}" data-topproduct="${doc.data().isTopProduct}" data-productqty="${doc.data().productQty}")">Delete</a>
 
                
             
@@ -124,12 +137,19 @@
             const productPrice = event.target.dataset.productprice;
             const productQuantity = event.target.dataset.productqty;
             const productDescription = event.target.dataset.productdesc;
+            const isTopProduct = event.target.dataset.topproduct;
 
             // Show confirmation alert
-            const confirmation = window.confirm(`Do you really want to modify ${productTitle} ?`);
-            if (confirmation) {
-              openModal(docId, productPicture, productTitle, productCat, productPrice, productQuantity, productDescription);
-            }
+            document.getElementById("itemName").innerHTML=productTitle;
+            confirmationModal.style.display = "block";
+
+            confirmBtn.addEventListener("click", () => {
+              confirmationModal.style.display = "none";
+              openModal(docId, productPicture, productTitle, productCat, productPrice, productQuantity, productDescription,isTopProduct);
+            });
+          
+            
+        
           });
         });
         // Add event listener to delete dropdown item
@@ -140,50 +160,33 @@
             const docId = event.target.dataset.docid;       
             const productTitle = event.target.dataset.productname;
 
+          const  deleteConfirmationModal = document.getElementById("delete-confirmation-modal");
+            const deleteConfirmBtn = document.getElementById("delete-yes-btn");
+            const deletedeclineBtn = document.getElementById("delete-no-btn");
+
+            
+            document.getElementById("deleteItemName").innerHTML=productTitle;
+            deleteConfirmationModal.style.display="block";
+          
 
 
-            // Show confirmation alert
-            const confirmation = window.confirm(`Do you really want to delete ${productTitle} ? `);
-            if (confirmation) {
+            deleteConfirmBtn.addEventListener("click", () => {
+              deleteConfirmationModal.style.display = "none";
               deleteDocument("products", docId, productTitle);
-            }
+            });
+
+            deletedeclineBtn.addEventListener("click", () => {
+              deleteConfirmationModal.style.display = "none";
+             
+            });
+
+      
           });
         });
 
 
 
-        // Add event listener to the image element for hover effect and modal opening
-        /*      const imageElements = document.querySelectorAll("#stockTable img");
-             imageElements.forEach((image) => {
-               image.addEventListener("mouseover", (event) => {
-                 // Apply zoom effect
-                 event.target.classList.add("image-zoom");
-   
-                 // Set the source of the modal image to the hovered image
-                 const modalImage = document.getElementById("modalImage");
-                 modalImage.src = event.target.src;
-   
-                 // Show the modal
-                 const modal = document.getElementById("imageModal");
-                 modal.style.display = "block";
-               });
-   
-               image.addEventListener("mouseout", (event) => {
-                 // Remove zoom effect
-                 event.target.classList.remove("image-zoom");
-   
-                 // Hide the modal
-                 const modal = document.getElementById("imageModal");
-                 modal.style.display = "none";
-               });
-             });
-   
-             // Add event listener to the close button in the modal
-             const closeButton = document.querySelector("#imageModal .imageClose");
-             closeButton.addEventListener("click", () => {
-               const modal = document.getElementById("imageModal");
-               modal.style.display = "none";
-             }); */
+     
 
       });
 
@@ -195,7 +198,7 @@
 
 
   // Add the openModal and closeModal functions
-  function openModal(docId, productImage, productTitle, productCat, productPrice, productQuantity, productDescription) {
+  function openModal(docId, productImage, productTitle, productCat, productPrice, productQuantity, productDescription,topProduct) {
 
     // Populate the modal with the data
     document.getElementById("productTitle").value = productTitle;
@@ -205,6 +208,14 @@
     document.getElementById("productDescription").value = productDescription;
     document.getElementById("documentId").value = docId;
     document.getElementById("imagePreview").setAttribute("src", productImage);
+    var yesRadio = document.getElementById("yes");
+    var noRadio = document.getElementById("no");
+
+    if(topProduct === "Yes"){
+      yesRadio.setAttribute("checked", "checked");
+    }else{
+      noRadio.setAttribute("checked", "checked");
+    }
 
 
 
@@ -252,6 +263,9 @@
     var productQty = getInputVal("productQuantiy");
     var productDescription = getInputVal("productDescription");
     var documentId = getInputVal("documentId");
+    var isTopProduct = document.querySelector("input[type='radio'][name=topProductRadios]:checked").value;
+
+
 
     const file = document.querySelector("#product-image").files[0];
 
@@ -266,7 +280,7 @@
           // Update image fields and other corresponding fields
           if (oldImageDeleted) {
             // Old image deleted successfully
-            updateProducts(documentId, downloadURL, productTitle, productPrice, productCat, productQty, productDescription);
+            updateProducts(documentId, downloadURL, productTitle, productPrice, productCat, productQty, productDescription,isTopProduct);
           } else {
             // Failed to delete old image
             console.error("Failed to delete old image");
@@ -281,25 +295,36 @@
         });
     } else {
       // No new image selected, update other fields only
-      updateProducts(documentId, null, productTitle, productPrice, productCat, productQty, productDescription);
+      updateProducts(documentId, null, productTitle, productPrice, productCat, productQty, productDescription,isTopProduct);
     }
   }
 
+  const successOkBtn = document.getElementById("succees-ok-btn");
+  successOkBtn.addEventListener("click", () => {
+    document.getElementById("success-alert-modal").style.display = "none";
+  });
+  const failureOkBtn = document.getElementById("failure-ok-btn");
+  failureOkBtn.addEventListener("click", () => {
+    failureOkBtn.getElementById("failure-alert-modal").style.display = "none";
+  });
 
-  function updateProducts(documentId, downloadURL, productTitle, productPrice, productCat, productQty, productDescription) {
+
+  function updateProducts(documentId, downloadURL, productTitle, productPrice, productCat, productQty, productDescription,isTopProd) {
 
 
 
     const productRef = doc(database, "products", documentId);
 
     if (downloadURL != null) {
+     
       updateDoc(productRef, {
         productPicture: downloadURL,
         productName: productTitle,
         productPrice: productPrice,
         productCategory: productCat,
         productQty: productQty,
-        productDesc: productDescription
+        productDesc: productDescription,
+        isTopProduct: isTopProd
       })
         .then(() => {
           // Product updated successfully
@@ -308,15 +333,23 @@
             comment: `${productTitle} was modified`,
             timestamp: serverTimestamp(),
           });
+
           document.getElementById("modifyModal").style.display = "none";
-          showSnackbar("Product updated successfully", true);
+        
+          document.getElementById("success-alertMessage").innerHTML = `${productTitle} has been updated successfully`;
+          document.getElementById("success-alert-modal").style.display = "block";
+          // showSnackbar("Product updated successfully", true);
+          document.getElementById("productForm").reset();
+
         })
         .catch((error) => {
           // Error occurred while updating the product
           console.error("Error updating product:", error);
           // Show error message or perform any error handling
           document.getElementById("modifyModal").style.display = "none";
-          showSnackbar("Failed to update product, please try again", false);
+          document.getElementById("failure-alertMessage").innerHTML = `${productTitle} update Failed, please try again`;
+          document.getElementById("failure-alert-modal").style.display = "block";
+          // showSnackbar("Failed to update product, please try again", false);
         })
         .finally(() => {
           // Reset the submit button
@@ -328,7 +361,8 @@
         productPrice: productPrice,
         productCategory: productCat,
         productQty: productQty,
-        productDesc: productDescription
+        productDesc: productDescription,
+        isTopProduct: isTopProd
       })
         .then(() => {
           // Product updated successfully
@@ -337,15 +371,20 @@
             comment: `${productTitle} was modified`,
             timestamp: serverTimestamp(),
           });
+          document.getElementById("productForm").reset();
           document.getElementById("modifyModal").style.display = "none";
-          showSnackbar("Product updated successfully", true);
+          document.getElementById("success-alertMessage").innerHTML = `${productTitle} has been updated successfully`;
+          document.getElementById("success-alert-modal").style.display = "block";
+          // showSnackbar("Product updated successfully", true);
         })
         .catch((error) => {
           // Error occurred while updating the product
           console.error("Error updating product:", error);
           // Show error message or perform any error handling
           document.getElementById("modifyModal").style.display = "none";
-          showSnackbar("Failed to update product, please try again", false);
+          document.getElementById("failure-alertMessage").innerHTML = `${productTitle} update Failed, please try again`;
+          document.getElementById("failure-alert-modal").style.display = "block";
+          // showSnackbar("Failed to update product, please try again", false);
         })
         .finally(() => {
           // Reset the submit button
@@ -474,34 +513,26 @@
         comment: `${productName} was deleted`,
         timestamp: serverTimestamp(),
       });
-      showSnackbar(`${productName} was deleted successfully`, true);
+      document.getElementById("success-alertMessage").innerHTML = `${productName} was deleted successfully`;
+      document.getElementById("success-alert-modal").style.display = "block";
+     
     } catch (error) {
+      document.getElementById("failure-alertMessage").innerHTML = `An error occured while trying to delete ${productName}, please try again`;
+      document.getElementById("failure-alert-modal").style.display = "block";
       console.error("Error deleting document:", error);
-      showSnackbar(`Failed to delete document ${productName}, try again`, false);
+    
     }
   }
-  function showSnackbar(message, isSuccess) {
-    const snackbar = document.getElementById("snackbar");
-    snackbar.textContent = message;
+  
 
-    if (isSuccess) {
-      snackbar.style.backgroundColor = "#4CAF50";
-    } else {
-      snackbar.style.backgroundColor = "#F44336";
-    }
-
-    snackbar.classList.add("show");
-
-    setTimeout(() => {
-      snackbar.classList.remove("show");
-    }, 2000);
-  }
-
-  //handle sign out
+  //handlemodals
   const signOutBtn = document.getElementById("sign-out-btn");
   const signOutModal = document.getElementById("sign-out-modal");
+
   const confirmSignOutBtn = document.getElementById("confirm-sign-out-btn");
   const cancelSignOutBtn = document.getElementById("cancel-sign-out-btn");
+ 
+  
 
   // Show the modal when the sign-out button is clicked
   signOutBtn.addEventListener("click", () => {
@@ -560,11 +591,11 @@
             const notificationLink = document.createElement('a');
             notificationLink.classList.add('dropdown-item', 'preview-item');
             if (notification.type == "service") {
-              notificationLink.setAttribute('href', './booking-page.html');
+              notificationLink.setAttribute('href', '../services/');
             } else if (notification.type == "feedback") {
-              notificationLink.setAttribute('href', '../feedbacks/feedbacks.html');
+              notificationLink.setAttribute('href', '../feedbacks/');
             } else {
-              notificationLink.setAttribute('href', '../orders/orders.html');
+              notificationLink.setAttribute('href', '../orders/');
             }
 
 

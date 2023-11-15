@@ -171,22 +171,7 @@ function searchMatchingValues() {
       console.log("Error getting matching values: ", error);
     });
 }
-function showSnackbar(message, isSuccess) {
-  const snackbar = document.getElementById("snackbar");
-  snackbar.textContent = message;
 
-  if (isSuccess) {
-    snackbar.style.backgroundColor = "#4CAF50";
-  } else {
-    snackbar.style.backgroundColor = "#F44336";
-  }
-
-  snackbar.classList.add("show");
-
-  setTimeout(() => {
-    snackbar.classList.remove("show");
-  }, 2000);
-}
 
 
 
@@ -246,6 +231,14 @@ function addProduct(e) {
   );
 }
 
+const successOkBtn = document.getElementById("succees-ok-btn");
+successOkBtn.addEventListener("click", () => {
+  document.getElementById("success-alert-modal").style.display = "none";
+});
+const failureOkBtn = document.getElementById("failure-ok-btn");
+failureOkBtn.addEventListener("click", () => {
+  failureOkBtn.getElementById("failure-alert-modal").style.display = "none";
+});
 
 const signOutBtn = document.getElementById("sign-out-btn");
 const signOutModal = document.getElementById("sign-out-modal");
@@ -309,16 +302,10 @@ async function addService(
   })
     .then((docRef) => {
       addProductBtn.innerHTML = "Submit";
-      // Data sent successfully!
-      createAlert(
-        "",
-        "Success!",
-        serviceName + " was added successfully",
-        "success",
-        true,
-        true,
-        "pageMessages"
-      );
+ 
+
+      document.getElementById("success-alertMessage").innerHTML = `${serviceName} service was added successfully`;
+      document.getElementById("success-alert-modal").style.display = "block";
       console.log("Product has been added successfully");
       document.getElementById("serviceForm").reset();
       imagePreview.setAttribute("src", "");
@@ -326,15 +313,9 @@ async function addService(
     .catch((error) => {
       // Data sent failed...
       addProductBtn.innerHTML = "Submit";
-      createAlert(
-        "Opps!",
-        "Something went wrong",
-        error + "",
-        "danger",
-        true,
-        false,
-        "pageMessages"
-      );
+   
+      document.getElementById("failure-alertMessage").innerHTML = `An Error occured when adding ${serviceName}, please try again`;
+      document.getElementById("failure-alert-modal").style.display = "block";
       console.log(error);
       // document.getElementById("serviceForm").reset();
     });
@@ -472,11 +453,11 @@ async function getNotifications() {
           const notificationLink = document.createElement('a');
           notificationLink.classList.add('dropdown-item', 'preview-item');
           if (notification.type == "service") {
-            notificationLink.setAttribute('href', './booking-page.html');
+            notificationLink.setAttribute('href', './services/');
           } else if (notification.type == "feedback") {
-            notificationLink.setAttribute('href', '../feedbacks/feedbacks.html');
+            notificationLink.setAttribute('href', '../feedbacks/');
           } else {
-            notificationLink.setAttribute('href', '../orders/orders.html');
+            notificationLink.setAttribute('href', '../orders/');
           }
 
 

@@ -41,7 +41,7 @@
       const uid = user.uid;
     } else {
 
-      window.location.href = "../../../login.html";
+      window.location.href = "../../../login/";
     }
   });
   async function getSections() {
@@ -82,6 +82,23 @@
     }
   }
 
+  const successOkBtn = document.getElementById("succees-ok-btn");
+  successOkBtn.addEventListener("click", () => {
+    document.getElementById("success-alert-modal").style.display = "none";
+  });
+  const failureOkBtn = document.getElementById("failure-ok-btn");
+  failureOkBtn.addEventListener("click", () => {
+    failureOkBtn.getElementById("failure-alert-modal").style.display = "none";
+  });
+  const confirmBtn = document.getElementById("yes-btn");
+  const declineBtn = document.getElementById("no-btn");
+  const confirmationModal = document.getElementById("confirmation-modal");
+ 
+
+  declineBtn.addEventListener("click", () => {
+    confirmationModal.style.display = "none";
+  });
+
   async function getServices() {
     const currentYear = new Date().getFullYear();
     document.getElementById("currentYear").textContent = currentYear;
@@ -104,7 +121,7 @@
             <td>${index}</td>
             <td><img src="${data.servicePicture}"  style="border-radius:0px;width:50px;heigth:50px"/></td>
             <td>${data.serviceName} </td>
-            <td class="section-des">
+            <td  style="max-width: 500px;word-wrap: break-word;overflow-wrap: break-word;white-space: pre-wrap;font-size: 14px;">
             ${data.serviceDes}
            
             </td>
@@ -158,11 +175,15 @@
             const servciesDuration = event.target.dataset.serviceduration;
             const serviceDescription = event.target.dataset.servicedesc;
 
-            // Show confirmation alert
-            const confirmation = window.confirm(`Do you really want to modify ${serviceTitle} ?`);
-            if (confirmation) {
+            document.getElementById("itemName").innerHTML=serviceTitle;
+            confirmationModal.style.display = "block";
+
+            confirmBtn.addEventListener("click", () => {
+              confirmationModal.style.display = "none";
               openModal(docId, servicePicture, serviceTitle, serviceCat, serviceprice, servciesDuration, serviceDescription);
-            }
+            });
+
+         
           });
         });
         // Add event listener to delete dropdown item
@@ -173,12 +194,29 @@
             const docId = event.target.dataset.docid;
             const serviceTitle = event.target.dataset.servicename;
 
+            const  deleteConfirmationModal = document.getElementById("delete-confirmation-modal");
+            const deleteConfirmBtn = document.getElementById("delete-yes-btn");
+            const deletedeclineBtn = document.getElementById("delete-no-btn");
+
+            
+            document.getElementById("deleteItemName").innerHTML=serviceTitle;
+            deleteConfirmationModal.style.display="block";
+          
+
+
+            deleteConfirmBtn.addEventListener("click", () => {
+              deleteConfirmationModal.style.display = "none";
+              deleteDocument("service", docId, serviceTitle);
+            });
+
+            deletedeclineBtn.addEventListener("click", () => {
+              deleteConfirmationModal.style.display = "none";
+             
+            });
+
 
             // Show confirmation alert
-            const confirmation = window.confirm(`Do you really want to delete ${serviceTitle} ? `);
-            if (confirmation) {
-              deleteDocument("service", docId, serviceTitle);
-            }
+          
           });
         });
 
@@ -313,14 +351,18 @@
             timestamp: serverTimestamp(),
           });
           document.getElementById("modifyModal").style.display = "none";
-          showSnackbar("Service updated successfully", true);
+          document.getElementById("success-alertMessage").innerHTML = `${serviceTitle} service has been updated successfully`;
+          document.getElementById("success-alert-modal").style.display = "block";
+          // showSnackbar("Service updated successfully", true);
         })
         .catch((error) => {
           // Error occurred while updating the product
           console.error("Error updating service:", error);
           // Show error message or perform any error handling
           document.getElementById("modifyModal").style.display = "none";
-          showSnackbar("Failed to update service, please try again", false);
+          document.getElementById("failure-alertMessage").innerHTML = `${serviceTitle} update Failed, please try again`;
+          document.getElementById("failure-alert-modal").style.display = "block";
+          // showSnackbar("Failed to update service, please try again", false);
         })
         .finally(() => {
           // Reset the submit button
@@ -343,14 +385,16 @@
             timestamp: serverTimestamp(),
           });
           document.getElementById("modifyModal").style.display = "none";
-          showSnackbar("Service updated successfully", true);
+          document.getElementById("success-alertMessage").innerHTML = `${serviceTitle} service has been updated successfully`;
+          document.getElementById("success-alert-modal").style.display = "block";
         })
         .catch((error) => {
           // Error occurred while updating the product
           console.error("Error updating service:", error);
           // Show error message or perform any error handling
           document.getElementById("modifyModal").style.display = "none";
-          showSnackbar("Failed to update service, please try again", false);
+          document.getElementById("failure-alertMessage").innerHTML = `${serviceTitle} update Failed, please try again`;
+          document.getElementById("failure-alert-modal").style.display = "block";
         })
         .finally(() => {
           // Reset the submit button
@@ -479,28 +523,17 @@
         comment: `${serviceName} was deleted`,
         timestamp: serverTimestamp(),
       });
-      showSnackbar(`${serviceName} was deleted successfully`, true);
+     // showSnackbar(`${serviceName} was deleted successfully`, true);
+      document.getElementById("success-alertMessage").innerHTML = `${serviceName} service was deleted successfully`;
+      document.getElementById("success-alert-modal").style.display = "block";
     } catch (error) {
       console.error("Error deleting document:", error);
-      showSnackbar(`Failed to delete document ${serviceName}, try again`, false);
+      // showSnackbar(`Failed to delete document ${serviceName}, try again`, false);
+      document.getElementById("failure-alertMessage").innerHTML = `An error occured while trying to delete ${serviceName}, please try again`;
+      document.getElementById("failure-alert-modal").style.display = "block";
     }
   }
-  function showSnackbar(message, isSuccess) {
-    const snackbar = document.getElementById("snackbar");
-    snackbar.textContent = message;
-
-    if (isSuccess) {
-      snackbar.style.backgroundColor = "#4CAF50";
-    } else {
-      snackbar.style.backgroundColor = "#F44336";
-    }
-
-    snackbar.classList.add("show");
-
-    setTimeout(() => {
-      snackbar.classList.remove("show");
-    }, 2000);
-  }
+  
 
 
   const signOutBtn = document.getElementById("sign-out-btn");
@@ -565,11 +598,11 @@
             const notificationLink = document.createElement('a');
             notificationLink.classList.add('dropdown-item', 'preview-item');
             if (notification.type == "service") {
-              notificationLink.setAttribute('href', './booking-page.html');
+              notificationLink.setAttribute('href', './services/');
             } else if (notification.type == "feedback") {
-              notificationLink.setAttribute('href', '../feedbacks/feedbacks.html');
+              notificationLink.setAttribute('href', '../feedbacks/');
             } else {
-              notificationLink.setAttribute('href', '../orders/orders.html');
+              notificationLink.setAttribute('href', '../orders/');
             }
 
 

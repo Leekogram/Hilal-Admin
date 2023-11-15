@@ -7,33 +7,26 @@
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-    <title>Bnb Admin / All Orders</title>
+    <title>Bnb Admin / All Messages</title>
     <!-- plugins:css -->
-      <!-- plugins:css -->
-  <link rel="stylesheet" href="../../vendors/feather/feather.css" />
-  <link rel="stylesheet" href="../../vendors/ti-icons/css/themify-icons.css" />
-  <link rel="stylesheet" href="../../vendors/css/vendor.bundle.base.css" />
-  <!-- endinject -->
-  <!-- Plugin css for this page -->
-  <!-- End plugin css for this page -->
-  <!-- inject:css -->
-  <link rel="stylesheet" href="../../css/vertical-layout-light/style.css" />
-  <!-- endinject -->
-  <link rel="shortcut icon" href="../../images/favicon.ico" />
-  <style>
-    table#myTable td {
+    <link rel="stylesheet" href="../../vendors/feather/feather.css" />
+    <link
+      rel="stylesheet"
+      href="../../vendors/ti-icons/css/themify-icons.css"
+    />
+    <link rel="stylesheet" href="../../vendors/css/vendor.bundle.base.css" />
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="../../css/vertical-layout-light/style.css" />
+    <!-- endinject -->
+    <link rel="shortcut icon" href="../../images/favicon.ico" />
+    <style>
+        /* Modal styles */
+        table#myTable td {
       vertical-align: top;
     }
-
-    .section-des {
-      max-width: 500px;
-      /* Adjust the maximum width as needed */
-      word-wrap: break-word;
-      overflow-wrap: break-word;
-      white-space: pre-wrap;
-    }
-
-    /* Modal styles */
     .modal {
       display: none;
       position: fixed;
@@ -61,18 +54,25 @@
       text-align: center;
       border-radius: 30px;
     }
-
-    #loader {
-      display: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-
-      z-index: 9999;
+      #loader {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+     
+        z-index: 9999;
+      }
+      .section-des {
+      max-width: 700px;
+      /* Adjust the maximum width as needed */
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      white-space: pre-wrap;
+      font-size: 14px;
     }
-
+      
     .spinner {
       position: absolute;
       top: 120%;
@@ -105,60 +105,29 @@
         opacity: 0;
       }
     }
+      #instruction{width: 100px !important;}
 
+      input[type="text"],
+        input[type="number"] {
+            float: right;
+            width: 200px;
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 12px;
+            font-family: Arial, sans-serif;
+        }
 
-    input[type="text"],
-    input[type="number"] {
-      float: right;
-      width: 200px;
-      padding-left: 10px;
-      padding-right: 10px;
-      padding-top: 8px;
-      padding-bottom: 8px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 12px;
-      font-family: Arial, sans-serif;
-    }
-
-    input[type="text"],
-    input[type="number"]:focus {
-      outline: none;
-      /* border-color: #FFC100; */
-    }
-
-
-    .top-left {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 50%;
-      height: 150%;
-    }
-
-    .top-right {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 50%;
-      height: 150%;
-    }
-
-    .bottom-left {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 20%;
-      /* height: 150%; */
-    }
-
-    .bottom-right {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      width: 50%;
-    }
-  </style>
+        input[type="text"],
+        input[type="number"]:focus {
+            outline: none;
+            /* border-color: #FFC100; */
+        }
+   
+      </style>
   </head>
 
   <body>
@@ -227,29 +196,29 @@
         </div>
       </nav>
       <!-- partial -->
-
-      <div id="sign-out-modal" class="modal">
-        <div class="modal-content">
-          <p>Are you sure you want to sign out?</p>
-          <button class="btn secondary-button btn-rounded align-self-center mb-3 w-50" id="confirm-sign-out-btn">Yes, sign me
-            out</button>
-          <button class="btn  primary-button btn-rounded align-self-center w-50" id="cancel-sign-out-btn">Cancel</button>
-        </div>
+           <!-- Modal -->
+    <div id="sign-out-modal" class="modal">
+      <div class="modal-content">
+        <p>Are you sure you want to sign out?</p>
+        <button class="btn secondary-button btn-rounded align-self-center mb-3 w-50" id="confirm-sign-out-btn">Yes, sign me
+          out</button>
+        <button class="btn  primary-button btn-rounded align-self-center w-50" id="cancel-sign-out-btn">Cancel</button>
       </div>
+    </div>
+    <!-- partial -->
       <div class="container-fluid page-body-wrapper">
-    
-      <!-- partial -->
+     <!-- partial -->
         <!-- partial:../../partials/_sidebar.html -->
         <nav class="sidebar  sidebar-offcanvas" id="sidebar">
           <ul class="nav">
             <li class="nav-item">
-              <a class="nav-link" href="../../index.html">
+              <a class="nav-link" href="../../">
                 <i class="icon-grid menu-icon"></i>
                 <span class="menu-title">Dashboard</span>
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="../bookings/booking-page.html">
+              <a class="nav-link" href="../bookings/">
                 <i class="icon-paper menu-icon"></i>
                 <span class="menu-title">Bookings</span>
   
@@ -257,7 +226,7 @@
   
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="./index.html">
+              <a class="nav-link" href="../orders/">
                 <i class="icon-paper menu-icon"></i>
                 <span class="menu-title">Orders</span>
   
@@ -273,18 +242,18 @@
               <div class="collapse" id="ui-basic">
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item">
-                    <a class="nav-link" href="../inventory/viewstock-dashboard.html">View Stock</a>
+                    <a class="nav-link" href="../inventory/">View Stock</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="../inventory/add-item.html">Add Stock</a>
+                    <a class="nav-link" href="../inventory/add-item/">Add Stock</a>
                   </li>
-               
+              
                   <!-- <li class="nav-item"> <a class="nav-link" href="pages/inventory/log.html">Log</a></li> -->
                 </ul>
               </div>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="../../section.html">
+              <a class="nav-link" href="../../section/">
                 <i class="icon-grid menu-icon"></i>
                 <span class="menu-title">Section</span>
               </a>
@@ -299,12 +268,12 @@
               <div class="collapse" id="ui-service">
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item">
-                    <a class="nav-link" href="../service/service-dashboard.html">View Services</a>
+                    <a class="nav-link" href="../service/">View Services</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="../service/add-service.html">Add Services</a>
+                    <a class="nav-link" href="../service/add-service/">Add Services</a>
                   </li>
-             
+               
                   <!-- <li class="nav-item"> <a class="nav-link" href="pages/inventory/log.html">Log</a></li> -->
                 </ul>
               </div>
@@ -319,15 +288,15 @@
               <div class="collapse" id="ui-customer">
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item">
-                    <a class="nav-link" href="../customers/registered-customers.html">Customers</a>
+                    <a class="nav-link" href="../customers/">Customers</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="../customers/customer_loyalty.html">Customer loyalty</a>
+                    <a class="nav-link" href="../customers/customers-loyalty/">Customer loyalty</a>
                   </li>
                 </ul>
               </div>
             </li>
-            <li class="nav-item">
+            <li class="nav-item active">
               <a class="nav-link" data-toggle="collapse" href="#ui-message" aria-expanded="false"
                 aria-controls="ui-basic">
                 <i class="icon-columns menu-icon"></i>
@@ -336,9 +305,9 @@
               </a>
               <div class="collapse" id="ui-message">
                 <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="../message/view_messages.html">View messages</a></li>
-                  <li class="nav-item"> <a class="nav-link" href="../../send-bc-message.html">Send Message</a></li>
-                  <li class="nav-item"> <a class="nav-link" href="../feedbacks/feedbacks.html">Feed backs</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="./>View messages">View mesaages</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="../../send-bc/">Send message</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="../feedbacks/">Feed backs</a></li>
   
                 </ul>
               </div>
@@ -353,21 +322,20 @@
             </li> -->
           </ul>
         </nav>
-        <!-- partial -->
         <div class="main-panel">
           <div class="content-wrapper">
             <div class="row">
               <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+               
                 <h6 class="font-weight-normal mb-0"><span class="text-danger"
                     id="notSpan"> You have <span id="notCount"></span> unread notification(s) !</span></h6>
               </div>
-            </div>
               <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    <h4 class="card-title">Order List</h4>
-                    <p class="card-description text-dark ">
-                      <span class="text-danger font-weight-bold"> Note:</span> No action can be performed on a completed or cancelled order. Please proceed with caution.</p>
+                    <h4 class="card-title">Messages List</h4>
+                    <p class="card-description ">
+
                  
                  <input type="text" id="searchInput" placeholder="Search...">
                     </p>
@@ -376,21 +344,15 @@
                         <thead>
                           <tr>
                             <th>S/N</th>
-                            <th>OrderID</th>
-                            <th>Customer name</th>
-                            <th>Phone number</th>
-                            <th>Email</th>
-                            <th>Product</th>
-                            <th>Quantity</th>
-                            <th>Price</th>
-                            <th>Delivery Fee</th>
-                            <th>Amount Paid</th>
-                            <th>Instruction</th>
-                            <th>Include Delivery</th>
-                            <th>Source Type</th>        
-                            <th>Payment Status</th>
-                          
-                            <th>orderStatus</th>
+                            <th>Recipient name</th>
+                            <th>Recipient Email</th>
+                            <th>Recipient Phonenumber</th>
+                            <th>Subject</th>
+                            <th>Message</th>
+                            <th>Optional Link</th>
+                            <th>Date sent</th>
+                         
+                         
                             <th></th>
                           </tr>
                         </thead>
@@ -438,8 +400,7 @@
     <script src="../../js/settings.js"></script>
     <script src="../../js/todolist.js"></script>
     <script src="../../js/firebase/firebase-config.js"></script>
-    <script src="../../js/firebase/manage_orders.js" type="module"></script>
-    
+    <script src="../../js/firebase/manage_messages.js" type="module"></script>
     <script>
      function searchTable() {
   var input = document.getElementById("searchInput");

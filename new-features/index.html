@@ -5,23 +5,60 @@
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>Bnb Admin / Sections</title>
+    <title>Bnb Admin / Feature Ad</title>
     <!-- plugins:css -->
-    <link rel="stylesheet" href="./vendors/feather/feather.css" />
+    <link rel="stylesheet" href="../vendors/feather/feather.css" />
 
-    <link rel="stylesheet" href="./vendors/ti-icons/css/themify-icons.css" />
-    <link rel="stylesheet" href="./vendors/css/vendor.bundle.base.css" />
+    <link rel="stylesheet" href="../vendors/ti-icons/css/themify-icons.css" />
+    <link rel="stylesheet" href="../vendors/css/vendor.bundle.base.css" />
     <!-- endinject -->
     <!-- Plugin css for this page -->
-    <link rel="stylesheet" href="./vendors/select2/select2.min.css" />
-    <link rel="stylesheet" href="./vendors/select2-bootstrap-theme/select2-bootstrap.min.css" />
+    <link rel="stylesheet" href="../vendors/select2/select2.min.css" />
+    <link rel="stylesheet" href="../vendors/select2-bootstrap-theme/select2-bootstrap.min.css" />
     <!-- End plugin css for this page -->
     <!-- inject:css -->
-    <link rel="stylesheet" href="./css/vertical-layout-light/style.css" />
+    <link rel="stylesheet" href="../css/vertical-layout-light/style.css" />
     <!-- endinject -->
-    <link rel="shortcut icon" href="./images/favicon.ico" />
-    <link rel="stylesheet" href="./css/alert-style.css" />
+    <link rel="shortcut icon" href="../images/favicon.ico" />
+    <link rel="stylesheet" href="../css/alert-style.css" />
     <style>
+
+        .response-modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.response-modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+#responseIcon {
+  font-size: 24px;
+  margin: 10px;
+}
+
+#responseIcon.success {
+  color: green;
+}
+
+#responseIcon.failure {
+  color: red;
+}
+
 
 .top-left {
             position: absolute;
@@ -171,7 +208,7 @@
             vertical-align: top;
         }
 
-        .section-des {
+        .promo-des {
             max-width: 500px;
             /* Adjust the maximum width as needed */
             word-wrap: break-word;
@@ -179,7 +216,7 @@
             white-space: pre-wrap;
         }
 
-        #addSectionModal {
+        #addpromoModal {
             display: none;
             /* Hide the modal by default */
             position: fixed;
@@ -279,7 +316,7 @@
 
      
 
-        #sectionExist {
+        #promoExist {
             display: none;
         }
     </style>
@@ -292,9 +329,9 @@
         <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center"
               style="background-color:rgba(41, 71, 37, 0.784);">
-              <a class="navbar-brand brand-logo mr-5" href="../index.html"><img src="./images//hilal_logo.jpg"
+              <a class="navbar-brand brand-logo mr-5" href="../"><img src="../images//hilal_logo.jpg"
                   class="mr-2" alt="logo" /></a>
-              <a class="navbar-brand brand-logo-mini" href="./index.html"><img src="./images//hilal_logo.jpg"
+              <a class="navbar-brand brand-logo-mini" href="../"><img src="../images//hilal_logo.jpg"
                   alt="logo" /></a>
             </div>
             <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end"
@@ -327,7 +364,7 @@
                 
                 <li class="nav-item nav-profile dropdown">
                   <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-                    <img src="./images/faces/face28.jpg" alt="profile" />
+                    <img src="../images/faces/face28.jpg" alt="profile" />
                   </a>
                   <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
       
@@ -372,16 +409,16 @@
                 <!-- <img src="../../images/bottomleft.png" class="bottom-left" alt="bottom-left image" /> -->
                 <span class="close" id="close">&times;</span>
                 <h4>Edit Product</h4><i class="fas fas-edit"></i>
-                <form class="forms-sample" id="updatesectionForm">
+                <form class="forms-sample" id="updatepromoForm">
                     <div class="form-group">
                         <div class="image-preview-container" id="updateimagePreviewContainer">
-                            <img id="updateimagePreview" class="image-preview" style="height: 100px;">
+                            <img id="updateimagePreview" class="image-preview" style="height: 400px;width: 400px;">
                         </div>
-                        <label>Section Image</label>
-                        <input type="file" name="img[]" class="file-upload-default" id="section-picture" />
+                        <label>promo Image</label>
+                        <input type="file" name="img[]" class="file-upload-default" id="promo-picture" />
                         <div class="input-group col-xs-12">
                             <input type="text" class="form-control file-upload-info" disabled
-                                placeholder="Upload Section Image" />
+                                placeholder="Upload promo Image" />
                             <span class="input-group-append">
                                 <button class="file-upload-browse btn btn-dark" type="button">Upload</button>
                             </span>
@@ -389,15 +426,15 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="sectionName">Section Name</label>
-                        <input type="text" class="form-control" id="sectionTitle" placeholder="HairStyling" />
+                        <label for="promoName">promo Name</label>
+                        <input type="text" class="form-control" id="promoTitle" placeholder="HairStyling" />
                         <input type="hidden" class="form-control" autocomplete="off" id="documentId" />
 
                     </div>
 
                     <div class="form-group">
-                        <label for="sectionDescription">About Section</label>
-                        <textarea class="form-control" id="sectionDescript" rows="4"></textarea>
+                        <label for="promoDescription">About promo</label>
+                        <textarea class="form-control" id="promoDescript" rows="4"></textarea>
                     </div>
 
                     <button class="btn btn-dark mr-2 ml-2 " type="submit" id="updateBtn">Update</button>
@@ -414,13 +451,13 @@
             <nav class="sidebar  sidebar-offcanvas" id="sidebar">
                 <ul class="nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html">
+                        <a class="nav-link" href="../">
                             <i class="icon-grid menu-icon"></i>
                             <span class="menu-title">Dashboard</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="pages/bookings/booking-page.html">
+                        <a class="nav-link" href="../pages/bookings/">
                             <i class="icon-paper menu-icon"></i>
                             <span class="menu-title">Bookings</span>
 
@@ -428,7 +465,7 @@
 
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="pages/orders/orders.html">
+                        <a class="nav-link" href="../pages/orders/">
                             <i class="icon-paper menu-icon"></i>
                             <span class="menu-title">Orders</span>
 
@@ -445,18 +482,18 @@
                         <div class="collapse" id="ui-basic">
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="./pages/inventory/viewstock-dashboard.html">View Stock</a>
+                                    <a class="nav-link" href="../pages/inventory/">View Stock</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="./pages/inventory/add-item.html">Add Stock</a>
+                                    <a class="nav-link" href="../pages/inventory/add-item/">Add Stock</a>
                                 </li>
                             </ul>
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="./section.html">
+                        <a class="nav-link" href="./">
                           <i class="icon-grid menu-icon"></i>
-                          <span class="menu-title">Section</span>
+                          <span class="menu-title">promo</span>
                         </a>
                       </li>
                     <li class="nav-item">
@@ -469,10 +506,10 @@
                         <div class="collapse" id="ui-service">
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="./pages/service/service-dashboard.html">View Services</a>
+                                    <a class="nav-link" href="../pages/service/">View Services</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="./pages/service/add-service.html">Add Services</a>
+                                    <a class="nav-link" href="../pages/service/add-service/">Add Services</a>
                                 </li>
                             </ul>
                         </div>
@@ -487,10 +524,10 @@
                         <div class="collapse" id="ui-customer">
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="pages/customers/registered-customers.html">Customers</a>
+                                    <a class="nav-link" href="../pages/customers/">Customers</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="pages/customers/customer_loyalty.html">Customer
+                                    <a class="nav-link" href="../pages/customers/customers-loyalty/">Customer
                                         loyalty</a>
                                 </li>
                             </ul>
@@ -505,11 +542,11 @@
                         </a>
                         <div class="collapse" id="ui-message">
                             <ul class="nav flex-column sub-menu">
-                                <li class="nav-item"> <a class="nav-link" href="./pages/message/view_messages.html">View
+                                <li class="nav-item"> <a class="nav-link" href="../pages/message/">View
                                         messages</a></li>
-                                <li class="nav-item"> <a class="nav-link" href="./send-bc-message.html">Send Message</a>
+                                <li class="nav-item"> <a class="nav-link" href="../send-bc/">Send Message</a>
                                 </li>
-                                <li class="nav-item"> <a class="nav-link" href="./pages/feedbacks/feedbacks.html">Feed
+                                <li class="nav-item"> <a class="nav-link" href="../pages/feedbacks/">Feed
                                         backs</a></li>
 
                             </ul>
@@ -519,7 +556,17 @@
                 </ul>
             </nav>
             <!-- partial -->
+
+            <div id="responseModal" class="response-modal">
+                <div class="response-modal-content">
+                  <span id="responseIcon"></span>
+                  <p id="responseMessage"></p>
+                  <button id="closeModalButton">Close</button>
+                </div>
+              </div>
             <div class="main-panel">
+
+                
                 <div class="content-wrapper">
 
                     <div class="row">
@@ -532,8 +579,8 @@
                                 <div class="dropdown flex-md-grow-1 flex-xl-grow-0">
                                     <!-- Button to trigger the modal -->
                                     <button type="button" class="btn btn-primary" data-toggle="modal"
-                                        data-target="#addSectionModal">
-                                        + Add a section
+                                        data-target="#addpromoModal">
+                                        + Add a promo
                                     </button>
 
                                 </div>
@@ -549,31 +596,31 @@
                     <div class="row">
                         <div class="col-12 col-xl-8 mb-4 mb-xl-0">
                             <!-- Modal -->
-                            <div class="modal fade" id="addSectionModal" tabindex="-1" role="dialog"
-                                aria-labelledby="addSectionModalLabel" aria-hidden="true">
+                            <div class="modal fade" id="addpromoModal" tabindex="-1" role="dialog"
+                                aria-labelledby="addpromoModalLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content position-relative">
 
                 <img src="../../images/topright.png" class="top-right" alt="top-right image" />
                 <img src="../../images/bottomleft.png" class="bottom-left" alt="bottom-left image" />
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="addSectionModalLabel">Add a Section</h5>
+                                            <h5 class="modal-title" id="addpromoModalLabel">Add a promo</h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <form class="forms-sample" id="sectionForm">
+                                            <form class="forms-sample" id="promoForm">
                                                 <div class="form-group">
                                                     <div class="image-preview-container" id="imagePreviewContainer">
                                                         <img id="imagePreview" class="image-preview">
                                                     </div>
-                                                    <label>Section Image</label>
+                                                    <label>promo Image</label>
                                                     <input type="file" name="img[]" class="file-upload-default"
-                                                        id="section-image" />
+                                                        id="promo-image" />
                                                     <div class="input-group col-xs-12">
                                                         <input type="text" class="form-control file-upload-info"
-                                                            disabled placeholder="Upload Section Image" />
+                                                            disabled placeholder="Upload promo Image" />
                                                         <span class="input-group-append">
                                                             <button class="file-upload-browse btn btn-dark"
                                                                 type="button">Upload</button>
@@ -582,19 +629,19 @@
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <label for="sectionName">Section Name</label>
-                                                    <input type="text" class="form-control" id="sectionName"
+                                                    <label for="promoName">promo/feature Name</label>
+                                                    <input type="text" class="form-control" id="promoName"
                                                         placeholder="HairStyling" />
                                                     <div id="matchingValuesContainer"></div>
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <label for="sectionDescription">About Section</label>
-                                                    <textarea class="form-control" id="sectionDescription"
+                                                    <label for="promoDescription">About promo</label>
+                                                    <textarea class="form-control" id="promoDescription"
                                                         rows="4"></textarea>
                                                 </div>
-                                                <h5 class="text-danger" id="sectionExist">Services listed above already exist,
-                                                    please add a new service or update it.</h5>
+                                                <h5 class="text-danger" id="promoExist">Promo/Feature listed above already exist,
+                                                    please add a new promo/feature or update it.</h5>
                                                 <button class="btn btn-dark mr-2" type="submit"
                                                     id="addProductBtn">Submit</button>
                                                 <button class="btn btn-light" type="button"
@@ -615,7 +662,7 @@
                         <div class="col-lg-12 grid-margin stretch-card mt-2">
                             <div class="card">
                                 <div class="card-body">
-                                    <h4 class="card-title">Section List</h4>
+                                    <h4 class="card-title">promo List</h4>
                                     <p class="card-description ">
 
                                         <input type="text" id="searchInput" placeholder="Search...">
@@ -626,13 +673,13 @@
                                                 <tr>
                                                     <th>S/N</th>
 
-                                                    <th>Section Image</th>
-                                                    <th>Section name</th>
-                                                    <th>Section Description</th>
+                                                    <th>promo Image</th>
+                                                    <th>promo name</th>
+                                                    <th>promo Description</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
-                                            <tbody id="sectionTable">
+                                            <tbody id="promoTable">
 
                                                 <div id="loader">
                                                     <div class="spinner">
@@ -668,34 +715,34 @@
     </div>
     <!-- container-scroller -->
     <!-- plugins:js -->
-    <script src="./vendors/js/vendor.bundle.base.js"></script>
+    <script src="../vendors/js/vendor.bundle.base.js"></script>
     <!-- endinject -->
     <!-- Plugin js for this page -->
-    <script src="./vendors/typeahead.js/typeahead.bundle.min.js"></script>
-    <script src="./vendors/select2/select2.min.js"></script>
+    <script src="../vendors/typeahead.js/typeahead.bundle.min.js"></script>
+    <script src="../vendors/select2/select2.min.js"></script>
     <!-- End plugin js for this page -->
     <!-- inject:js -->
-    <script src="./js/off-canvas.js"></script>
-    <script src="./js/hoverable-collapse.js"></script>
-    <script src="./js/template.js"></script>
-    <script src="./js/settings.js"></script>
-    <script src="./js/todolist.js"></script>
+    <script src="../js/off-canvas.js"></script>
+    <script src="../js/hoverable-collapse.js"></script>
+    <script src="../js/template.js"></script>
+    <script src="../js/settings.js"></script>
+    <script src="../js/todolist.js"></script>
     <!-- endinject -->
     <!-- Custom js for this page-->
-    <script src="./js/file-upload.js"></script>
-    <script src="./js/typeahead.js"></script>
-    <script src="./js/select2.js"></script>
-    <script src="./js/alert-file.js"></script>
+    <script src="../js/file-upload.js"></script>
+    <script src="../js/typeahead.js"></script>
+    <script src="../js/select2.js"></script>
+    <script src="../js/alert-file.js"></script>
 
 
     <!-- JavaScript code -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             // Get the modal element
-            var modal = document.getElementById("addSectionModal");
+            var modal = document.getElementById("addpromoModal");
 
             // Get the button that triggers the modal
-            var modalButton = document.querySelector("[data-target='#addSectionModal']");
+            var modalButton = document.querySelector("[data-target='#addpromoModal']");
 
             // Add a click event listener to the button
             modalButton.addEventListener("click", function () {
@@ -708,15 +755,15 @@
             closeButton.addEventListener("click", function () {
                 // Hide the modal
                 modal.style.display = "none";
-                document.getElementById("sectionForm").reset
+                document.getElementById("promoForm").reset
                 document.getElementById("imagePreview").setAttribute("src", "");
                 imagePreview.style.height = '0px';
                 imagePreviewContainer.style.height = '0px'
             });
         });
     </script>
-     <script src="js/firebase/firebase-config.js"></script>
-    <script src="js/firebase/manage_section.js" type="module"></script>
+     <script src="../js/firebase/firebase-config.js"></script>
+    <script src="../js/firebase/manage_promo.js" type="module"></script>
 
 
 </body>

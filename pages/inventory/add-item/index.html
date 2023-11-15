@@ -7,21 +7,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <title>Bnb Admin / Add item</title>
   <!-- plugins:css -->
-  <link rel="stylesheet" href="../../vendors/feather/feather.css" />
+  <link rel="stylesheet" href="../../../vendors/feather/feather.css" />
 
-  <link rel="stylesheet" href="../../vendors/ti-icons/css/themify-icons.css" />
-  <link rel="stylesheet" href="../../vendors/css/vendor.bundle.base.css" />
+  <link rel="stylesheet" href="../../../vendors/ti-icons/css/themify-icons.css" />
+  <link rel="stylesheet" href="../../../vendors/css/vendor.bundle.base.css" />
   <!-- endinject -->
   <!-- Plugin css for this page -->
-  <link rel="stylesheet" href="../../vendors/select2/select2.min.css" />
-  <link rel="stylesheet" href="../../vendors/select2-bootstrap-theme/select2-bootstrap.min.css" />
+  <link rel="stylesheet" href="../../../vendors/select2/select2.min.css" />
+  <link rel="stylesheet" href="../../../vendors/select2-bootstrap-theme/select2-bootstrap.min.css" />
   <!-- End plugin css for this page -->
   <!-- inject:css -->
-  <link rel="stylesheet" href="../../css/vertical-layout-light/style.css" />
+  <link rel="stylesheet" href="../../../css/vertical-layout-light/style.css" />
   <!-- endinject -->
-  <link rel="shortcut icon" href="../../images/favicon.ico" />
-  <link rel="stylesheet" href="../../css/alert-style.css" />
-
+  <link rel="shortcut icon" href="../../../images/favicon.ico" />
+  <link rel="stylesheet" href="../../../css/alert-style.css" />
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
   <Style>
   /* Remove the absolute positioning for the images */
 .top-left,
@@ -61,26 +61,7 @@
 /* Rest of your CSS styles */
 
 
-    #snackbar {
-      visibility: hidden;
-      min-width: 250px;
-      background-color: #333;
-      color: #fff;
-      text-align: center;
-      border-radius: 2px;
-      padding: 16px;
-      position: fixed;
-      z-index: 1;
-      left: 50%;
-      bottom: 30px;
-      transform: translateX(-50%);
-    }
-
-    #snackbar.show {
-      visibility: visible;
-      -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-      animation: fadein 0.5s, fadeout 0.5s 2.5s;
-    }
+   
 
     @-webkit-keyframes fadein {
       from {
@@ -136,7 +117,7 @@
     .modal {
       display: none;
       position: fixed;
-      z-index: 1;
+      z-index: 10;
       left: 0;
       top: 0;
       width: 100%;
@@ -180,9 +161,9 @@
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center"
         style="background-color:rgba(41, 71, 37, 0.784);">
-        <a class="navbar-brand brand-logo mr-5" href="../../index.html"><img src="../../images//hilal_logo.jpg"
+        <a class="navbar-brand brand-logo mr-5" href="../../../"><img src="../../../images//hilal_logo.jpg"
             class="mr-2" alt="logo" /></a>
-        <a class="navbar-brand brand-logo-mini" href="../../index.html"><img src="../../images//hilal_logo.jpg"
+        <a class="navbar-brand brand-logo-mini" href="../../../"><img src="../../../images//hilal_logo.jpg"
             alt="logo" /></a>
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end"
@@ -215,7 +196,7 @@
 
           <li class="nav-item nav-profile dropdown">
             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-              <img src="../../images/faces/face28.jpg" alt="profile" />
+              <img src="../../../images/faces/face28.jpg" alt="profile" />
             </a>
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
 
@@ -240,11 +221,28 @@
       </div>
     </nav>
     <!-- partial -->
+
+    <div id="success-alert-modal" class="modal">
+      <div class="modal-content">
+        <iconify-icon icon="octicon:check-circle-fill-16" style="color: green;" width="100" height="100" class="align-self-center pb-3"></iconify-icon>
+        <p class="h5 pb-3"><span id="success-alertMessage"></span></p>
+       
+        <button class="btn  primary-button btn-rounded align-self-center w-50" id="succees-ok-btn">Okay</button>
+      </div>
+    </div>
+    <div id="failure-alert-modal" class="modal">
+      <div class="modal-content">
+        <iconify-icon icon="octicon:x-circle-fill-16" style="color: indianred;" width="100" height="100" class="align-self-center pb-3"></iconify-icon>
+        <p class="h5 pb-3"><span id="failure-alertMessage"></span></p>
+       
+        <button class="btn  primary-button btn-rounded align-self-center w-50" id="failure-ok-btn">Okay</button>
+      </div>
+    </div>
     <!-- Modal -->
     <div id="sign-out-modal" class="modal">
       <div class="modal-content">
         <p>Are you sure you want to sign out?</p>
-        <button class="btn secondary-button btn-rounded align-self-center mb-3 w-50" id="confirm-sign-out-btn">Yes, sign
+        <button class="btn btn-danger btn-rounded align-self-center mb-3 w-50" id="confirm-sign-out-btn">Yes, sign
           me
           out</button>
         <button class="btn  primary-button btn-rounded align-self-center w-50" id="cancel-sign-out-btn">Cancel</button>
@@ -257,13 +255,13 @@
       <nav class="sidebar  sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           <li class="nav-item">
-            <a class="nav-link" href="../../index.html">
+            <a class="nav-link" href="../../../">
               <i class="icon-grid menu-icon"></i>
               <span class="menu-title">Dashboard</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="../bookings/booking-page.html">
+            <a class="nav-link" href="../../bookings/">
               <i class="icon-paper menu-icon"></i>
               <span class="menu-title">Bookings</span>
 
@@ -271,14 +269,14 @@
 
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="../orders/orders.html">
+            <a class="nav-link" href="../../orders/">
               <i class="icon-paper menu-icon"></i>
               <span class="menu-title">Orders</span>
 
             </a>
 
           </li>
-          <li class="nav-item">
+          <li class="nav-item active">
             <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
               <i class="icon-layout menu-icon"></i>
               <span class="menu-title">Inventory</span>
@@ -287,10 +285,10 @@
             <div class="collapse" id="ui-basic">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item">
-                  <a class="nav-link" href="./viewstock-dashboard.html">View Stock</a>
+                  <a class="nav-link" href="../">View Stock</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="./add-item.html">Add Stock</a>
+                  <a class="nav-link" href="./">Add Stock</a>
                 </li>
 
                 <!-- <li class="nav-item"> <a class="nav-link" href="pages/inventory/log.html">Log</a></li> -->
@@ -298,7 +296,7 @@
             </div>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="../../section.html">
+            <a class="nav-link" href="../../../section/">
               <i class="icon-grid menu-icon"></i>
               <span class="menu-title">Section</span>
             </a>
@@ -313,10 +311,10 @@
             <div class="collapse" id="ui-service">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item">
-                  <a class="nav-link" href="../service/service-dashboard.html">View Services</a>
+                  <a class="nav-link" href="../../service/">View Services</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="../service/add-service.html">Add Services</a>
+                  <a class="nav-link" href="../../service/add-service/">Add Services</a>
                 </li>
 
               </ul>
@@ -332,10 +330,10 @@
             <div class="collapse" id="ui-customer">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item">
-                  <a class="nav-link" href="../customers/registered-customers.html">Customers</a>
+                  <a class="nav-link" href="../../customers/">Customers</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="../customers/customer_loyalty.html">Customer loyalty</a>
+                  <a class="nav-link" href="../../customers/customers-loyalty/">Customer loyalty</a>
                 </li>
               </ul>
             </div>
@@ -349,9 +347,9 @@
             </a>
             <div class="collapse" id="ui-message">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="../message/view_messages.html">View messages</a></li>
-                <li class="nav-item"> <a class="nav-link" href="../../send-bc-message.html">Send Message</a></li>
-                <li class="nav-item"> <a class="nav-link" href="../feedbacks/feedbacks.html">Feed backs</a></li>
+                <li class="nav-item"> <a class="nav-link" href="../../message/">View messages</a></li>
+                <li class="nav-item"> <a class="nav-link" href="../../../send-bc/">Send Message</a></li>
+                <li class="nav-item"> <a class="nav-link" href="../../feedbacks/">Feed backs</a></li>
 
               </ul>
             </div>
@@ -425,6 +423,25 @@
                         <option value="beautyProduct">Beauty Product</option>
                         <option value="fashionProduct">Fashion Product</option>
                       </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="productCat">Show in App TopProducts ?</label>
+                    <div class="col-sm-4">
+                      <div class="form-check">
+                        <label class="form-check-label">
+                          <input type="radio" class="form-check-input" name="topProductRadios" id="yes" value="Yes" >
+                          Yes
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-sm-5">
+                      <div class="form-check">
+                        <label class="form-check-label">
+                          <input type="radio" class="form-check-input" name="topProductRadios" id="no" value="No" checked>
+                          No
+                        </label>
+                      </div>
+                    </div>
                     </div>
                     <div class="form-group">
                       <label for="productPrice">Product Price</label>
@@ -514,27 +531,27 @@
   </div>
   <!-- container-scroller -->
   <!-- plugins:js -->
-  <script src="../../vendors/js/vendor.bundle.base.js"></script>
+  <script src="../../../vendors/js/vendor.bundle.base.js"></script>
   <!-- endinject -->
   <!-- Plugin js for this page -->
-  <script src="../../vendors/typeahead.js/typeahead.bundle.min.js"></script>
-  <script src="../../vendors/select2/select2.min.js"></script>
+  <script src="../../../vendors/typeahead.js/typeahead.bundle.min.js"></script>
+  <script src="../../../vendors/select2/select2.min.js"></script>
   <!-- End plugin js for this page -->
   <!-- inject:js -->
-  <script src="../../js/off-canvas.js"></script>
-  <script src="../../js/hoverable-collapse.js"></script>
-  <script src="../../js/template.js"></script>
-  <script src="../../js/settings.js"></script>
-  <script src="../../js/todolist.js"></script>
+  <script src="../../../js/off-canvas.js"></script>
+  <script src="../../../js/hoverable-collapse.js"></script>
+  <script src="../../../js/template.js"></script>
+  <script src="../../../js/settings.js"></script>
+  <script src="../../../js/todolist.js"></script>
   <!-- endinject -->
   <!-- Custom js for this page-->
-  <script src="../../js/file-upload.js"></script>
-  <script src="../../js/typeahead.js"></script>
-  <script src="../../js/select2.js"></script>
-  <script src="../../js/alert-file.js"></script>
+  <script src="../../../js/file-upload.js"></script>
+  <script src="../../../js/typeahead.js"></script>
+  <script src="../../../js/select2.js"></script>
+  <script src="../../../js/alert-file.js"></script>
   <!-- End custom js for this page-->
-  <script src="../../js/firebase/firebase-config.js"></script>
-  <script src="../../js/firebase/manage_inventory.js" type="module"></script>
+  <script src="../../../js/firebase/firebase-config.js"></script>
+  <script src="../../../js/firebase/manage_inventory.js" type="module"></script>
 
 </body>
 

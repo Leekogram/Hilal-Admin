@@ -5,32 +5,93 @@
   <!-- Required meta tags -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <title>Bnb Admin / All Bookings</title>
+  <title>Bnb Admin / Send Broadcast Message</title>
   <!-- plugins:css -->
-  <link rel="stylesheet" href="../../vendors/feather/feather.css" />
-  <link rel="stylesheet" href="../../vendors/ti-icons/css/themify-icons.css" />
-  <link rel="stylesheet" href="../../vendors/css/vendor.bundle.base.css" />
+  <link rel="stylesheet" href="../vendors/feather/feather.css" />
+
+  <link rel="stylesheet" href="../vendors/ti-icons/css/themify-icons.css" />
+  <link rel="stylesheet" href="../vendors/css/vendor.bundle.base.css" />
   <!-- endinject -->
   <!-- Plugin css for this page -->
+  <link rel="stylesheet" href="../vendors/select2/select2.min.css" />
+  <link rel="stylesheet" href="../vendors/select2-bootstrap-theme/select2-bootstrap.min.css" />
   <!-- End plugin css for this page -->
   <!-- inject:css -->
-  <link rel="stylesheet" href="../../css/vertical-layout-light/style.css" />
+  <link rel="stylesheet" href="../css/vertical-layout-light/style.css" />
   <!-- endinject -->
-  <link rel="shortcut icon" href="../../images/favicon.ico" />
+  <link rel="shortcut icon" href="../images/favicon.ico" />
+  <link rel="stylesheet" href="../css/alert-style.css" />
+  <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
   <style>
-    table#myTable td {
-      vertical-align: top;
+    #snackbar {
+      visibility: hidden;
+      min-width: 250px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 2px;
+      padding: 16px;
+      position: fixed;
+      z-index: 1;
+      left: 50%;
+      bottom: 30px;
+      transform: translateX(-50%);
     }
 
-    .section-des {
-      max-width: 500px;
-      /* Adjust the maximum width as needed */
-      word-wrap: break-word;
-      overflow-wrap: break-word;
-      white-space: pre-wrap;
+    #snackbar.show {
+      visibility: visible;
+      -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      animation: fadein 0.5s, fadeout 0.5s 2.5s;
     }
 
-    /* Modal styles */
+    @-webkit-keyframes fadein {
+      from {
+        bottom: 0;
+        opacity: 0;
+      }
+
+      to {
+        bottom: 30px;
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadein {
+      from {
+        bottom: 0;
+        opacity: 0;
+      }
+
+      to {
+        bottom: 30px;
+        opacity: 1;
+      }
+    }
+
+    @-webkit-keyframes fadeout {
+      from {
+        bottom: 30px;
+        opacity: 1;
+      }
+
+      to {
+        bottom: 0;
+        opacity: 0;
+      }
+    }
+
+    @keyframes fadeout {
+      from {
+        bottom: 30px;
+        opacity: 1;
+      }
+
+      to {
+        bottom: 0;
+        opacity: 0;
+      }
+    }
+
     .modal {
       display: none;
       position: fixed;
@@ -103,9 +164,12 @@
       }
     }
 
+   
+    #importButton{
+      margin-top: 10px;
+    }
 
-    input[type="text"],
-    input[type="number"] {
+    #searchInput {
       float: right;
       width: 200px;
       padding-left: 10px;
@@ -118,44 +182,14 @@
       font-family: Arial, sans-serif;
     }
 
-    input[type="text"],
-    input[type="number"]:focus {
+    #searchInput:focus {
       outline: none;
       /* border-color: #FFC100; */
     }
 
-
-    .top-left {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 50%;
-      height: 150%;
-    }
-
-    .top-right {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 50%;
-      height: 150%;
-    }
-
-    .bottom-left {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 20%;
-      /* height: 150%; */
-    }
-
-    .bottom-right {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      width: 50%;
-    }
+   
   </style>
+
 </head>
 
 <body>
@@ -164,9 +198,9 @@
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center"
         style="background-color:rgba(41, 71, 37, 0.784);">
-        <a class="navbar-brand brand-logo mr-5" href="../../index.html"><img src="../../images//hilal_logo.jpg"
+        <a class="navbar-brand brand-logo mr-5" href="../"><img src="../images//hilal_logo.jpg"
             class="mr-2" alt="logo" /></a>
-        <a class="navbar-brand brand-logo-mini" href="../../index.html"><img src="../../images//hilal_logo.jpg"
+        <a class="navbar-brand brand-logo-mini" href="../"><img src="../images//hilal_logo.jpg"
             alt="logo" /></a>
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end"
@@ -199,7 +233,7 @@
           
           <li class="nav-item nav-profile dropdown">
             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-              <img src="../../images/faces/face28.jpg" alt="profile" />
+              <img src="../images/faces/face28.jpg" alt="profile" />
             </a>
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
 
@@ -228,29 +262,26 @@
     <div id="sign-out-modal" class="modal">
       <div class="modal-content">
         <p>Are you sure you want to sign out?</p>
-        <button class="btn secondary-button btn-rounded align-self-center mb-3 w-50" id="confirm-sign-out-btn">Yes, sign
-          me
+        <button class="btn btn-danger btn-rounded align-self-center mb-3 w-50" id="confirm-sign-out-btn">Yes, sign me
           out</button>
-        <button class="btn  primary-button btn-rounded align-self-center w-50" id="cancel-sign-out-btn">Cancel</button>
+        <button class="btn  btn-success btn-rounded align-self-center w-50" id="cancel-sign-out-btn">Cancel</button>
       </div>
     </div>
-    <!-- partial -->
     <!-- partial -->
     <div class="container-fluid page-body-wrapper">
 
 
-      <!-- partial -->
-      <!-- partial:../../partials/_sidebar.html -->
+      <!-- partial:partials/_sidebar.html -->
       <nav class="sidebar  sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           <li class="nav-item">
-            <a class="nav-link" href="../../index.html">
+            <a class="nav-link" href="../">
               <i class="icon-grid menu-icon"></i>
               <span class="menu-title">Dashboard</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="./booking-page.html">
+            <a class="nav-link" href="../pages/bookings/">
               <i class="icon-paper menu-icon"></i>
               <span class="menu-title">Bookings</span>
 
@@ -258,7 +289,7 @@
 
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="../orders/orders.html">
+            <a class="nav-link" href="../pages/orders/">
               <i class="icon-paper menu-icon"></i>
               <span class="menu-title">Orders</span>
 
@@ -274,10 +305,10 @@
             <div class="collapse" id="ui-basic">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item">
-                  <a class="nav-link" href="../inventory/viewstock-dashboard.html">View Stock</a>
+                  <a class="nav-link" href="../pages/inventory/">View Stock</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="../inventory/add-item.html">Add Stock</a>
+                  <a class="nav-link" href="../pages/inventory/add-item/">Add Stock</a>
                 </li>
 
                 <!-- <li class="nav-item"> <a class="nav-link" href="pages/inventory/log.html">Log</a></li> -->
@@ -285,7 +316,7 @@
             </div>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="../../section.html">
+            <a class="nav-link" href="../section/">
               <i class="icon-grid menu-icon"></i>
               <span class="menu-title">Section</span>
             </a>
@@ -300,12 +331,12 @@
             <div class="collapse" id="ui-service">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item">
-                  <a class="nav-link" href="../service/service-dashboard.html">View Services</a>
+                  <a class="nav-link" href="../pages/service/">View Services</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="../service/add-service.html">Add Services</a>
-                </li>
-                <!-- <li class="nav-item"> <a class="nav-link" href="pages/inventory/log.html">Log</a></li> -->
+                  <a class="nav-link" href="../pages/service/add-service/">Add Services</a>
+
+                  <!-- <li class="nav-item"> <a class="nav-link" href="pages/inventory/log.html">Log</a></li> -->
               </ul>
             </div>
           </li>
@@ -319,10 +350,10 @@
             <div class="collapse" id="ui-customer">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item">
-                  <a class="nav-link" href="../customers/registered-customers.html">Customers</a>
+                  <a class="nav-link" href="../pages/customers/">Customers</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="../customers/customer_loyalty.html">Customer loyalty</a>
+                  <a class="nav-link" href="../pages/customers/customers-loyalty/">Customer loyalty</a>
                 </li>
               </ul>
             </div>
@@ -336,76 +367,96 @@
             </a>
             <div class="collapse" id="ui-message">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="../message/view_messages.html">View messages</a></li>
-                <li class="nav-item"> <a class="nav-link" href="../../send-bc-message.html">Send Message</a></li>
-                <li class="nav-item"> <a class="nav-link" href="../feedbacks/feedbacks.html">Feed backs</a></li>
+                <li class="nav-item"> <a class="nav-link" href="../pages/message/">View messages</a>
+                </li>
+                <li class="nav-item active"> <a class="nav-link" href="../send-bc/">Send Message</a></li>
+                <li class="nav-item"> <a class="nav-link" href="../pages/feedbacks/">Feed backs</a></li>
 
               </ul>
             </div>
           </li>
-          <!--   <li class="nav-item">
-              <a class="nav-link" href="" >
-                <i class="icon-paper menu-icon"></i>
-                <span class="menu-title">FeedBacks</span>
-  
-              </a>
-            
-            </li> -->
+
         </ul>
       </nav>
       <!-- partial -->
       <div class="main-panel">
         <div class="content-wrapper">
           <div class="row">
-            <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-
-              <h6 class="font-weight-normal mb-0"><span class="text-danger" id="notSpan"> You have <span
-                    id="notCount"></span> unread notification(s) !</span></h6>
-            </div>
-            <div class="col-lg-12 grid-margin stretch-card">
+            <div class="col-md-10 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title">Booking List</h4>
-                  <p class="card-description text-dark ">
-                    <span class="text-danger font-weight-bold"> Note:</span> No action can be performed on a completed
-                    or cancelled booking. Please proceed with caution.
-                  </p>
+                  <h4 class="card-title">Send Message</h4>
+                  <p class="card-description">Fill in appropriately.
 
-                  <input type="text" id="searchInput" placeholder="Search...">
+
                   </p>
+                  <form class="forms-sample" method="post" id="messageForm">
+                    <input type="file" id="importFile" accept=".xlsx, .xls" />
+                    <button type="button" id="importButton" class="btn btn-dark">Import Recipients</button>
+                    <div class="form-group">
+                      <label for="messageSubject">Subject <span style="font-size: 12px;color: #ccc;">(Required
+                          *)</span></label>
+                      <input type="text" class="form-control" required id="messageSubject" placeholder="Subject...." />
+                    </div>
+
+
+                    <div class="form-group">
+                      <label for="messageContent">Message Content <span style="font-size: 12px;color: #ccc;">(Required
+                          *)</label>
+                      <textarea class="form-control" id="messageContent" required rows="6"
+                        placeholder="Type here....."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="optionalLink">Optional Link</label>
+                      <input type="text" class="form-control" id="optionalLink"
+                        placeholder="E.g To learn more visit Wwww.bnb.com for more info" />
+                    </div>
+                    <button type="submit" class="btn btn-md btn-primary mr-2" id="sendMessageBtn">
+                      Send
+                    </button>
+                    <button class="btn btn-light" type="reset">Reset</button>
+
+
+                  </form>
+                  <br>
+                  <h4 class="card-title">Add Recipients</h4>
+                  <p><input type="text" id="searchInput" placeholder="Search..."></p>
                   <div class="table-responsive">
                     <table class="table" id="myTable">
-                      <thead>
+                      <thead id="tableHead">
                         <tr>
-                          <th>S/N</th>
-                          <th>BookingId</th>
+                          <th><input type="checkbox" id="select-all"></th>
+                          <th>S/n</th>
                           <th>Customer name</th>
-                          <th>Service</th>
-                          <th>Phone number</th>
                           <th>Email</th>
-                          <th>Date of Visit</th>
-                          <th>Source Type</th>
-                          <th>Instruction</th>
-                          <th>Booking Status</th>
+                          <th>Phone number</th>
 
-                          <th></th>
                         </tr>
                       </thead>
-                      <tbody id="bookingTable">
+                      <tbody id="customerTable">
 
                         <div id="loader">
                           <div class="spinner">
-                            <img src="../../images/transparent-logo.png" alt="Logo">
+                            <img src="../images/transparent-logo.png" alt="Logo">
                           </div>
                         </div>
                       </tbody>
                     </table>
+
+                    <div id="loader">
+                      <img src="../images/transparent-logo.png" alt="Logo">
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+
+
           </div>
         </div>
+
+        <div id="snackbar"></div>
         <!-- content-wrapper ends -->
         <!-- partial:../../partials/_footer.html -->
         <footer class="footer">
@@ -424,18 +475,31 @@
   </div>
   <!-- container-scroller -->
   <!-- plugins:js -->
-  <script src="../../vendors/js/vendor.bundle.base.js"></script>
+  <script src="../vendors/js/vendor.bundle.base.js"></script>
   <!-- endinject -->
   <!-- Plugin js for this page -->
+  <script src="../vendors/typeahead.js/typeahead.bundle.min.js"></script>
+  <script src="../vendors/select2/select2.min.js"></script>
   <!-- End plugin js for this page -->
   <!-- inject:js -->
-  <script src="../../js/off-canvas.js"></script>
-  <script src="../../js/hoverable-collapse.js"></script>
-  <script src="../../js/template.js"></script>
-  <script src="../../js/settings.js"></script>
-  <script src="../../js/todolist.js"></script>
-  <script src="../../js/firebase/firebase-config.js"></script>
-  <script src="../../js/firebase/manage_bookings.js" type="module"></script>
+  <script src="../js/off-canvas.js"></script>
+  <script src="../js/hoverable-collapse.js"></script>
+  <script src="../js/template.js"></script>
+  <script src="../js/settings.js"></script>
+  <script src="../js/todolist.js"></script>
+  <!-- endinject -->
+  <!-- Custom js for this page-->
+  <script src="../js/file-upload.js"></script>
+  <script src="../js/typeahead.js"></script>
+  <script src="../js/select2.js"></script>
+  <script src="../js/alert-file.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <script src="../js/firebase/firebase-config.js"></script>
+
+  <!-- End custom js for this page-->
+  <script src="../js/firebase/manage_bc_message.js" type="module"></script>
+
   <script>
     function searchTable() {
       var input = document.getElementById("searchInput");
@@ -462,9 +526,7 @@
 
     document.getElementById("searchInput").addEventListener("keyup", searchTable);
   </script>
-  <!-- endinject -->
-  <!-- Custom js for this page-->
-  <!-- End custom js for this page-->
+
 </body>
 
 </html>
