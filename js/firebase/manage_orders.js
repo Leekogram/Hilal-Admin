@@ -10,7 +10,7 @@ import {
   updateDoc,
   serverTimestamp,
   orderBy,
-  writeBatch,where, getDoc, getDocs
+  writeBatch, where, getDoc, getDocs
 } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-auth.js";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -24,30 +24,30 @@ const app = initializeApp(firebaseConfig);
 
 // Initialize  Database and get a reference to the service
 const database = getFirestore(app);
- // Initialize Firebase Authentication and get a reference to the service
- const auth = getAuth(app);
+// Initialize Firebase Authentication and get a reference to the service
+const auth = getAuth(app);
 const colRef = collection(database, "orders");
 // const notRef = collection(database, "orderNotification");
 
 
-  async function updateNotificationStatus() {
-    const notificationRef = collection(database, "orderNotification");
-    const batch = writeBatch(database);
-  
-    const unsubscribe = onSnapshot(notificationRef, (querySnapshot) => {
-      console.log(querySnapshot.size);
-      querySnapshot.forEach((doc) => {
-        const docRef = doc.ref;
-        batch.update(docRef, { status: "read" });
-      });
-  
-       batch.commit().then(() => {
-        console.log("Batch update completed successfully.");
-      }).catch((error) => {
-        console.error("Error committing batch update:", error);
-      });
+async function updateNotificationStatus() {
+  const notificationRef = collection(database, "orderNotification");
+  const batch = writeBatch(database);
+
+  const unsubscribe = onSnapshot(notificationRef, (querySnapshot) => {
+    console.log(querySnapshot.size);
+    querySnapshot.forEach((doc) => {
+      const docRef = doc.ref;
+      batch.update(docRef, { status: "read" });
     });
-  }
+
+    batch.commit().then(() => {
+      console.log("Batch update completed successfully.");
+    }).catch((error) => {
+      console.error("Error committing batch update:", error);
+    });
+  });
+}
 
 
 
@@ -90,15 +90,15 @@ confirmSignOutBtn.addEventListener("click", () => {
 });
 
 
-  
+
 
 async function getOrders() {
 
   const currentYear = new Date().getFullYear();
   document.getElementById("currentYear").textContent = currentYear;
 
-   //check if user is logged in or not
-   onAuthStateChanged(auth, (user) => {
+  //check if user is logged in or not
+  onAuthStateChanged(auth, (user) => {
     if (user) {
       // User is signed in, see docs for a list of available properties
       // https://firebase.google.com/docs/reference/js/firebase.User
@@ -107,7 +107,7 @@ async function getOrders() {
     } else {
       // User is signed out
       // ...
-      window.location.href = "../../../login.html";
+      window.location.href = "../../../login/";
     }
   });
   let tableRow = document.getElementById("bookingTable");
@@ -126,7 +126,7 @@ async function getOrders() {
         index++;
         let data = doc.data();
 
-      
+
         let row = `<tr>
               <td>${index}</td>
               <td>${data.orderId}</td>
@@ -150,13 +150,13 @@ async function getOrders() {
               
               <td>
               <label class="badge ${data.orderStatus == "Confirmed"
-              ? "badge-success"
-              : data.orderStatus == "Cancelled"
-                ? "badge-danger"
-                : data.orderStatus == "Completed"
-                  ? "badge-dark"
-                  : "badge-info"
-            }" id="statusLabel"
+            ? "badge-success"
+            : data.orderStatus == "Cancelled"
+              ? "badge-danger"
+              : data.orderStatus == "Completed"
+                ? "badge-dark"
+                : "badge-info"
+          }" id="statusLabel"
             >${data.orderStatus}</label
           >
               
@@ -184,103 +184,103 @@ ${data.orderStatus === 'New' || data.orderStatus === 'Confirmed' ? `
         rows += row;
       });
       tableRow.innerHTML = rows;
- // Add event listener to accept dropdown item
- const acceptItems = document.querySelectorAll(".accept-action");
- acceptItems.forEach((item) => {
-   item.addEventListener("click", (event) => {
-     const docId = event.target.dataset.docid;
-     const itemName = event.target.dataset.itemname;
-     const customaEmail = event.target.dataset.customeremail;
+      // Add event listener to accept dropdown item
+      const acceptItems = document.querySelectorAll(".accept-action");
+      acceptItems.forEach((item) => {
+        item.addEventListener("click", (event) => {
+          const docId = event.target.dataset.docid;
+          const itemName = event.target.dataset.itemname;
+          const customaEmail = event.target.dataset.customeremail;
 
-     // Show confirmation alert
+          // Show confirmation alert
 
-     acceptModal.style.display = "block";
+          acceptModal.style.display = "block";
 
-     confirmBtn.addEventListener("click", () => {
-       acceptModal.style.display = "none";
-       confirmOrderFunction(docId, customaEmail, itemName);
-     });
-   
-
-   });
- });
-
-  // Add event listener to complete dropdown item
-  const completeItems = document.querySelectorAll(".complete-action");
-  completeItems.forEach((item) => {
-    item.addEventListener("click", (event) => {
-      const docId = event.target.dataset.docid;
-      const itemName = event.target.dataset.itemname;
-      const customaEmail = event.target.dataset.customeremail;
-      const itemPrice = event.target.dataset.itemprice;
-      const qtyPurchased = event.target.dataset.qty;
+          confirmBtn.addEventListener("click", () => {
+            acceptModal.style.display = "none";
+            confirmOrderFunction(docId, customaEmail, itemName);
+          });
 
 
-      const  completedConfirmationModal = document.getElementById("completed-modal");
-      const completedConfirmBtn = document.getElementById("completed-yes-btn");
-      const completeNoBtn = document.getElementById("completed-no-btn");
-
-      
-    
-      completedConfirmationModal.style.display="block";
-    
-
-
-      completedConfirmBtn.addEventListener("click", () => {
-       
-        completeFunction(docId, customaEmail, itemName, itemPrice, qtyPurchased);
-        completedConfirmationModal.style.display = "none";
+        });
       });
 
-      completeNoBtn.addEventListener("click", () => {
-        completedConfirmationModal.style.display = "none";
-       
+      // Add event listener to complete dropdown item
+      const completeItems = document.querySelectorAll(".complete-action");
+      completeItems.forEach((item) => {
+        item.addEventListener("click", (event) => {
+          const docId = event.target.dataset.docid;
+          const itemName = event.target.dataset.itemname;
+          const customaEmail = event.target.dataset.customeremail;
+          const itemPrice = event.target.dataset.itemprice;
+          const qtyPurchased = event.target.dataset.qty;
+
+
+          const completedConfirmationModal = document.getElementById("completed-modal");
+          const completedConfirmBtn = document.getElementById("completed-yes-btn");
+          const completeNoBtn = document.getElementById("completed-no-btn");
+
+
+
+          completedConfirmationModal.style.display = "block";
+
+
+
+          completedConfirmBtn.addEventListener("click", () => {
+
+            completeFunction(docId, customaEmail, itemName, itemPrice, qtyPurchased);
+            completedConfirmationModal.style.display = "none";
+          });
+
+          completeNoBtn.addEventListener("click", () => {
+            completedConfirmationModal.style.display = "none";
+
+          });
+
+
+        });
       });
-    
+
+      // Add event listener to cancel dropdown item
+      const cancelItems = document.querySelectorAll(".cancel-action");
+      cancelItems.forEach((item) => {
+        item.addEventListener("click", (event) => {
+          const docId = event.target.dataset.docid;
+          const itemName = event.target.dataset.itemname;
+          const customaEmail = event.target.dataset.customeremail;
+          // Show confirmation alert
+
+          const cancelConfirmationModal = document.getElementById("cancel-modal");
+          const cancelConfirmBtn = document.getElementById("cancel-yes-btn");
+          const cancelBtn = document.getElementById("cancel-no-btn");
+
+
+
+          cancelConfirmationModal.style.display = "block";
+
+
+
+          cancelConfirmBtn.addEventListener("click", () => {
+            cancelConfirmationModal.style.display = "none";
+            cancelFunction(docId, customaEmail, itemName);
+          });
+
+          cancelBtn.addEventListener("click", () => {
+            cancelConfirmationModal.style.display = "none";
+
+          });
+
+        });
+      });
+
+
 
     });
-  });
-
- // Add event listener to cancel dropdown item
- const cancelItems = document.querySelectorAll(".cancel-action");
- cancelItems.forEach((item) => {
-   item.addEventListener("click", (event) => {
-     const docId = event.target.dataset.docid;
-     const itemName = event.target.dataset.itemname;
-     const customaEmail = event.target.dataset.customeremail;
-     // Show confirmation alert
-
-     const  cancelConfirmationModal = document.getElementById("cancel-modal");
-     const cancelConfirmBtn = document.getElementById("cancel-yes-btn");
-     const cancelBtn = document.getElementById("cancel-no-btn");
-
-     
-   
-     cancelConfirmationModal.style.display="block";
-   
 
 
-     cancelConfirmBtn.addEventListener("click", () => {
-       cancelConfirmationModal.style.display = "none";
-       cancelFunction(docId, customaEmail, itemName);
-     });
-
-     cancelBtn.addEventListener("click", () => {
-       cancelConfirmationModal.style.display = "none";
-      
-     });
-   
-   });
- });
 
 
-     
-    });
-
-    
-
-
-    function confirmOrderFunction(docId, customerEmail, productName) {
+    async function confirmOrderFunction(docId, customerEmail, productName) {
       // Execute your accept function here with the docId parameter
       // console.log("Confirm function executed for docId", docId);
 
@@ -310,6 +310,23 @@ ${data.orderStatus === 'New' || data.orderStatus === 'Confirmed' ? `
       });
 
 
+
+      let userId;
+
+      const ordersSnapshot = await getDocs(query(collection(database, 'users'), where('email', '==', customerEmail)
+      ));
+      ordersSnapshot.forEach((doc) => {
+        // Accessing the document ID
+        userId = doc.id;
+
+      });
+
+      var message = `Your order for ${productName} has been confirm, our represenative will contact you soon.`;
+      var type = "Order notification";
+
+      postNotification(message, userId, type);
+
+
       addDoc(collection(database, "log"), {
         comment: "Order status has been updated to comfirmed.",
 
@@ -329,20 +346,20 @@ ${data.orderStatus === 'New' || data.orderStatus === 'Confirmed' ? `
       console.log("Complete function executed for docId", docId);
       const docRef = doc(database, "orders", docId);
       const productRef = collection(database, "products");
-    
+
       // Query the products collection for a document with the matching field
       const q = query(productRef, where("productName", "==", productName));
-    
+
       // Get the current quantity of the product
       getDocs(q)
-        .then((querySnapshot) => {
+        .then(async (querySnapshot) => {
           if (!querySnapshot.empty) {
             const productDoc = querySnapshot.docs[0].data();
             const currentQuantity = parseInt(productDoc.productQty);
-    
+
             // Convert quantityPurchased to a number
             const boughtQuantity = parseInt(quantityPurchased);
-    
+
             // Check if the current quantity is less than the quantity being bought
             if (currentQuantity < boughtQuantity) {
               // Alert the user to add more quantity or purchase a smaller amount
@@ -350,7 +367,7 @@ ${data.orderStatus === 'New' || data.orderStatus === 'Confirmed' ? `
             } else {
               // Calculate the remaining quantity
               const remainingQuantity = currentQuantity - boughtQuantity;
-    
+
               // Update the productQty field in the matched document
               const productDocRef = doc(database, "products", querySnapshot.docs[0].id);
               updateDoc(productDocRef, { productQty: remainingQuantity.toString() })
@@ -360,7 +377,7 @@ ${data.orderStatus === 'New' || data.orderStatus === 'Confirmed' ? `
                 .catch((error) => {
                   console.log("Error updating product quantity:", error);
                 });
-    
+
               const data = {
                 orderStatus: "Completed",
                 paymentStatus: "Paid",
@@ -373,14 +390,29 @@ ${data.orderStatus === 'New' || data.orderStatus === 'Confirmed' ? `
                 .catch((error) => {
                   console.log(error);
                 });
-    
+
               addDoc(collection(database, "appNotification"), {
                 message: `Your order for ${productName} has been set to completed.`,
                 email: customerEmail,
                 status: "New",
                 timestamp: serverTimestamp(),
               });
-    
+
+              let userId;
+
+              const ordersSnapshot = await getDocs(query(collection(database, 'users'), where('email', '==', customerEmail)
+              ));
+              ordersSnapshot.forEach((doc) => {
+                // Accessing the document ID
+                userId = doc.id;
+        
+              });
+        
+              var message = `Your order for ${productName} has been set to completed.`;
+              var type = "Order notification";
+        
+              postNotification(message, userId, type);
+
               addDoc(collection(database, "log"), {
                 comment: "Order status has been updated to completed.",
                 timestamp: serverTimestamp(),
@@ -400,7 +432,7 @@ ${data.orderStatus === 'New' || data.orderStatus === 'Confirmed' ? `
           console.log("Error retrieving product:", error);
         });
     }
-    function cancelFunction(docId, customerEmail, productName) {
+    async function cancelFunction(docId, customerEmail, productName) {
       // Execute your complete function here with the docId parameter
       console.log("Complete function executed for docId", docId);
       const docRef = doc(database, "orders", docId);
@@ -425,6 +457,21 @@ ${data.orderStatus === 'New' || data.orderStatus === 'Confirmed' ? `
         timestamp: serverTimestamp(),
       });
 
+      let userId;
+
+      const ordersSnapshot = await getDocs(query(collection(database, 'users'), where('email', '==', customerEmail)
+      ));
+      ordersSnapshot.forEach((doc) => {
+        // Accessing the document ID
+        userId = doc.id;
+
+      });
+
+      var message = `Your order for ${productName} has been cancelled, please contact our support for more info`;
+      var type = "Order notification";
+
+      postNotification(message, userId, type);
+
       addDoc(collection(database, "log"), {
         comment: "Order status has been updated to cancelled.",
 
@@ -444,118 +491,139 @@ ${data.orderStatus === 'New' || data.orderStatus === 'Confirmed' ? `
   }
 }
 
-  //get notifications
-  async function getNotifications() {
-    try {
-      // Get a reference to the notificationTray element
-      const notificationTray = document.getElementById('notificationTray');
-      // const notSpan = document.getElementById('notSpan');
+
+async function postNotification(message, userId, type) {
+  try {
+    const headers = {
+      // 'Authorization': 'Bearer YOUR_ACCESS_TOKEN', // Replace with your authorization header
+      'Content-Type': 'application/json', // Adjust content type as needed
+      // Add more headers if required
+    };
+
+    const response = await axios.post('http://172.20.10.2:3000/api/sendnotification/pushNotification', {
+      "message": `${message}`,
+      "userId": `${userId}`,
+      "type": `${type}`
+    },{ headers: headers });
+
+
+    console.log('Push notification was sent successfully', response);
+  } catch (error) {
+    console.error('Failed to send Push notification', error);
+  }
+}
+//get notifications
+async function getNotifications() {
+  try {
+    // Get a reference to the notificationTray element
+    const notificationTray = document.getElementById('notificationTray');
+    // const notSpan = document.getElementById('notSpan');
 
 
 
-      const q = query(collection(database, "orderNotification"), where("status", "==", "unread"), orderBy("timestamp", "desc"));
-      await
-        onSnapshot(q, (querySnapshot) => {
-          const notificationCount = querySnapshot.size;
+    const q = query(collection(database, "orderNotification"), where("status", "==", "unread"), orderBy("timestamp", "desc"));
+    await
+      onSnapshot(q, (querySnapshot) => {
+        const notificationCount = querySnapshot.size;
 
-          if (querySnapshot.size > 0) {
-            document.getElementById('notSpan').style.visibility = "visible";
-            document.getElementById('count').innerHTML = notificationCount
-            document.getElementById('notCount').innerHTML = notificationCount;
-            document.getElementById('notificationDropdown').classList.add("count-indicator");
+        if (querySnapshot.size > 0) {
+          document.getElementById('notSpan').style.visibility = "visible";
+          document.getElementById('count').innerHTML = notificationCount
+          document.getElementById('notCount').innerHTML = notificationCount;
+          document.getElementById('notificationDropdown').classList.add("count-indicator");
+        } else {
+          document.getElementById('notSpan').style.visibility = "hidden";
+          document.getElementById('notificationDropdown').classList.remove("count-indicator");
+        }
+
+
+        // Loop through each document in the query snapshot and create an HTML element for it
+        querySnapshot.forEach((doc) => {
+          // Get the data from the document
+          const notification = doc.data();
+
+          // Create a new anchor element for the notification
+          const notificationLink = document.createElement('a');
+          notificationLink.classList.add('dropdown-item', 'preview-item');
+          if (notification.type == "service") {
+            notificationLink.setAttribute('href', '../services/');
+          } else if (notification.type == "feedback") {
+            notificationLink.setAttribute('href', '../feedbacks/');
           } else {
-            document.getElementById('notSpan').style.visibility = "hidden";
-            document.getElementById('notificationDropdown').classList.remove("count-indicator");
+            notificationLink.setAttribute('href', './');
           }
 
 
-          // Loop through each document in the query snapshot and create an HTML element for it
-          querySnapshot.forEach((doc) => {
-            // Get the data from the document
-            const notification = doc.data();
 
-            // Create a new anchor element for the notification
-            const notificationLink = document.createElement('a');
-            notificationLink.classList.add('dropdown-item', 'preview-item');
-            if (notification.type == "service") {
-              notificationLink.setAttribute('href', '../services/');
-            } else if (notification.type == "feedback") {
-              notificationLink.setAttribute('href', '../feedbacks/');
-            } else {
-              notificationLink.setAttribute('href', './');
-            }
+          // Create the preview-thumbnail element
+          const previewThumbnail = document.createElement('div');
+          previewThumbnail.classList.add('preview-thumbnail');
 
+          // Create the preview-icon element
+          const previewIcon = document.createElement('div');
+          previewIcon.classList.add('preview-icon', 'bg-success');
+          const icon = document.createElement('i');
+          icon.classList.add('ti-info-alt', 'mx-0');
+          previewIcon.appendChild(icon);
+          previewThumbnail.appendChild(previewIcon);
 
+          // Create the preview-item-content element
+          const previewItemContent = document.createElement('div');
+          previewItemContent.classList.add('preview-item-content');
+          const subject = document.createElement('h6');
+          subject.classList.add('preview-subject', 'font-weight-normal');
+          subject.textContent = notification.title;
+          const message = document.createElement('p');
+          message.classList.add('font-weight-light', 'small-text', 'mb-0', 'text-muted');
+          message.textContent = notification.message;
+          const time = document.createElement('p');
+          time.classList.add('font-weight-light', 'small-text', 'mb-0', 'text-muted');
+          time.textContent = getTimeAgo(notification.timestamp.toDate().toLocaleString());
+          previewItemContent.appendChild(subject);
+          previewItemContent.appendChild(message);
+          previewItemContent.appendChild(time);
 
-            // Create the preview-thumbnail element
-            const previewThumbnail = document.createElement('div');
-            previewThumbnail.classList.add('preview-thumbnail');
+          // Add the preview-thumbnail and preview-item-content elements to the anchor element
+          notificationLink.appendChild(previewThumbnail);
+          notificationLink.appendChild(previewItemContent);
 
-            // Create the preview-icon element
-            const previewIcon = document.createElement('div');
-            previewIcon.classList.add('preview-icon', 'bg-success');
-            const icon = document.createElement('i');
-            icon.classList.add('ti-info-alt', 'mx-0');
-            previewIcon.appendChild(icon);
-            previewThumbnail.appendChild(previewIcon);
-
-            // Create the preview-item-content element
-            const previewItemContent = document.createElement('div');
-            previewItemContent.classList.add('preview-item-content');
-            const subject = document.createElement('h6');
-            subject.classList.add('preview-subject', 'font-weight-normal');
-            subject.textContent = notification.title;
-            const message = document.createElement('p');
-            message.classList.add('font-weight-light', 'small-text', 'mb-0', 'text-muted');
-            message.textContent = notification.message;
-            const time = document.createElement('p');
-            time.classList.add('font-weight-light', 'small-text', 'mb-0', 'text-muted');
-            time.textContent = getTimeAgo(notification.timestamp.toDate().toLocaleString());
-            previewItemContent.appendChild(subject);
-            previewItemContent.appendChild(message);
-            previewItemContent.appendChild(time);
-
-            // Add the preview-thumbnail and preview-item-content elements to the anchor element
-            notificationLink.appendChild(previewThumbnail);
-            notificationLink.appendChild(previewItemContent);
-
-            // Add the anchor element to the notificationTray element
-            notificationTray.appendChild(notificationLink);
-          });
-
+          // Add the anchor element to the notificationTray element
+          notificationTray.appendChild(notificationLink);
         });
 
+      });
 
-      function getTimeAgo(dateString) {
-        const date = new Date(dateString);
-        const now = new Date();
-        const diffMs = now - date;
-        const diffSec = Math.round(diffMs / 1000);
-        const diffMin = Math.round(diffSec / 60);
-        const diffHr = Math.round(diffMin / 60);
-        const diffDays = Math.round(diffHr / 24);
 
-        if (diffSec < 60) {
-          return `${diffSec} second${diffSec !== 1 ? 's' : ''} ago`;
-        } else if (diffMin < 60) {
-          return `${diffMin} minute${diffMin !== 1 ? 's' : ''} ago`;
-        } else if (diffHr < 24) {
-          return `${diffHr} hour${diffHr !== 1 ? 's' : ''} ago`;
-        } else if (diffDays === 1) {
-          return `1 day ago`;
-        } else if (diffDays < 30) {
-          return `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`;
-        } else {
-          const diffMonths = Math.floor(diffDays / 30);
-          return `${diffMonths} month${diffMonths !== 1 ? 's' : ''} ago`;
-        }
+    function getTimeAgo(dateString) {
+      const date = new Date(dateString);
+      const now = new Date();
+      const diffMs = now - date;
+      const diffSec = Math.round(diffMs / 1000);
+      const diffMin = Math.round(diffSec / 60);
+      const diffHr = Math.round(diffMin / 60);
+      const diffDays = Math.round(diffHr / 24);
+
+      if (diffSec < 60) {
+        return `${diffSec} second${diffSec !== 1 ? 's' : ''} ago`;
+      } else if (diffMin < 60) {
+        return `${diffMin} minute${diffMin !== 1 ? 's' : ''} ago`;
+      } else if (diffHr < 24) {
+        return `${diffHr} hour${diffHr !== 1 ? 's' : ''} ago`;
+      } else if (diffDays === 1) {
+        return `1 day ago`;
+      } else if (diffDays < 30) {
+        return `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`;
+      } else {
+        const diffMonths = Math.floor(diffDays / 30);
+        return `${diffMonths} month${diffMonths !== 1 ? 's' : ''} ago`;
       }
-
-
-    } catch (error) {
-      console.log(error);
     }
+
+
+  } catch (error) {
+    console.log(error);
   }
+}
 
 window.onload = function () {
   // call both functions

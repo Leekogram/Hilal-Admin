@@ -68,6 +68,72 @@ const endDateTimestamp = Timestamp.fromDate(endDate);
   getCustomer(startDateTimestamp, endDateTimestamp);
 });
 
+
+
+//calculate date of birth
+function calculateDaysToBirthday(dateOfBirth) {
+  const today = new Date();
+  const dob = new Date(dateOfBirth);
+
+  // Set the year of the date of birth to the current year
+  dob.setFullYear(today.getFullYear());
+
+  // If the birthday has passed for this year, set it to next year
+  if (today > dob) {
+    dob.setFullYear(today.getFullYear() + 1);
+  }
+
+  // Calculate the difference in milliseconds between today and the next birthday
+  const diffTime = Math.abs(dob - today);
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+  if (diffDays === 0) {
+
+    return "Birthday";
+  } else {
+  
+    return `${diffDays} days to birthday`;
+  }
+}
+
+function colorCodeBirthdayCell(dateOfBirth, tableCell) {
+  const birthday = new Date(dateOfBirth);
+  const today = new Date();
+
+  birthday.setFullYear(today.getFullYear());
+
+  if (birthday.getDate() === today.getDate() && birthday.getMonth() === today.getMonth()) {
+    tableCell.textContent = "Birthday";
+    tableCell.style.color = "green"; // Change text color to green
+    tableCell.style.fontWeight = "bold"; // Make text bold
+  } else {
+    const daysToBirthday = calculateDaysToBirthday(dateOfBirth);
+    tableCell.textContent = daysToBirthday;
+    tableCell.style.color = "black"; // Reset text color to default
+    tableCell.style.fontWeight = "normal"; // Reset font weight to normal
+  }
+}
+
+function countBirthdaysToday(listOfBirthdays) {
+  const today = new Date();
+  const todayStr = `${today.getMonth() + 1}/${today.getDate()}`;
+
+  let count = 0;
+  listOfBirthdays.forEach((birthday) => {
+    const birthdayDate = new Date(birthday);
+    const birthdayStr = `${birthdayDate.getMonth() + 1}/${birthdayDate.getDate()}`;
+    if (birthdayStr === todayStr) {
+      count++;
+    }
+  });
+
+  return count;
+}
+
+
+
+
+
 async function getCustomer(startDate,endDate) {
   console.log('i have been called',+startDate);
   const currentYear = new Date().getFullYear();
@@ -86,7 +152,7 @@ async function getCustomer(startDate,endDate) {
     if (user) {
       const uid = user.uid;
     } else {
-      window.location.href = "../../../login.html";
+      window.location.href = "../../../login/";
     }
   });
   let tableRow = document.getElementById("customerTable");
@@ -108,10 +174,13 @@ async function getCustomer(startDate,endDate) {
       loader.style.display = "none";
       let rows = "";
       let index = 0;
+      const listOfBirthdays = []; 
       docsSnap.forEach(async (doc) => {
         index++;
         let data = doc.data();
         const userEmail = doc.data().email;
+        listOfBirthdays.push(new Date(data.dateOfBirth));
+
 
 
 
@@ -123,10 +192,9 @@ async function getCustomer(startDate,endDate) {
               </td>
               <td>${data.phoneNo}</td>
               <td>${data.address}</td>
+              <td id="birthdayCell"  >${calculateDaysToBirthday(data.dateOfBirth)}</td>
               <td>${formatDate(data.createdDateTime)} </td>
             
-              
-             
               <td class="total-spending">
               Loading...
               </td>
@@ -165,8 +233,13 @@ async function getCustomer(startDate,endDate) {
         
     
         const tableRow = document.getElementById(`user-row-${userEmail}`);
+        
         if (tableRow) {
           const totalSpendingCell = tableRow.querySelector('.total-spending');
+          const birthdayCell = tableRow.querySelector('#birthdayCell');
+          if (birthdayCell) {
+            colorCodeBirthdayCell(data.dateOfBirth, birthdayCell);
+          }
           if (totalSpendingCell) {
             if (typeof totalSpending === 'number') {
               totalSpendingCell.textContent = formatTotalSpending(totalSpending);
@@ -183,11 +256,15 @@ async function getCustomer(startDate,endDate) {
           }
         }
 
+        
+
       });
       tableRow.innerHTML = rows;
-      // Add event listener to accept dropdown item
-    
-      
+  
+      const countToday = countBirthdaysToday(listOfBirthdays);
+
+      document.getElementById("totalcustomerbirthday").innerHTML = countToday;
+      console.log("=======>"+countToday);
       // Add click event listener to each row
       const rowsElements = document.querySelectorAll("#customerTable tr");
       rowsElements.forEach((row) => {

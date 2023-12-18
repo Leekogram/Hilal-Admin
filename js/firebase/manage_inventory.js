@@ -6,7 +6,7 @@ import {
   addDoc,
   getDocs,
   doc,
-  updateDoc,
+  setDoc,
   serverTimestamp,
   orderBy,
   query,
@@ -327,7 +327,7 @@ async function addProducts(
 
 
 // Add an event listener to the form submit event
-const updateDeliveryFeeBtn = document.getElementById("updateDeliveryFeeBtn");
+/* const updateDeliveryFeeBtn = document.getElementById("updateDeliveryFeeBtn");
 updateDeliveryFeeBtn.addEventListener("click", function (event) {
   event.preventDefault();
   document.getElementById("updateDeliveryFeeBtn").innerHTML="Updating..."; // Prevent the default form submission
@@ -364,7 +364,171 @@ function updateDeliveryPrice() {
 
 
  
+} */
+
+// Get the delivery prices container
+const deliveryPricesContainer = document.getElementById("deliveryPrices");
+
+// Function to create input fields for each state
+function createInputFields() {
+  const states = [
+    "Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", "Benue", "Borno", 
+    "Cross River", "Delta", "Ebonyi", "Edo", "Ekiti", "Enugu", "Gombe", "Imo", "Jigawa", 
+    "Kaduna", "Kano", "Katsina", "Kebbi", "Kogi", "Kwara", "Lagos", "Nasarawa", "Niger", 
+    "Ogun", "Ondo", "Osun", "Oyo", "Plateau", "Rivers", "Sokoto", "Taraba", "Yobe", "Zamfara"
+  ];
+
+
+  const columns = 4; // Number of columns
+  const statesPerColumn = Math.ceil(states.length / columns);
+
+  // Create columns for states
+  for (let i = 0; i < columns; i++) {
+    const column = document.createElement("div");
+    column.classList.add("state-column");
+  
+
+
+     // Create input fields for each state
+  states.forEach(state => {
+    const label = document.createElement("label");
+    label.setAttribute("for", `deliveryPrice-${state.replace(/ /g, "-")}`);
+    label.textContent = state;
+  
+
+    const inputGroup = document.createElement("div");
+    inputGroup.classList.add("input-group", "mb-3");
+
+    const inputGroupPrepend = document.createElement("div");
+    inputGroupPrepend.classList.add("input-group-prepend");
+
+    const currencySpan = document.createElement("span");
+    currencySpan.classList.add("input-group-text", "bg-dark", "text-white");
+    currencySpan.textContent = "₦";
+
+    inputGroupPrepend.appendChild(currencySpan);
+
+    const inputField = document.createElement("input");
+    inputField.setAttribute("type", "number");
+    inputField.setAttribute("class", "form-control");
+    inputField.setAttribute("aria-label", `Delivery Price for ${state} (in ₦)`);
+    inputField.setAttribute("placeholder", `Enter Delivery Price for ${state}`);
+    inputField.setAttribute("id", `deliveryPrice-${state.replace(/ /g, "-")}`); 
+    inputField.required = true;
+
+    const inputGroupAppend = document.createElement("div");
+    inputGroupAppend.classList.add("input-group-append");
+
+    const appendSpan = document.createElement("span");
+    appendSpan.classList.add("input-group-text");
+    appendSpan.textContent = ".00";
+
+    // Append the label to the container
+  deliveryPricesContainer.appendChild(label);
+
+    inputGroupAppend.appendChild(appendSpan);
+
+    inputGroup.appendChild(inputGroupPrepend);
+    inputGroup.appendChild(inputField);
+    inputGroup.appendChild(inputGroupAppend);
+
+    // Append the input field to the container
+    deliveryPricesContainer.appendChild(inputGroup);
+  });
+
+  // Create the update button
+  const updateButton = document.createElement("button");
+  updateButton.textContent = "Update Delivery Prices";
+  updateButton.setAttribute("id", "updateDeliveryPricesBtn");
+  updateButton.classList.add("btn", "btn-primary");
+  updateButton.addEventListener("click", updateDeliveryPrices);
+  getExistingDeliveryPrices();
+
+  // Append the update button to the container
+  deliveryPricesContainer.appendChild(updateButton);
+  
+  
+  }
+
+ 
 }
+
+// Function to update delivery prices
+function updateDeliveryPrices() {
+  const statePrices = {};
+
+  // Loop through each state input field
+  const stateInputs = deliveryPricesContainer.querySelectorAll("input[type='number']");
+  stateInputs.forEach(input => {
+    // Update the regex pattern to match the modified ID format
+    const stateName = input.id.replace(/deliveryPrice-/g, "").replace(/-/g, " "); // Convert ID back to state name
+
+    statePrices[stateName] = input.value ? Number(input.value) : 0;
+  });
+
+  // Call the function to update prices in Firestore database
+  updateDeliveryPricesFirestore(statePrices);
+}
+
+// Function to update delivery prices in Firestore
+async function updateDeliveryPricesFirestore(statePrices) {
+  const deliveryPricesCollection = collection(database, "deliveryPrices");
+ document.getElementById("updateDeliveryPricesBtn").textContent="Updating..."
+
+  // Loop through statePrices object and update Firestore
+  for (const state in statePrices) {
+    try {
+      const stateDocRef = doc(deliveryPricesCollection, state);
+      console.log("the price =====>"+statePrices[state] );
+
+      // Update the Firestore database with statePrices[state]
+      await setDoc(stateDocRef, {
+        price: statePrices[state],
+        id: state // You can set the state name as the document ID
+      });
+
+      console.log(`Delivery price for ${state} updated successfully!`);
+     
+    } catch (error) {
+      console.error(`Error updating delivery price for ${state}:`, error);
+      document.getElementById("updateDeliveryPricesBtn").textContent="Opps Failed please try again"
+      return;
+    }
+  }
+  document.getElementById("updateDeliveryPricesBtn").textContent="Done !!!"
+  setTimeout(() => {
+    document.getElementById("updateDeliveryPricesBtn").textContent = "Update Delivery Prices";
+  }, 2000); // You can adjust the delay as needed, here set to 0 for immediate execution
+  
+  
+  console.log("All delivery prices updated successfully!");
+}
+
+
+// Function to fetch existing delivery prices from the database
+async function getExistingDeliveryPrices() {
+  try {
+    const querySnapshot = await getDocs(collection(database, "deliveryPrices"));
+
+    querySnapshot.forEach((doc) => {
+      const state = doc.id; // Assuming the document ID corresponds to the state name
+      const deliveryPrice = doc.data().price || 0;
+
+      console.log(deliveryPrice);
+
+      // Find the corresponding input field by ID and set its value
+      const inputField = document.getElementById(`deliveryPrice-${state.replace(/ /g, "-")}`);
+      if (inputField) {
+        inputField.value = deliveryPrice;
+      }
+    });
+  } catch (error) {
+    console.error("Error getting existing delivery prices:", error);
+  }
+}
+
+
+
 
 
 //get notifications
@@ -481,6 +645,7 @@ async function getNotifications() {
 }
 
 window.onload = function () {
+  createInputFields();
   getNotifications();
-  getDeliveryPrice();
+  // getDeliveryPrice();
 }

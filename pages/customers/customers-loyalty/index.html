@@ -23,6 +23,7 @@
   <link rel="stylesheet" href="../../../css/vertical-layout-light/style.css" />
   <!-- endinject -->
   <link rel="shortcut icon" href="../../../images/favicon.ico" />
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
   <style>
       /* Modal styles */
       .modal {
@@ -363,6 +364,8 @@
                               <h1 class="text-black">&#8358 <span class="text-black" id="totalSpent"></span></h1>
                               <h3 class="font-weight-500 mb-xl-4 text-primary">Spent</h3>
                               <p class="mb-2 mb-xl-0">Showing total amount spent by customer with in selected date range</p>
+
+                             
                             </div>
                           </div>
                           <div class="col-md-12 col-xl-9">
@@ -477,13 +480,18 @@
                   <h4 class="card-title">Customer List</h4>
                   <p class="card-description text-dark font-weight-bold">
                     Click on each row to see more info 
+                   
                     </p>
                   <label for="start-date">From:</label>
                   <input type="date" id="start-date">
 
                   <label for="end-date">To:</label>
                   <input type="date" id="end-date">
-
+                  <strong  style="margin-left: 100px;">
+                    <iconify-icon icon="bi:people-fill" style="color: #5a4542;" width="25" height="25"></iconify-icon>
+                    <iconify-icon icon="teenyicons:gift-solid" height="20" width="20"  style="color: green;"></iconify-icon> <span id="totalcustomerbirthday" style="font-size: 20px;"></span>
+                  </strong>
+                 
               
                
                   <div class="table-responsive">
@@ -495,6 +503,7 @@
                           <th>Email</th>
                           <th>Phone number</th>
                           <th>Address</th>
+                          <th>Birthday</th>
                           <th>Registered on</th>
 
                           <th>Total Money Spent</th>
