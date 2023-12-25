@@ -417,7 +417,7 @@ async function getCustomer(startDate,endDate) {
                 <div>${data.email}</div>
               </td>
               <td>${data.phoneNo}</td>
-              <td>${data.address}</td>
+         
               <td id="birthdayCell"  >${calculateDaysToBirthday(data.dateOfBirth)}</td>
               <td>${formatDate(data.createdDateTime)} </td>
             
