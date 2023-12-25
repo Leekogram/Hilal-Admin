@@ -339,6 +339,35 @@
             </div>
           </li>
           <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#ui-Training" aria-expanded="false"
+              aria-controls="ui-basic">
+              <i class="icon-stack menu-icon"></i>
+              <span class="menu-title">Training</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-Training">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item">
+                  <a class="nav-link" href="../../training/training_request/">Training Request</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../../training/">View Training</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../../training/add-training/">Add Training</a>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../../../new-features/">
+              <i class="icon-star menu-icon"></i>
+              <span class="menu-title">Promo/Feature Ad</span>
+
+            </a>
+
+          </li>
+          <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#ui-message" aria-expanded="false"
               aria-controls="ui-basic">
               <i class="icon-columns menu-icon"></i>
@@ -394,9 +423,9 @@
                   <form class="forms-sample" method="post" id="productForm">
                     <div class="form-group">
                       <div class="image-preview-container" id="imagePreviewContainer">
-                        <img id="imagePreview" class="image-preview" style="height: 10%;">
+                        <img id="imagePreview" class="image-preview" style="height: 400px;width: 400px;">
                       </div>
-
+                      <br/>
                       <label>
                         Product image</label>
                       <input type="file" name="img[]" class="file-upload-default" id="product-image" />
@@ -491,35 +520,11 @@
              
 
 
-                    <div class="form-group" id="deliveryPrices">
-                     
+                    <div class="row">
+                      <!-- Columns will be dynamically inserted here -->
                     </div>
 
 
-               <!--    <form class="forms-sample" method="post" id="deliveryFeeForm">
-
-
-                    <div class="form-group" id="deliveryPrices">
-                      <label for="productPrice">Delivery Price</label>
-                      <div class="input-group">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text bg-dark text-white">₦</span>
-                        </div>
-                        <input type="text" class="form-control" id="deliveryPrice"
-                          aria-label="Amount (to the nearest naira)" required />
-                        <div class="input-group-append">
-                          <span class="input-group-text">.00</span>
-                        </div>
-                      </div>
-                    </div>
-
-
-                    <button type="submit" class="btn btn-md btn-dark " id="updateDeliveryFeeBtn">
-                      Update
-                    </button>
-
-
-                  </form>  -->
                 </div>
               </div>
             </div>

@@ -254,9 +254,61 @@ document.getElementById("closeModalButton").addEventListener("click", function()
      promoName,
      promoDes
  ) {
-     // Add a new document with a generated id.
-       // Add a new document with a generated id.
-try {
+
+
+
+    try {
+        // Fetch all users
+        const usersSnapshot = await getDocs(collection(database, "users"));
+
+        // Iterate through each user
+        usersSnapshot.forEach(async (userDoc) => {
+            const userRef = doc(database, "users", userDoc.id);
+            const userPromosCollectionRef = collection(userRef, "userPromos");
+
+            // Create a new document for each user with promo details
+            await addDoc(userPromosCollectionRef, {
+                promoPicture: promoPicture,
+                promoName: promoName,
+                promoStatus: "new",
+                promoDes: promoDes,
+                timestamp: serverTimestamp(),
+            });
+
+            console.log(`Promo added for user: ${userDoc.data().email}`);
+            
+        });
+
+        addProductBtn.innerHTML = "Submit";
+
+        // Data sent successfully!
+        document.getElementById("addpromoModal").style.display = "none";
+        //showSnackbar(`Success! ${promoName} was created successfully`, true);
+        showModal(true, `Success! ${promoName} was created successfully`);
+       
+        console.log("promo has been added successfully");
+        document.getElementById("promoForm").reset();
+        imagePreview.setAttribute("src", "");
+       
+        // Remove the dimmed background
+        var backdrop = document.querySelector(".modal-backdrop");
+        if (backdrop) {
+            backdrop.style.display = "none";
+        }
+
+        // Other success handling code...
+    } catch (error) {
+     // Data sent failed...
+ addProductBtn.innerHTML = "Submit";
+ document.getElementById("addpromoModal").style.display = "none";
+// showSnackbar(`Oh no! Operation Failed ${error}`, false);
+showModal(false, `Oh no! Operation Failed ${error}`);
+ console.log(error);
+    }
+
+
+
+/* try {
  const docRef = await addDoc(collection(database, "promo"), {
      promoPicture: promoPicture,
      promoName: promoName,
@@ -288,7 +340,7 @@ try {
 // showSnackbar(`Oh no! Operation Failed ${error}`, false);
 showModal(false, `Oh no! Operation Failed ${error}`);
  console.log(error);
-}
+} */
 
 
      addDoc(collection(database, "log"), {
@@ -304,7 +356,7 @@ showModal(false, `Oh no! Operation Failed ${error}`);
  loader.style.display = "block";
  const colRef = collection(database, "promo");
  //  const promoContainer = document.getElementById("promoContainer");
- async function getpromos() {
+/*  async function getpromos() {
      try {
          const q = query(colRef, orderBy("timestamp", "desc"));
 
@@ -390,71 +442,153 @@ showModal(false, `Oh no! Operation Failed ${error}`);
          console.log(error);
      }
  }
+ */
+ async function getPromosForUsers() {
+    try {
+        const usersCollectionRef = collection(database, "users");
+        const usersSnapshot = await getDocs(usersCollectionRef);
+
+        usersSnapshot.forEach(async (userDoc) => {
+            const userPromosCollectionRef = collection(userDoc.ref, "userPromos");
+            const q = query(userPromosCollectionRef, orderBy("timestamp", "desc"));
+
+            const userPromosSnapshot = await getDocs(q);
+
+            // Incorporating your previous lines
+            loader.style.display = "none";
+            let rows = "";
+            let index = 0;
+
+            userPromosSnapshot.forEach((promoDoc) => {
+                let data = promoDoc.data();
+                const tableRow = document.getElementById("your-table-id");
+                index++;
+                let tableHTML = `
+                    <tr>
+                        <td>${index}</td>
+                        <td><img src="${data.promoPicture}" style="border-radius:0px;width:50px;height:50px"/></td>
+                        <td>${data.promoName}</td>
+                        <td>
+                            <div class="promo-des">${data.promoDes}</div>
+                        </td>
+                        <td>
+                            <i class="icon-ellipsis" id="dropdownMenuSplitButton1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuSplitButton1">
+                                <h5 class="dropdown-header">Action</h5>
+                                <a class="dropdown-item update-action" data-docid="${promoDoc.id}" data-promopic="${data.promoPicture}" data-promoname="${data.promoName}" data-promodesc="${data.promoDes}">Edit</a>
+                                <a class="dropdown-item delete-action" data-docid="${promoDoc.id}" data-promoname="${data.promoName}">Delete</a>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+
+                rows += tableHTML;
+                index++;
+            });
+
+            tableRow.innerHTML = rows;
+
+            const modifyItems = document.querySelectorAll(".update-action");
+            modifyItems.forEach((item) => {
+                item.addEventListener("click", (event) => {
+                    const docId = event.target.dataset.docid;
+                    const promoPicture = event.target.dataset.promopic;
+                    const promoTitle = event.target.dataset.promoname;
+                    const promoDescription = event.target.dataset.promodesc;
+
+                    const confirmation = window.confirm(`Do you really want to modify ${promoTitle} ?`);
+                    if (confirmation) {
+                        openModal(docId, promoPicture, promoTitle, promoDescription);
+                    }
+                });
+            });
+
+            const deleteItems = document.querySelectorAll(".delete-action");
+            deleteItems.forEach((item) => {
+                item.addEventListener("click", (event) => {
+                    const docId = event.target.dataset.docid;
+                    const promoTitle = event.target.dataset.promoname;
+
+                    const confirmation = window.confirm(`Do you really want to delete ${promoTitle} ?`);
+                    if (confirmation) {
+                        deleteDocument("userPromos", docId, promoTitle);
+                        deleteOldImage(docId);
+                    }
+                });
+            });
+        });
+
+        // Event listeners for edit and delete actions can remain inside the forEach loop
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+// Call the function to retrieve promos for users
 
 
- const updatepromoBtn = document.getElementById("updateBtn");
+const updatepromoBtn = document.getElementById("updateBtn");
 
- document.getElementById("updatepromoForm").addEventListener("submit", updatepromot);
- const updatepromotImageInput = document.getElementById("promo-picture");
- const updatepromotImagePreview = document.getElementById("updateimagePreview");
- updatepromotImageInput.addEventListener("change", () => {
-     const file = updatepromotImageInput.files[0];
+document.getElementById("updatepromoForm").addEventListener("submit", updatepromot);
+const updatepromotImageInput = document.getElementById("promo-picture");
+const updatepromotImagePreview = document.getElementById("updateimagePreview");
+updatepromotImageInput.addEventListener("change", () => {
+    const file = updatepromotImageInput.files[0];
 
-     if (file) {
-         const reader = new FileReader();
+    if (file) {
+        const reader = new FileReader();
 
-         reader.addEventListener("load", () => {
-             updatepromotImagePreview.setAttribute("src", reader.result);
-         });
+        reader.addEventListener("load", () => {
+            updatepromotImagePreview.setAttribute("src", reader.result);
+        });
 
-         reader.readAsDataURL(file);
-     }
- });
+        reader.readAsDataURL(file);
+    }
+});
 
- function updatepromot(e) {
-     e.preventDefault();
+function updatepromot(e) {
+    e.preventDefault();
 
-     // Change submit button to spinner
-     updatepromoBtn.innerHTML = '<span class="spinner"></span> Updating...';
+    // Change submit button to spinner
+    updatepromoBtn.innerHTML = '<span class="spinner"></span> Updating...';
 
-     // Get values
-     var promoTitle = getInputVal("promoTitle");
-     var promoDescription = getInputVal("promoDescript");
-     var documentId = getInputVal("documentId");
+    // Get values
+    var promoTitle = getInputVal("promoTitle");
+    var promoDescription = getInputVal("promoDescript");
+    var documentId = getInputVal("documentId");
 
-     const file = document.querySelector("#promo-picture").files[0];
+    const file = document.querySelector("#promo-picture").files[0];
 
-     if (file) {
-         const storageRef = sRef(storage, `promoImages/${file.name}` + new Date());
+    if (file) {
+        const storageRef = sRef(storage, `promoImages/${file.name}` + new Date());
 
-         const deleteOldImagePromise = deleteOldImage(documentId); // Delete old image
-         const uploadNewImagePromise = uploadNewImage(storageRef, file); // Upload new image
+        const deleteOldImagePromise = deleteOldImage(documentId); // Delete old image
+        const uploadNewImagePromise = uploadNewImage(storageRef, file); // Upload new image
 
-         Promise.all([deleteOldImagePromise, uploadNewImagePromise])
-             .then(([oldImageDeleted, downloadURL]) => {
-                 // Update image fields and other corresponding fields
-                 if (oldImageDeleted) {
-                     // Old image deleted successfully
-                     updatepromos(documentId, downloadURL, promoTitle, promoDescription);
-                 } else {
-                     // Failed to delete old image
-                     console.error("Failed to delete old image");
-                 }
-             })
-             .catch((error) => {
-                 console.error("Error updating product:", error);
-             })
-             .finally(() => {
-                 // Change submit button back to normal text
-                 updatepromoBtn.innerHTML = "Update Product";
-             });
-     } else {
-         // No new image selected, update other fields only
-         updatepromos(documentId, null, promoTitle, promoDescription);
-     }
- }
-
-
+        Promise.all([deleteOldImagePromise, uploadNewImagePromise])
+            .then(([oldImageDeleted, downloadURL]) => {
+                // Update image fields and other corresponding fields
+                if (oldImageDeleted) {
+                    // Old image deleted successfully
+                    updatepromos(documentId, downloadURL, promoTitle, promoDescription);
+                } else {
+                    // Failed to delete old image
+                    console.error("Failed to delete old image");
+                }
+            })
+            .catch((error) => {
+                console.error("Error updating product:", error);
+            })
+            .finally(() => {
+                // Change submit button back to normal text
+                updatepromoBtn.innerHTML = "Update Product";
+            });
+    } else {
+        // No new image selected, update other fields only
+        updatepromos(documentId, null, promoTitle, promoDescription);
+    }
+}
+/* 
  function updatepromos(documentId, downloadURL, promotTitle, promotDescript) {
 
 
@@ -518,6 +652,81 @@ showModal(false, `Oh no! Operation Failed ${error}`);
 
  }
 
+
+
+
+
+ */
+ async function updatepromos(documentId, downloadURL, promotTitle, promotDescript) {
+    const usersSnapshot = await getDocs(collection(database, "users"));
+
+    for (const userDoc of usersSnapshot.docs) {
+        const userPromosCollectionRef = collection(database, "users", userDoc.id, "userPromos");
+        const promosSnapshot = await getDocs(userPromosCollectionRef);
+
+        for (const promoDoc of promosSnapshot.docs) {
+            const promoRef = doc(userPromosCollectionRef, promoDoc.id);
+
+            if (downloadURL != null) {
+                updateDoc(promoRef, {
+                    promoPicture: downloadURL,
+                    promoName: promotTitle,
+                    promoDes: promotDescript
+                })
+                .then(() => {
+                    // Product updated successfully
+                    // Show success message or perform any additional actions
+                    console.log(`${promotTitle} promo updated successfully`);
+                    document.getElementById("modifyModal").style.display = "none";
+                    showSnackbar(`${promotTitle} promo updated successfully`, true);
+                    setTimeout(() => {
+                        location.reload();;
+                    }, 10000);
+                    //  
+                })
+                .catch((error) => {
+                    // Error occurred while updating the product
+                    console.error("Error updating product:", error);
+                    document.getElementById("modifyModal").style.display = "none";
+                    showSnackbar("Failed to update promo, please try again", false);
+                })
+                .finally(() => {
+                    // Reset the submit button
+                    updatepromoBtn.innerHTML = "Update promo";
+                });
+            } else {
+                // Handle case when no new image is uploaded
+                updateDoc(promoRef, {
+                    promoName: promotTitle,
+                    promoDes: promotDescript
+                })
+                .then(() => {
+                    // Product updated successfully
+                    // Show success message or perform any additional actions
+                    console.log(`${promotTitle} promo updated successfully`);
+                    document.getElementById("modifyModal").style.display = "none";
+                    showSnackbar(`${promotTitle} promo updated successfully`, true);
+                    setTimeout(() => {
+                        location.reload();;
+                    }, 10000);
+                })
+                .catch((error) => {
+                    // Error occurred while updating the product
+                    console.error("Error updating product:", error);
+                    document.getElementById("modifyModal").style.display = "none";
+                    showSnackbar("Failed to update promo, please try again", false);
+                })
+                .finally(() => {
+                    // Reset the submit button
+                    updatepromoBtn.innerHTML = "Update promo";
+                });
+            }
+
+            console.log(`Promo updated for user: ${userDoc.data().email}`);
+        }
+    }
+
+}
  function deleteObjectFromURL(url) {
      // Assuming you have initialized the Firebase Storage instance as `storage`
      // Extract the storage path from the URL
@@ -627,9 +836,18 @@ showModal(false, `Oh no! Operation Failed ${error}`);
  async function deleteDocument(collectionName, documentId, promoName) {
      try {
 
-         const documentRef = doc(database, collectionName, documentId);
 
-         await deleteDoc(documentRef);
+        const usersSnapshot = await getDocs(collection(database, 'users'));
+
+        for (const userDoc of usersSnapshot.docs) {
+            const userPromosCollectionRef = collection(database, 'users', userDoc.id, 'userPromos');
+            const promoRef = doc(userPromosCollectionRef, documentId);
+
+            await deleteDoc(promoRef);
+            console.log(`Promo with ID ${documentId} deleted for user ${userDoc.id}`);
+        }
+
+       
          console.log("Document deleted successfully");
          addDoc(collection(database, "log"), {
              comment: `${promoName} was deleted`,
@@ -686,5 +904,5 @@ showModal(false, `Oh no! Operation Failed ${error}`);
 
  window.onload = function () {
 
-     getpromos();
+    getPromosForUsers();
  }

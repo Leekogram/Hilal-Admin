@@ -157,15 +157,7 @@
     `;
             });
 
-            /*   var tableHeader = `
-                <tr>
-                  <th><input type="checkbox" id="select-all"></th>
-                  <th>S/n</th>
-                  <th>Customer name</th>
-                  <th>Email</th>
-                  <th>Phone number</th>
-                </tr>
-              `; */
+          
 
             tableBody.innerHTML = dataRows.join('');
 

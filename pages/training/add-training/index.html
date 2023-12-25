@@ -7,7 +7,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-    <title>Bnb Admin / Add Service</title>
+    <title>Bnb Admin / Add Training</title>
     <!-- plugins:css -->
     <link rel="stylesheet" href="../../../vendors/feather/feather.css" />
 
@@ -328,7 +328,7 @@
                     <a class="nav-link" href="../">View Services</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="./">Add Services</a>
+                    <a class="nav-link" href="./">Add service</a>
                   </li>
             
                   <!-- <li class="nav-item"> <a class="nav-link" href="pages/inventory/log.html">Log</a></li> -->
@@ -363,13 +363,13 @@
               <div class="collapse" id="ui-Training">
                 <ul class="nav flex-column sub-menu">
                   <li class="nav-item">
-                    <a class="nav-link" href="../../training/training_request/">Training Request</a>
+                    <a class="nav-link" href="../training_request/">Training Request</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="../../training/">View Training</a>
+                    <a class="nav-link" href="../">View Training</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="../../training/add-training/">Add Training</a>
+                    <a class="nav-link" href="./">Add Training</a>
                   </li>
                 </ul>
               </div>
@@ -381,6 +381,24 @@
   
               </a>
   
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="collapse" href="#ui-Training" aria-expanded="false"
+                aria-controls="ui-basic">
+                <i class="icon-contract menu-icon"></i>
+                <span class="menu-title">Training</span>
+                <i class="menu-arrow"></i>
+              </a>
+              <div class="collapse" id="ui-Training">
+                <ul class="nav flex-column sub-menu">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../../training/">View Training</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="../../training/add-training/">Add Training</a>
+                  </li>
+                </ul>
+              </div>
             </li>
             <li class="nav-item">
               <a class="nav-link" data-toggle="collapse" href="#ui-message" aria-expanded="false"
@@ -425,27 +443,27 @@
                 <img src="../../../images/topright.png" class="top-right" alt="top-right image" />
                 <img src="../../../images/bottomleft.png" class="bottom-left" alt="bottom-left image" />
                   <div class="card-body">
-                    <h4 class="card-title">Add a Service</h4>
+                    <h4 class="card-title">Add a Training</h4>
                     <p class="card-description">Fill in appropriately</p>
-                    <form class="forms-sample" id="serviceForm">
+                    <form class="forms-sample" id="trainingForm">
                        <div class="form-group">
                         <div class="image-preview-container">
                           <img id="imagePreview" class="image-preview" style="height: 400px;width: 400px;">
                         </div>
                         <br/>
-                        <label>Service Image</label>
+                        <label>Training Image</label>
                         <input
                           type="file"
                           name="img[]"
                           class="file-upload-default"
-                          id="service-image"
+                          id="training-image"
                         />
                         <div class="input-group col-xs-12">
                           <input
                             type="text"
                             class="form-control file-upload-info"
                             disabled
-                            placeholder="Upload Service Image"
+                            placeholder="Uploadtraining Image"
                           />
                           <span class="input-group-append">
                             <button
@@ -459,18 +477,19 @@
                       </div> 
 
                       <div class="form-group">
-                        <label for="serviceName">Service Name</label>
+                       
+                        <label for="trainingName">Training Name</label>
                         <input
                           type="text"
                           class="form-control"
-                          id="serviceName"
+                          id="trainingName"
                           placeholder="HairStyling"
                           required
                         />
                         <div id="matchingValuesContainer"></div>
                       </div>
                       <div class="form-group">
-                        <label for="servicePrice">Service Price</label>
+                        <label for="trainingPrice">Training Price</label>
                         <div class="input-group">
                           <div class="input-group-prepend">
                             <span class="input-group-text bg-dark text-white"
@@ -480,7 +499,7 @@
                           <input
                             type="text"
                             class="form-control"
-                            id="servicePrice"
+                            id="trainingPrice"
                             aria-label="Amount (to the nearest naira)"
                             required
                           />
@@ -489,37 +508,30 @@
                           </div>
                         </div>
                       </div>
-                      <div class="form-group">
-                        <label for="serviceCategory">Section Category</label>
-                        <div class="input-group">
-                          <select class="form-control"  id="serviceCat" required>
-                         
-                          </select>
-                        </div>
-                      </div>
+                   
 
                       <div class="form-group">
-                        <label for="serviceDuration">Duration</label>
+                        <label for="trainingDuration">Duration</label>
                         <input
                           type="text"
                           class="form-control"
-                          id="serviceDuration"
-                          placeholder="12:00 Mins"
+                          id="trainingDuration"
+                          placeholder="2 Hours"
                           required
                         />
                       </div>
                       <div class="form-group">
-                        <label for="serviceDescription"
-                          >Service Description</label
+                        <label for="trainingDescription"
+                          >Training Description</label
                         >
                         <textarea
                           class="form-control"
-                          id="serviceDescription"
-                          rows="4"
+                          id="trainingDescription"
+                          rows="15"
                           required
                         ></textarea>
                       </div>
-                      <p class="text-danger" id="productExist">Services listed above already exist, please update or add a new service</p>
+                      <p class="text-danger" id="productExist">Trainings listed above already exist, please update or add a newtraining</p>
                       <button type="submit" class="btn btn-primary mr-1 float-right ml-2" id="addProductBtn">
                         Submit
                       </button>
@@ -572,7 +584,7 @@
     <script src="../../../js/alert-file.js"></script>
     <!-- End custom js for this page-->
     <script src="../../../js/firebase/firebase-config.js"></script>
-    <script src="../../../js/firebase/manage_service.js" type="module"></script>
+    <script src="../../../js/firebase/manage_training.js" type="module"></script>
     
   </body>
 </html>

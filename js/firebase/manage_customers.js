@@ -132,6 +132,232 @@ function countBirthdaysToday(listOfBirthdays) {
 
 
 
+async function getCustomerBirthDay() {
+  try {
+    const today = new Date();
+    const todayMonth = today.getMonth() + 1; // Months are zero-based, so add 1
+    const todayDay = today.getDate();
+    
+    const q = query(colRef); // Query to get all documents
+
+    onSnapshot(q, { includeMetadataChanges: true }, (docsSnap) => {
+      const loader = document.getElementById("loader");
+      loader.style.display = "block";
+
+      let rows = "";
+      let index = 0;
+      function formatDate(timestamp) {
+        const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
+        return date.toLocaleString();
+      }
+
+      docsSnap.forEach(async (doc) => {
+        let data = doc.data();
+        const dob = new Date(data.dateOfBirth); // Convert date string to Date object
+        const dobMonth = dob.getMonth() + 1; // Months are zero-based, so add 1
+        const dobDay = dob.getDate();
+
+        if (dobMonth === todayMonth && dobDay === todayDay) {
+          index++;
+          const userEmail = data.email;
+
+          let row = `<tr data-useremail="${userEmail}" class="clickable-row" id="user-row-${userEmail}">
+          <td><input type="checkbox" class="customer-checkbox" value="${doc.docId}"></td>
+          <td>${index}</td>
+          <td>${data.fullName}</td>
+          <td>
+            <div>${data.email}</div>
+          </td>
+          <td>${data.phoneNo}</td> 
+              </tr>`;
+
+          rows += row;
+        }
+      });
+
+      const tableRow = document.getElementById("customerBirthDayTable");
+      tableRow.innerHTML = rows;
+
+         // Get the "Select All" checkbox and all customer checkboxes
+         var selectAll = document.getElementById("select-all");
+         var checkboxes = document.querySelectorAll(".customer-checkbox");
+
+         // Add an event listener to the "Select All" checkbox
+         selectAll.addEventListener("click", function () {
+           checkboxes.forEach(function (checkbox) {
+             checkbox.checked = selectAll.checked;
+           });
+         });
+
+         // Add an event listener to each customer checkbox
+         checkboxes.forEach(function (checkbox) {
+           checkbox.addEventListener("click", function (e) {
+             // Stop event propagation
+             e.stopPropagation();
+             // Uncheck the "Select All" checkbox if any customer checkbox is unchecked
+             if (!this.checked) {
+               selectAll.checked = false;
+             }
+             // Check the "Select All" checkbox if all customer checkboxes are checked
+             else if (document.querySelectorAll(".customer-checkbox:checked").length === checkboxes.length) {
+               selectAll.checked = true;
+             }
+           });
+         });
+
+      loader.style.display = "none";
+
+    });
+
+          // Add an event listener to the "Send" button
+          var sendButton = document.getElementById("sendMessageBtn");
+          sendButton.addEventListener("click", function (e) {
+            e.preventDefault(); // Prevent the default form submission behavior
+
+            // Check if recipients are imported from the Excel sheet
+           
+              sendMessagesToDatabaseRecipients();
+            
+          });
+
+      
+          // Function to send messages to recipients from the database
+          function sendMessagesToDatabaseRecipients() {
+            // Get the selected customers from the database
+            // Collect the form input values
+            var subject = document.getElementById("messageSubject").value;
+            var message = document.getElementById("messageContent").value;
+            var optLink = document.getElementById("optionalLink").value;
+
+
+            if (subject.trim() === "" || message.trim() === "") {
+              alert("Please fill in all required fields.");
+              return; // Stop further execution
+            }
+
+            var smsContent = subject + "\n\n" + message;
+            if (optLink) {
+              smsContent += "\n\n" + optLink;
+            }
+
+            var selectedCustomers = [];
+            var checkboxes = document.querySelectorAll(".customer-checkbox:checked");
+
+            checkboxes.forEach(function (checkbox) {
+              var row = checkbox.closest("tr");
+              var name = row.cells[2].textContent;
+              var email = row.cells[3].textContent;
+              var phone = row.cells[4].textContent;
+
+              selectedCustomers.push({
+                name: name,
+                email: email,
+                phone: phone,
+              });
+            });
+
+            // Send the message to the selected customers
+            if (selectedCustomers.length > 0) {
+
+              console.log("here");
+              selectedCustomers.forEach(function (customer) {
+                sendButton.innerHTML = '<span class="spinner"></span> Sending...';
+
+                sendSMS(customer.phone, smsContent, optLink, customer.name, customer.email, subject);
+                // sendMessage(subject, message, optLink, customer.name, customer.email, customer.phone);
+              });
+
+              // Clean the array after processing all customers
+              selectedCustomers = [];
+            } else {
+              sendButton.innerHTML = "Submit";
+              alert("Please select at least one recipient.");
+            }
+          }
+
+
+          async function sendSMS(recipientPhoneNumber, message, optLink, name, email, subject) {
+            // Set your Termii API key and sender ID
+            const TERMII_API_KEY = 'TLXnn6CfF9iCwj4uzWXFL84AGqo7w8UT6ga4mqND139VrYCy7D7QOuuHY7mY22';
+            const TERMII_SENDER_ID = 'Hilal';
+
+            try {
+              const response = await axios.post('https://api.ng.termii.com/api/sms/send', {
+                to: recipientPhoneNumber,
+                from: TERMII_SENDER_ID,
+                sms: message,
+                type: 'plain',
+                channel: 'generic',
+                api_key: TERMII_API_KEY,
+              });
+              sendMessage(recipientPhoneNumber, message, optLink, name, email, subject);
+           
+              console.log('SMS sent successfully:', response.data);
+            } catch (error) {
+              console.error('Failed to send SMS:', error.response.data);
+            }
+          }
+
+          async function sendMessage(recipientPhone, message, optlink, recipientName, recipientEmail, subject) {
+            try {
+              await addDoc(collection(database, "messages"), {
+                subject: subject,
+                message: message,
+                optionalLink: optlink,
+                recipientName: recipientName,
+                recipientEmail: recipientEmail,
+                recipientPhone: recipientPhone,
+                timestamp: serverTimestamp()
+              });
+
+              showSnackbar("Message was sent successfully", true);
+
+
+
+              // console.log("Message has been added to the database successfully");
+
+              // Clear the form fields and close the modal
+              document.getElementById("messageSubject").value = "";
+              document.getElementById("messageContent").value = "";
+              document.getElementById("optionalLink").value = "";
+              sendButton.innerHTML = "Submit";
+              document.getElementById("messageForm").reset();
+              createLog(recipientName);
+
+            } catch (error) {
+              showSnackbar(`Opps! Something went wrong ${error}`, false);
+
+              console.log("Error adding the message to the database:", error);
+              sendButton.innerHTML = "Submit";
+            }
+          }
+          async function createLog(recipientName) {
+            try {
+
+              await addDoc(collection(database, "log"), {
+                comment: "a message was sent to " + recipientName,
+
+                timestamp: serverTimestamp(),
+              })
+                .then((docRef) => {
+                  console.log("Log created successfully");
+                })
+                .catch((error) => {
+                  console.log(error);
+
+                });
+
+            } catch (error) {
+              console.log("Error adding the message to the database:", error);
+              sendButton.innerHTML = "Submit";
+            }
+          }
+
+  } catch (error) {
+    console.log("Error fetching data:", error);
+  }
+}
+
 
 
 async function getCustomer(startDate,endDate) {
@@ -264,6 +490,12 @@ async function getCustomer(startDate,endDate) {
       const countToday = countBirthdaysToday(listOfBirthdays);
 
       document.getElementById("totalcustomerbirthday").innerHTML = countToday;
+
+      if (countToday > 0) {
+        document.getElementById("sendBirthdayLink").style = "block";
+      }else{
+        document.getElementById("sendBirthdayLink").style = "none";
+      }
       console.log("=======>"+countToday);
       // Add click event listener to each row
       const rowsElements = document.querySelectorAll("#customerTable tr");
@@ -563,7 +795,26 @@ const today = new Date();
 const start = new Date(today.getFullYear(), today.getMonth(),0 );
 const end = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
 
+function showSnackbar(message, isSuccess) {
+  const snackbar = document.getElementById("snackbar");
+  snackbar.textContent = message;
+
+  if (isSuccess) {
+    snackbar.style.backgroundColor = "#4CAF50";
+  } else {
+    snackbar.style.backgroundColor = "#F44336";
+  }
+
+  snackbar.classList.add("show");
+
+  setTimeout(() => {
+    snackbar.classList.remove("show");
+  }, 2000);
+}
 
 
-window.onload = function(){getCustomer(start,end);
-  getNotifications();}
+window.onload = function(){
+  getCustomer(start,end);
+  getCustomerBirthDay();
+  getNotifications();
+}

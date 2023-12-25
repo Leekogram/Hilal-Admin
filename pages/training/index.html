@@ -5,7 +5,7 @@
   <!-- Required meta tags -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <title>Bnb Admin / Inventory</title>
+  <title>Bnb Admin / Training</title>
   <!-- plugins:css -->
   <link rel="stylesheet" href="../../vendors/feather/feather.css" />
 
@@ -23,44 +23,6 @@
   <link rel="stylesheet" href="../../css/alert-style.css" />
   <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
   <style>
-    /* ... Existing styles ... */
-
-    /* Style for the modal */
-    .imageModal {
-      display: none;
-      position: fixed;
-      z-index: 9999;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.7);
-    }
-
-
-    /* Style for the modal image */
-    #modalImage {
-      display: block;
-      margin: auto;
-      max-width: 80%;
-      max-height: 80%;
-    }
-
-    /* Style for the close button */
-    .imageClose {
-      color: #fff;
-      font-size: 30px;
-      font-weight: bold;
-      position: absolute;
-      top: 10px;
-      right: 25px;
-      cursor: pointer;
-    }
-
-
-
-
-
     .image-zoom {
       transform: scale(1);
       transition: transform 0.3s;
@@ -70,8 +32,37 @@
       transform: scale(3);
     }
 
+    table#myTable td {
+      vertical-align: top;
+    }
+     .service-des {
+      max-width: 700px;
+      /* Adjust the maximum width as needed */
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      white-space: pre-wrap;
+      font-size: 14px;
+    }
+    #snackbar {
+      visibility: hidden;
+      min-width: 250px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 2px;
+      padding: 16px;
+      position: fixed;
+      z-index: 1;
+      left: 50%;
+      bottom: 30px;
+      transform: translateX(-50%);
+    }
 
-   
+    #snackbar.show {
+      visibility: visible;
+      -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
 
     @-webkit-keyframes fadein {
       from {
@@ -157,14 +148,46 @@
 
 
 
-    .section-des {
-      max-width: 800px;
+    .service-des {
+      max-width: 700px;
       /* Adjust the maximum width as needed */
       word-wrap: break-word;
       overflow-wrap: break-word;
       white-space: pre-wrap;
       font-size: 14px;
-     
+    }
+
+    .spinner {
+      position: absolute;
+      top: 120%;
+      /* Adjust the vertical position as needed */
+      left: 50%;
+      /* Adjust the horizontal position as needed */
+      transform: translate(-50%, -50%);
+      /* Center the spinner */
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      overflow: hidden;
+      /* Hide the default border */
+    }
+
+    .spinner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      /* Resize the logo to fit the container */
+      animation: flash 1s alternate infinite;
+    }
+
+    @keyframes flash {
+      from {
+        opacity: 1;
+      }
+
+      to {
+        opacity: 0;
+      }
     }
 
 
@@ -208,39 +231,8 @@
       z-index: 9999;
     }
 
-   
-    .spinner {
-      position: absolute;
-      top: 120%;
-      /* Adjust the vertical position as needed */
-      left: 50%;
-      /* Adjust the horizontal position as needed */
-      transform: translate(-50%, -50%);
-      /* Center the spinner */
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      overflow: hidden;
-      /* Hide the default border */
-    }
+    
 
-    .spinner img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      /* Resize the logo to fit the container */
-      animation: flash 1s alternate infinite;
-    }
-
-    @keyframes flash {
-      from {
-        opacity: 1;
-      }
-
-      to {
-        opacity: 0;
-      }
-    }
     #searchInput {
       float: right;
       width: 200px;
@@ -261,9 +253,6 @@
     }
 
    
-    table#myTable td {
-      vertical-align: top;
-    }
   </style>
 
 </head>
@@ -334,13 +323,17 @@
       </div>
     </nav>
     <!-- partial -->
-    <!-- Edit Modal -->
-    <div id="imageModal" class="imageModal">
-      <span class="imageClose">&times;</span>
-      <img id="modalImage" src="" alt="Enlarged Image">
+    <!-- Modal -->
+    <div id="sign-out-modal" class="modal">
+      <div class="modal-content">
+        <p>Are you sure you want to sign out?</p>
+        <button class="btn btn-danger btn-rounded align-self-center mb-3 w-50" id="confirm-sign-out-btn">Yes, sign me
+          out</button>
+        <button class="btn  primary-button btn-rounded align-self-center w-50" id="cancel-sign-out-btn">Cancel</button>
+      </div>
     </div>
 
-    <!--  Sign out Modal -->
+
     <div id="sign-out-modal" class="modal">
       <div class="modal-content">
         <p>Are you sure you want to sign out?</p>
@@ -367,7 +360,7 @@
         <button class="btn  primary-button btn-rounded align-self-center w-50" id="delete-no-btn">No</button>
       </div>
     </div>
-    <!-- alert modal -->
+    <!-- confirmation modal -->
     <div id="success-alert-modal" class="modal">
       <div class="modal-content">
         <iconify-icon icon="octicon:check-circle-fill-16" style="color: green;" width="100" height="100" class="align-self-center pb-3"></iconify-icon>
@@ -384,22 +377,22 @@
         <button class="btn  primary-button btn-rounded align-self-center w-50" id="failure-ok-btn">Okay</button>
       </div>
     </div>
+
+
     <!-- Example modal structure -->
     <div id="modifyModal" class="modfiy-modal-nodal">
       <div class="modfiy-modal-content">
         <span class="close" id="close">&times;</span>
-        <h4>Edit Product</h4><i class="fas fas-edit"></i>
-        <form class="forms-sample" method="post" id="productForm">
+        <h4>Edit Service</h4><i class="fas fas-edit"></i>
+        <form class="forms-sample" method="post" id="trainingForm">
           <div class="form-group">
             <div class="image-preview-container">
-              <img id="imagePreview" class="image-preview" style="height: 400px;width: 400px;">
+              <img id="imagePreview" class="image-preview" style="height: 200px;width: 200px;">
             </div>
-
-            <label>
-              Product image</label>
-            <input type="file" name="img[]" class="file-upload-default" id="product-image" />
+            <label>Training Image</label>
+            <input type="file" name="img[]" class="file-upload-default" id="training-image" />
             <div class="input-group col-xs-12">
-              <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Product Image" />
+              <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Training Image" />
               <span class="input-group-append">
                 <button class="file-upload-browse btn btn-dark" type="button">
                   Change Image
@@ -407,61 +400,38 @@
               </span>
             </div>
           </div>
+
           <div class="form-group">
-            <label for="productTitle">Product Title</label>
-            <input type="text" class="form-control" autocomplete="off" id="productTitle"
-              placeholder="Naturale beauty cream" required />
-          </div>
-          <div class="form-group">
-            <label for="productCat">Product Category</label>
-            <select class="form-control" id="productCat" required>
-              <option value="beautyProduct">Beauty Product</option>
-              <option value="fashionProduct">Fashion Product</option>
-            </select>
+            <label for="trainingName">Training Name</label>
+            <input type="text" class="form-control" id="trainingName" placeholder="" required />
+            <div id="matchingValuesContainer"></div>
           </div>
           <div class="form-group">
-            <label for="productCat">Show in App TopProducts ?</label>
-          <div class="col-sm-4">
-            <div class="form-check">
-              <label class="form-check-label">
-                <input type="radio" class="form-check-input" name="topProductRadios" id="yes" value="Yes" >
-                Yes
-              </label>
-            </div>
-          </div>
-          <div class="col-sm-5">
-            <div class="form-check">
-              <label class="form-check-label">
-                <input type="radio" class="form-check-input" name="topProductRadios" id="no" value="No">
-                No
-              </label>
-            </div>
-          </div>
-          </div>
-          <div class="form-group">
-            <label for="productPrice">Product Price</label>
+            <label for="trainingPrice">Training Price</label>
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text bg-dark text-white">₦</span>
               </div>
-              <input type="text" class="form-control" id="productPrice" aria-label="Amount (to the nearest naira)"
+              <input type="text" class="form-control" id="trainingPrice" aria-label="Amount (to the nearest naira)"
                 required />
               <div class="input-group-append">
                 <span class="input-group-text">.00</span>
               </div>
             </div>
           </div>
+        
+
           <div class="form-group">
-            <label for="productQuantiy">Product Qauntity</label>
-            <input type="number" class="form-control" id="productQuantiy" placeholder="100" min="1" required />
-          </div>
-          <div class="form-group">
-            <label for="productDescription">Product Description</label>
-            <textarea class="form-control" id="productDescription" rows="4" required></textarea>
+            <label for="serviceDuration">Duration</label>
+            <input type="text" class="form-control" id="trainingDuration" placeholder="12:00 Mins" required />
             <input type="hidden" class="form-control" autocomplete="off" id="documentId" />
           </div>
+          <div class="form-group">
+            <label for="trainingDescription">Training Description</label>
+            <textarea class="form-control" id="trainingDescription" rows="4" required></textarea>
+          </div>
 
-          <button type="submit" class="btn btn-md btn-dark " id="updateProductBtn">
+          <button type="submit" class="btn btn-dark mr-1" id="updateTrainingBtn">
             Update
           </button>
           <button class="btn btn-light" type="reset" id="resetBtn">Reset</button>
@@ -474,6 +444,7 @@
     <!-- partial -->
     <div class="container-fluid page-body-wrapper">
       <!-- partial:../../partials/_settings-panel.html -->
+      <!-- partial -->
       <!-- partial -->
       <!-- partial:../../partials/_sidebar.html -->
       <nav class="sidebar  sidebar-offcanvas" id="sidebar">
@@ -500,21 +471,21 @@
             </a>
 
           </li>
-          <li class="nav-item active">
-            <a class="nav-link " data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
               <i class="icon-layout menu-icon"></i>
               <span class="menu-title">Inventory</span>
               <i class="menu-arrow"></i>
             </a>
-            <div class="collapse " id="ui-basic">
-              <ul class="nav flex-column sub-menu ">
+            <div class="collapse" id="ui-basic">
+              <ul class="nav flex-column sub-menu">
                 <li class="nav-item">
-                  <a class="nav-link" href="./">View Stock</a>
+                  <a class="nav-link" href="../inventory/">View Stock</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="./add-item/">Add Stock</a>
+                  <a class="nav-link" href="../inventory/add-item/">Add Stock</a>
                 </li>
-
+              
                 <!-- <li class="nav-item"> <a class="nav-link" href="pages/inventory/log.html">Log</a></li> -->
               </ul>
             </div>
@@ -525,7 +496,7 @@
               <span class="menu-title">Section</span>
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item active">
             <a class="nav-link" data-toggle="collapse" href="#ui-service" aria-expanded="false"
               aria-controls="ui-basic">
               <i class="icon-contract menu-icon"></i>
@@ -535,12 +506,12 @@
             <div class="collapse" id="ui-service">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item">
-                  <a class="nav-link" href="../service/">View Services</a>
+                  <a class="nav-link" href="./">View Services</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="../service/add-service/">Add Services</a>
+                  <a class="nav-link" href="./add-service/">Add Services</a>
                 </li>
-             
+         
                 <!-- <li class="nav-item"> <a class="nav-link" href="pages/inventory/log.html">Log</a></li> -->
               </ul>
             </div>
@@ -573,13 +544,13 @@
             <div class="collapse" id="ui-Training">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item">
-                  <a class="nav-link" href="../training/training_request/">Training Request</a>
+                  <a class="nav-link" href="./training_request/">Training Request</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="../training/">View Training</a>
+                  <a class="nav-link" href="./">View Training</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="../training/add-training/">Add Training</a>
+                  <a class="nav-link" href="./add-training/">Add Training</a>
                 </li>
               </ul>
             </div>
@@ -618,7 +589,6 @@
             </li> -->
         </ul>
       </nav>
-      <!-- partial -->
       <div class="main-panel">
         <div class="content-wrapper">
           <div class="row">
@@ -630,7 +600,7 @@
             <div class="col-lg-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title">Product List</h4>
+                  <h4 class="card-title">Training List</h4>
                   <p class="card-description ">
 
                     <input type="text" id="searchInput" placeholder="Search...">
@@ -641,13 +611,12 @@
                         <tr>
                           <th>S/N</th>
 
-                          <th>Product Image</th>
-                          <th>Product name</th>
-                          <th>Product Price</th>
-                          <th>Unit</th>
-                          <th>Product Description</th>
-                          <th>Top Product</th>
-                          <th>Status</th>
+                          <th>Training Image</th>
+                          <th>Training name</th>
+                          <th>Training Description</th>
+                          <th>Training Price</th>
+                          <th>Duration</th>
+                 
 
 
                           <th></th>
@@ -669,7 +638,6 @@
           </div>
         </div>
         <div id="snackbar"></div>
-
         <!-- content-wrapper ends -->
         <!-- partial:../../partials/_footer.html -->
         <footer class="footer">
@@ -710,7 +678,7 @@
   <script src="../../js/alert-file.js"></script>
   <!-- End custom js for this page-->
   <script src="../../js/firebase/firebase-config.js"></script>
-  <script src="../../js/firebase/manage_stock_dashboard.js" type="module"> </script>
+  <script src="../../js/firebase/manage_training_dashboard.js" type="module"></script>
 
 
   <script>
@@ -739,7 +707,6 @@
 
     document.getElementById("searchInput").addEventListener("keyup", searchTable);
   </script>
-
 
 </body>
 

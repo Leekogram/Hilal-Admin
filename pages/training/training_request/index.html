@@ -5,168 +5,32 @@
   <!-- Required meta tags -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <title>Bnb Admin / Inventory</title>
+  <title>Bnb Admin / All Training Request</title>
   <!-- plugins:css -->
-  <link rel="stylesheet" href="../../vendors/feather/feather.css" />
-
-  <link rel="stylesheet" href="../../vendors/ti-icons/css/themify-icons.css" />
-  <link rel="stylesheet" href="../../vendors/css/vendor.bundle.base.css" />
+  <link rel="stylesheet" href="../../../vendors/feather/feather.css" />
+  <link rel="stylesheet" href="../../../vendors/ti-icons/css/themify-icons.css" />
+  <link rel="stylesheet" href="../../../vendors/css/vendor.bundle.base.css" />
   <!-- endinject -->
   <!-- Plugin css for this page -->
-  <link rel="stylesheet" href="../../vendors/select2/select2.min.css" />
-  <link rel="stylesheet" href="../../vendors/select2-bootstrap-theme/select2-bootstrap.min.css" />
   <!-- End plugin css for this page -->
   <!-- inject:css -->
-  <link rel="stylesheet" href="../../css/vertical-layout-light/style.css" />
+  <link rel="stylesheet" href="../../../css/vertical-layout-light/style.css" />
   <!-- endinject -->
-  <link rel="shortcut icon" href="../../images/favicon.ico" />
-  <link rel="stylesheet" href="../../css/alert-style.css" />
+  <link rel="shortcut icon" href="../../../images/favicon.ico" />
   <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <style>
-    /* ... Existing styles ... */
-
-    /* Style for the modal */
-    .imageModal {
-      display: none;
-      position: fixed;
-      z-index: 9999;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.7);
+    table#myTable td {
+      vertical-align: top;
     }
-
-
-    /* Style for the modal image */
-    #modalImage {
-      display: block;
-      margin: auto;
-      max-width: 80%;
-      max-height: 80%;
-    }
-
-    /* Style for the close button */
-    .imageClose {
-      color: #fff;
-      font-size: 30px;
-      font-weight: bold;
-      position: absolute;
-      top: 10px;
-      right: 25px;
-      cursor: pointer;
-    }
-
-
-
-
-
-    .image-zoom {
-      transform: scale(1);
-      transition: transform 0.3s;
-    }
-
-    .image-zoom:hover {
-      transform: scale(3);
-    }
-
-
-   
-
-    @-webkit-keyframes fadein {
-      from {
-        bottom: 0;
-        opacity: 0;
-      }
-
-      to {
-        bottom: 30px;
-        opacity: 1;
-      }
-    }
-
-    @keyframes fadein {
-      from {
-        bottom: 0;
-        opacity: 0;
-      }
-
-      to {
-        bottom: 30px;
-        opacity: 1;
-      }
-    }
-
-    @-webkit-keyframes fadeout {
-      from {
-        bottom: 30px;
-        opacity: 1;
-      }
-
-      to {
-        bottom: 0;
-        opacity: 0;
-      }
-    }
-
-    @keyframes fadeout {
-      from {
-        bottom: 30px;
-        opacity: 1;
-      }
-
-      to {
-        bottom: 0;
-        opacity: 0;
-      }
-    }
-
-
-
-
-    #close {
-      cursor: pointer;
-    }
-
-    .modfiy-modal-nodal {
-      display: none;
-      /* Hide the modal by default */
-      position: fixed;
-      z-index: 9999;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0, 0, 0, 0.5);
-      /* Remove the opacity */
-    }
-
-    .modfiy-modal-content {
-      background-color: #fff;
-      margin: 10% auto;
-      /* Adjust the modal's vertical position */
-      padding: 20px;
-      border: none;
-      border-radius: 20px;
-      width: 100%;
-      max-width: 700px;
-      position: relative;
-      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-    }
-
-
 
     .section-des {
-      max-width: 800px;
+      max-width: 500px;
       /* Adjust the maximum width as needed */
       word-wrap: break-word;
       overflow-wrap: break-word;
       white-space: pre-wrap;
-      font-size: 14px;
-     
     }
-
 
     /* Modal styles */
     .modal {
@@ -208,7 +72,6 @@
       z-index: 9999;
     }
 
-   
     .spinner {
       position: absolute;
       top: 120%;
@@ -241,7 +104,10 @@
         opacity: 0;
       }
     }
-    #searchInput {
+
+
+    input[type="text"],
+    input[type="number"] {
       float: right;
       width: 200px;
       padding-left: 10px;
@@ -260,23 +126,49 @@
       /* border-color: #FFC100; */
     }
 
-   
-    table#myTable td {
-      vertical-align: top;
+
+    .top-left {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 50%;
+      height: 150%;
+    }
+
+    .top-right {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 50%;
+      height: 150%;
+    }
+
+    .bottom-left {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 20%;
+      /* height: 150%; */
+    }
+
+    .bottom-right {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 50%;
     }
   </style>
-
 </head>
 
 <body>
   <div class="container-scroller">
-    <!-- partial:../../partials/_navbar.html -->
+    <!-- partial:../../../partials/_navbar.html -->
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center"
         style="background-color:rgba(41, 71, 37, 0.784);">
-        <a class="navbar-brand brand-logo mr-5" href="../../"><img src="../../images//hilal_logo.jpg"
+        <a class="navbar-brand brand-logo mr-5" href="../../../"><img src="../../../images//hilal_logo.jpg"
             class="mr-2" alt="logo" /></a>
-        <a class="navbar-brand brand-logo-mini" href="../../"><img src="../../images//hilal_logo.jpg"
+        <a class="navbar-brand brand-logo-mini" href="../../../"><img src="../../../images//hilal_logo.jpg"
             alt="logo" /></a>
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end"
@@ -309,7 +201,7 @@
           
           <li class="nav-item nav-profile dropdown">
             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-              <img src="../../images/faces/face28.jpg" alt="profile" />
+              <img src="../../../images/faces/face28.jpg" alt="profile" />
             </a>
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
 
@@ -333,38 +225,59 @@
         </button>
       </div>
     </nav>
-    <!-- partial -->
-    <!-- Edit Modal -->
-    <div id="imageModal" class="imageModal">
-      <span class="imageClose">&times;</span>
-      <img id="modalImage" src="" alt="Enlarged Image">
-    </div>
 
-    <!--  Sign out Modal -->
+    <!-- Modal -->
     <div id="sign-out-modal" class="modal">
       <div class="modal-content">
         <p>Are you sure you want to sign out?</p>
-        <button class="btn btn-danger btn-rounded align-self-center mb-3 w-50" id="confirm-sign-out-btn">Yes, sign me
+        <button class="btn btn-danger btn-rounded align-self-center mb-3 w-50" id="confirm-sign-out-btn">Yes, sign
+          me
           out</button>
         <button class="btn  primary-button btn-rounded align-self-center w-50" id="cancel-sign-out-btn">Cancel</button>
       </div>
     </div>
+    <!-- partial -->
+
     <!-- edit confirmation modal -->
-    <div id="confirmation-modal" class="modal">
+    <div id="accept-modal" class="modal">
+        <div class="modal-content">
+          <iconify-icon icon="octicon:info-16" width="100" height="100" style="color: #ebeaef;" class="align-self-center pb-3"></iconify-icon>
+          <p class="h5 pb-3">Do you really want to accept this training request?</p>
+          
+          <!-- Start Day Input -->
+          
+            <div class="form-group">
+               
+          <label for="startDay" style="float: left;">Start Day:</label>
+          <input type="date" id="start-day" class="form-control mb-3" required>
+          </div>
+          <!-- Start Time Input (12-hour clock) -->
+          <div class="form-group">
+               
+          <label for="startTime" style="float: left;">Start Time:</label>
+          <input type="time" id="start-time" class="form-control mb-3" required>
+           </div>
+          <button class="btn btn-info btn-rounded align-self-center mb-3 w-50"  id="yes-btn">Yes</button>
+          <button class="btn primary-button btn-rounded align-self-center w-50" id="no-btn">No</button>
+      
+        </div>
+      </div>
+
+    <div id="completed-modal" class="modal">
       <div class="modal-content">
         <iconify-icon icon="octicon:info-16" width="100" height="100"  style="color: #ebeaef;" class="align-self-center pb-3"></iconify-icon>
-        <p class="h5 pb-3">Do you really want to modify <span id="itemName"></span> ?</p>
-        <button class="btn btn-info btn-rounded align-self-center mb-3 w-50" id="yes-btn">Yes</button>
-        <button class="btn  primary-button btn-rounded align-self-center w-50" id="no-btn">No</button>
+        <p class="h5 pb-3">Do you really want to set this training status to completed?</p>
+        <button class="btn btn-info btn-rounded align-self-center mb-3 w-50" id="completed-yes-btn">Yes</button>
+        <button class="btn  primary-button btn-rounded align-self-center w-50" id="completed-no-btn">No</button>
       </div>
     </div>
     <!-- delete confirmation modal -->
-    <div id="delete-confirmation-modal" class="modal">
+    <div id="cancel-modal" class="modal">
       <div class="modal-content">
         <iconify-icon icon="octicon:info-16" width="100" height="100"  style="color: #ebeaef;" class="align-self-center pb-3"></iconify-icon>
-        <p class="h5 pb-3">Do you really want to delete <span id="deleteItemName"></span> ?</p>
-        <button class="btn btn-info btn-rounded align-self-center mb-3 w-50" id="delete-yes-btn">Yes</button>
-        <button class="btn  primary-button btn-rounded align-self-center w-50" id="delete-no-btn">No</button>
+        <p class="h5 pb-3">Do you really want to cancel this training ?</p>
+        <button class="btn btn-info btn-rounded align-self-center mb-3 w-50" id="cancel-yes-btn">Yes</button>
+        <button class="btn  primary-button btn-rounded align-self-center w-50" id="cancel-no-btn">No</button>
       </div>
     </div>
     <!-- alert modal -->
@@ -384,108 +297,25 @@
         <button class="btn  primary-button btn-rounded align-self-center w-50" id="failure-ok-btn">Okay</button>
       </div>
     </div>
-    <!-- Example modal structure -->
-    <div id="modifyModal" class="modfiy-modal-nodal">
-      <div class="modfiy-modal-content">
-        <span class="close" id="close">&times;</span>
-        <h4>Edit Product</h4><i class="fas fas-edit"></i>
-        <form class="forms-sample" method="post" id="productForm">
-          <div class="form-group">
-            <div class="image-preview-container">
-              <img id="imagePreview" class="image-preview" style="height: 400px;width: 400px;">
-            </div>
 
-            <label>
-              Product image</label>
-            <input type="file" name="img[]" class="file-upload-default" id="product-image" />
-            <div class="input-group col-xs-12">
-              <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Product Image" />
-              <span class="input-group-append">
-                <button class="file-upload-browse btn btn-dark" type="button">
-                  Change Image
-                </button>
-              </span>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="productTitle">Product Title</label>
-            <input type="text" class="form-control" autocomplete="off" id="productTitle"
-              placeholder="Naturale beauty cream" required />
-          </div>
-          <div class="form-group">
-            <label for="productCat">Product Category</label>
-            <select class="form-control" id="productCat" required>
-              <option value="beautyProduct">Beauty Product</option>
-              <option value="fashionProduct">Fashion Product</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="productCat">Show in App TopProducts ?</label>
-          <div class="col-sm-4">
-            <div class="form-check">
-              <label class="form-check-label">
-                <input type="radio" class="form-check-input" name="topProductRadios" id="yes" value="Yes" >
-                Yes
-              </label>
-            </div>
-          </div>
-          <div class="col-sm-5">
-            <div class="form-check">
-              <label class="form-check-label">
-                <input type="radio" class="form-check-input" name="topProductRadios" id="no" value="No">
-                No
-              </label>
-            </div>
-          </div>
-          </div>
-          <div class="form-group">
-            <label for="productPrice">Product Price</label>
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text bg-dark text-white">₦</span>
-              </div>
-              <input type="text" class="form-control" id="productPrice" aria-label="Amount (to the nearest naira)"
-                required />
-              <div class="input-group-append">
-                <span class="input-group-text">.00</span>
-              </div>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="productQuantiy">Product Qauntity</label>
-            <input type="number" class="form-control" id="productQuantiy" placeholder="100" min="1" required />
-          </div>
-          <div class="form-group">
-            <label for="productDescription">Product Description</label>
-            <textarea class="form-control" id="productDescription" rows="4" required></textarea>
-            <input type="hidden" class="form-control" autocomplete="off" id="documentId" />
-          </div>
-
-          <button type="submit" class="btn btn-md btn-dark " id="updateProductBtn">
-            Update
-          </button>
-          <button class="btn btn-light" type="reset" id="resetBtn">Reset</button>
-
-        </form>
-      </div>
-    </div>
 
 
     <!-- partial -->
     <div class="container-fluid page-body-wrapper">
-      <!-- partial:../../partials/_settings-panel.html -->
+
+
       <!-- partial -->
-      <!-- partial:../../partials/_sidebar.html -->
+      <!-- partial:../../../partials/_sidebar.html -->
       <nav class="sidebar  sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           <li class="nav-item">
-            <a class="nav-link" href="../../">
+            <a class="nav-link" href="../../../">
               <i class="icon-grid menu-icon"></i>
               <span class="menu-title">Dashboard</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="../bookings/">
+            <a class="nav-link" href="./">
               <i class="icon-paper menu-icon"></i>
               <span class="menu-title">Bookings</span>
 
@@ -500,19 +330,19 @@
             </a>
 
           </li>
-          <li class="nav-item active">
-            <a class="nav-link " data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
               <i class="icon-layout menu-icon"></i>
               <span class="menu-title">Inventory</span>
               <i class="menu-arrow"></i>
             </a>
-            <div class="collapse " id="ui-basic">
-              <ul class="nav flex-column sub-menu ">
+            <div class="collapse" id="ui-basic">
+              <ul class="nav flex-column sub-menu">
                 <li class="nav-item">
-                  <a class="nav-link" href="./">View Stock</a>
+                  <a class="nav-link" href="../inventory/">View Stock</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="./add-item/">Add Stock</a>
+                  <a class="nav-link" href="../inventory/add-item/">Add Stock</a>
                 </li>
 
                 <!-- <li class="nav-item"> <a class="nav-link" href="pages/inventory/log.html">Log</a></li> -->
@@ -520,7 +350,7 @@
             </div>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="../../section/">
+            <a class="nav-link" href="../../../section/">
               <i class="icon-grid menu-icon"></i>
               <span class="menu-title">Section</span>
             </a>
@@ -540,7 +370,6 @@
                 <li class="nav-item">
                   <a class="nav-link" href="../service/add-service/">Add Services</a>
                 </li>
-             
                 <!-- <li class="nav-item"> <a class="nav-link" href="pages/inventory/log.html">Log</a></li> -->
               </ul>
             </div>
@@ -573,24 +402,45 @@
             <div class="collapse" id="ui-Training">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item">
-                  <a class="nav-link" href="../training/training_request/">Training Request</a>
+                  <a class="nav-link" href="./">Training Request</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="../training/">View Training</a>
+                  <a class="nav-link" href="../">View Training</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="../training/add-training/">Add Training</a>
+                  <a class="nav-link" href="../add-training/">Add Training</a>
                 </li>
               </ul>
             </div>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="../../new-features/">
+            <a class="nav-link" href="../../../new-features/">
               <i class="icon-star menu-icon"></i>
               <span class="menu-title">Promo/Feature Ad</span>
 
             </a>
 
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" data-toggle="collapse" href="#ui-Training" aria-expanded="false"
+              aria-controls="ui-basic">
+              <i class="icon-contract menu-icon"></i>
+              <span class="menu-title">Training</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-Training">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item">
+                  <a class="nav-link" href="./">Training Request</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../">View Training</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../add-training/">Add Training</a>
+                </li>
+              </ul>
+            </div>
           </li>
           <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#ui-message" aria-expanded="false"
@@ -601,8 +451,8 @@
             </a>
             <div class="collapse" id="ui-message">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="../message/">View messages</a></li>
-                <li class="nav-item"> <a class="nav-link" href="../../send-bc/">Send Message</a></li>
+                <li class="nav-item"> <a class="nav-link" href="../message/"">View messages</a></li>
+                <li class="nav-item"> <a class="nav-link" href="../../../send-bc/">Send Message</a></li>
                 <li class="nav-item"> <a class="nav-link" href="../feedbacks/">Feed backs</a></li>
 
               </ul>
@@ -630,34 +480,39 @@
             <div class="col-lg-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title">Product List</h4>
-                  <p class="card-description ">
+                  <h4 class="card-title">Training Request List</h4>
+                  <p class="card-description text-dark ">
+                    <span class="text-danger font-weight-bold"> Note:</span> No action can be performed on a completed
+                    or cancelled Request. Please proceed with caution.
+                  </p>
 
-                    <input type="text" id="searchInput" placeholder="Search...">
+                  <input type="text" id="searchInput" placeholder="Search...">
                   </p>
                   <div class="table-responsive">
                     <table class="table" id="myTable">
                       <thead>
                         <tr>
                           <th>S/N</th>
-
-                          <th>Product Image</th>
-                          <th>Product name</th>
-                          <th>Product Price</th>
-                          <th>Unit</th>
-                          <th>Product Description</th>
-                          <th>Top Product</th>
-                          <th>Status</th>
-
+                          <th>RequestId</th>
+                          <th>Customer name</th>
+                          <th>Training Name</th>
+                          <th>Phone number</th>
+                          <th>Email</th>
+                          <th>Instagram Username/Link</th>
+                          <th>Payment Status</th>
+                          <th>Amount Paid</th>
+                          <th>Start Day</th>
+                          <th>Start Time</th>
+                          <th>Order Status</th>
 
                           <th></th>
                         </tr>
                       </thead>
-                      <tbody id="stockTable">
+                      <tbody id="requestTable">
 
                         <div id="loader">
                           <div class="spinner">
-                            <img src="../../images/transparent-logo.png" alt="Logo">
+                            <img src="../../../images/transparent-logo.png" alt="Logo">
                           </div>
                         </div>
                       </tbody>
@@ -668,10 +523,8 @@
             </div>
           </div>
         </div>
-        <div id="snackbar"></div>
-
         <!-- content-wrapper ends -->
-        <!-- partial:../../partials/_footer.html -->
+        <!-- partial:../../../partials/_footer.html -->
         <footer class="footer">
           <div class="d-sm-flex justify-content-center justify-content-sm-between">
             <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © <span
@@ -684,35 +537,22 @@
       </div>
       <!-- main-panel ends -->
     </div>
-    <!-- main-panel ends -->
-  </div>
-  <!-- page-body-wrapper ends -->
+    <!-- page-body-wrapper ends -->
   </div>
   <!-- container-scroller -->
   <!-- plugins:js -->
-  <script src="../../vendors/js/vendor.bundle.base.js"></script>
+  <script src="../../../vendors/js/vendor.bundle.base.js"></script>
   <!-- endinject -->
   <!-- Plugin js for this page -->
-  <script src="../../vendors/typeahead.js/typeahead.bundle.min.js"></script>
-  <script src="../../vendors/select2/select2.min.js"></script>
   <!-- End plugin js for this page -->
   <!-- inject:js -->
-  <script src="../../js/off-canvas.js"></script>
-  <script src="../../js/hoverable-collapse.js"></script>
-  <script src="../../js/template.js"></script>
-  <script src="../../js/settings.js"></script>
-  <script src="../../js/todolist.js"></script>
-  <!-- endinject -->
-  <!-- Custom js for this page-->
-  <script src="../../js/file-upload.js"></script>
-  <script src="../../js/typeahead.js"></script>
-  <script src="../../js/select2.js"></script>
-  <script src="../../js/alert-file.js"></script>
-  <!-- End custom js for this page-->
-  <script src="../../js/firebase/firebase-config.js"></script>
-  <script src="../../js/firebase/manage_stock_dashboard.js" type="module"> </script>
-
-
+  <script src="../../../js/off-canvas.js"></script>
+  <script src="../../../js/hoverable-collapse.js"></script>
+  <script src="../../../js/template.js"></script>
+  <script src="../../../js/settings.js"></script>
+  <script src="../../../js/todolist.js"></script>
+  <script src="../../../js/firebase/firebase-config.js"></script>
+  <script src="../../../js/firebase/manage_training_request.js" type="module"></script>
   <script>
     function searchTable() {
       var input = document.getElementById("searchInput");
@@ -739,8 +579,9 @@
 
     document.getElementById("searchInput").addEventListener("keyup", searchTable);
   </script>
-
-
+  <!-- endinject -->
+  <!-- Custom js for this page-->
+  <!-- End custom js for this page-->
 </body>
 
 </html>

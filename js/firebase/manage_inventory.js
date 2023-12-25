@@ -38,37 +38,37 @@ const database = getFirestore(app);
 const auth = getAuth(app);
 
 
-  //handlemodals
-  const signOutBtn = document.getElementById("sign-out-btn");
-  const signOutModal = document.getElementById("sign-out-modal");
+//handlemodals
+const signOutBtn = document.getElementById("sign-out-btn");
+const signOutModal = document.getElementById("sign-out-modal");
 
-  const confirmSignOutBtn = document.getElementById("confirm-sign-out-btn");
-  const cancelSignOutBtn = document.getElementById("cancel-sign-out-btn");
- 
-  
+const confirmSignOutBtn = document.getElementById("confirm-sign-out-btn");
+const cancelSignOutBtn = document.getElementById("cancel-sign-out-btn");
 
-  // Show the modal when the sign-out button is clicked
-  signOutBtn.addEventListener("click", () => {
-    signOutModal.style.display = "block";
-  });
 
-  // Hide the modal when the cancel button is clicked
-  cancelSignOutBtn.addEventListener("click", () => {
-    signOutModal.style.display = "none";
-  });
 
-  // Sign the user out of Firebase when the confirm button is clicked
-  confirmSignOutBtn.addEventListener("click", () => {
-    auth.signOut()
-      .then(() => {
-        console.log("User signed out successfully");
-        signOutModal.style.display = "none";
-      })
-      .catch((error) => {
-        console.error("Error signing out:", error);
-        signOutModal.style.display = "none";
-      });
-  });
+// Show the modal when the sign-out button is clicked
+signOutBtn.addEventListener("click", () => {
+  signOutModal.style.display = "block";
+});
+
+// Hide the modal when the cancel button is clicked
+cancelSignOutBtn.addEventListener("click", () => {
+  signOutModal.style.display = "none";
+});
+
+// Sign the user out of Firebase when the confirm button is clicked
+confirmSignOutBtn.addEventListener("click", () => {
+  auth.signOut()
+    .then(() => {
+      console.log("User signed out successfully");
+      signOutModal.style.display = "none";
+    })
+    .catch((error) => {
+      console.error("Error signing out:", error);
+      signOutModal.style.display = "none";
+    });
+});
 //check if user is logged in or not
 onAuthStateChanged(auth, (user) => {
   if (user) {
@@ -289,10 +289,10 @@ async function addProducts(
     .then((docRef) => {
       addProductBtn.innerHTML = "Submit";
       // Data sent successfully!
-    
+
       document.getElementById("success-alertMessage").innerHTML = `${productName} was added successfully`;
       document.getElementById("success-alert-modal").style.display = "block";
-    
+
       console.log("Product has been added successfully");
       document.getElementById("productForm").reset();
       document.getElementById("productExist").style.display = "none";
@@ -367,7 +367,7 @@ function updateDeliveryPrice() {
 } */
 
 // Get the delivery prices container
-const deliveryPricesContainer = document.getElementById("deliveryPrices");
+/* const deliveryPricesContainer = document.getElementById("deliveryPrices");
 
 // Function to create input fields for each state
 function createInputFields() {
@@ -378,19 +378,19 @@ function createInputFields() {
     "Ogun", "Ondo", "Osun", "Oyo", "Plateau", "Rivers", "Sokoto", "Taraba", "Yobe", "Zamfara"
   ];
 
-
   const columns = 4; // Number of columns
   const statesPerColumn = Math.ceil(states.length / columns);
 
-  // Create columns for states
+
   for (let i = 0; i < columns; i++) {
     const column = document.createElement("div");
-    column.classList.add("state-column");
+    column.classList.add("col-md-3"); // Adjust this class based on your layout
+
+    const columnStates = states.slice(i * statesPerColumn, (i + 1) * statesPerColumn);
   
-
-
-     // Create input fields for each state
-  states.forEach(state => {
+  
+   // Create input fields for each state
+   columnStates.forEach(state => {
     const label = document.createElement("label");
     label.setAttribute("for", `deliveryPrice-${state.replace(/ /g, "-")}`);
     label.textContent = state;
@@ -431,10 +431,17 @@ function createInputFields() {
     inputGroup.appendChild(inputGroupPrepend);
     inputGroup.appendChild(inputField);
     inputGroup.appendChild(inputGroupAppend);
+    column.appendChild(inputGroup); 
 
     // Append the input field to the container
     deliveryPricesContainer.appendChild(inputGroup);
   });
+  deliveryPricesContainer.querySelector(".row").appendChild(column); // Append column to the row
+  
+  }
+  
+
+ 
 
   // Create the update button
   const updateButton = document.createElement("button");
@@ -446,12 +453,95 @@ function createInputFields() {
 
   // Append the update button to the container
   deliveryPricesContainer.appendChild(updateButton);
-  
-  
+}
+ */
+
+const deliveryPricesContainer = document.getElementById("deliveryPrices");
+
+// Function to create input fields for each state
+function createInputFields() {
+  const states = [
+    "Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", "Benue", "Borno",
+    "Cross River", "Delta", "Ebonyi", "Edo", "Ekiti", "Enugu", "Gombe", "Imo", "Jigawa",
+    "Kaduna", "Kano", "Katsina", "Kebbi", "Kogi", "Kwara", "Lagos", "Nasarawa", "Niger",
+    "Ogun", "Ondo", "Osun", "Oyo", "Plateau", "Rivers", "Sokoto", "Taraba", "Yobe", "Zamfara","Federal Capital Territory (FCT)"
+  ];
+
+  const columns = 4; // Number of columns
+  const statesPerColumn = Math.ceil(states.length / columns);
+
+  const row = document.createElement("div");
+  row.classList.add("row");
+
+  for (let i = 0; i < columns; i++) {
+    const column = document.createElement("div");
+    column.classList.add("col-md-3");
+
+    const columnStates = states.slice(i * statesPerColumn, (i + 1) * statesPerColumn);
+
+    columnStates.forEach((state, index) => {
+      const label = document.createElement("label");
+      label.setAttribute("for", `deliveryPrice-${state.replace(/ /g, "-")}`);
+      label.textContent = `${i * statesPerColumn + index + 1}. ${state}`;
+
+      const inputGroup = document.createElement("div");
+      inputGroup.classList.add("input-group", "mb-3");
+
+      const inputGroupPrepend = document.createElement("div");
+      inputGroupPrepend.classList.add("input-group-prepend");
+
+      const currencySpan = document.createElement("span");
+      currencySpan.classList.add("input-group-text", "primary-color", "text-white");
+      currencySpan.textContent = "₦";
+
+      inputGroupPrepend.appendChild(currencySpan);
+
+      const inputField = document.createElement("input");
+      inputField.setAttribute("type", "number");
+      inputField.setAttribute("class", "form-control");
+      inputField.setAttribute("aria-label", `Delivery Price for ${state} (in ₦)`);
+      inputField.setAttribute("placeholder", `Enter Delivery Price for ${state}`);
+      inputField.setAttribute("id", `deliveryPrice-${state.replace(/ /g, "-")}`);
+      inputField.required = true;
+
+
+     
+
+
+      const inputGroupAppend = document.createElement("div");
+      inputGroupAppend.classList.add("input-group-append");
+
+      const appendSpan = document.createElement("span");
+      appendSpan.classList.add("input-group-text");
+      appendSpan.textContent = ".00";
+
+      inputGroupAppend.appendChild(appendSpan);
+
+      inputGroup.appendChild(inputGroupPrepend);
+      inputGroup.appendChild(inputField);
+      inputGroup.appendChild(inputGroupAppend);
+
+      column.appendChild(label);
+      column.appendChild(inputGroup);
+
+      row.appendChild(column);
+    });
   }
 
- 
+  deliveryPricesContainer.appendChild(row);
+  // Create the update button
+  const updateButton = document.createElement("button");
+  updateButton.textContent = "Update Delivery Prices";
+  updateButton.setAttribute("id", "updateDeliveryPricesBtn");
+  updateButton.classList.add("btn", "btn-primary");
+  updateButton.addEventListener("click", updateDeliveryPrices);
+  getExistingDeliveryPrices();
+
+  // Append the update button to the container
+  deliveryPricesContainer.appendChild(updateButton);
+  // Create the update button (similar to the previous code)
 }
+
 
 // Function to update delivery prices
 function updateDeliveryPrices() {
@@ -473,13 +563,13 @@ function updateDeliveryPrices() {
 // Function to update delivery prices in Firestore
 async function updateDeliveryPricesFirestore(statePrices) {
   const deliveryPricesCollection = collection(database, "deliveryPrices");
- document.getElementById("updateDeliveryPricesBtn").textContent="Updating..."
+  document.getElementById("updateDeliveryPricesBtn").textContent = "Updating..."
 
   // Loop through statePrices object and update Firestore
   for (const state in statePrices) {
     try {
       const stateDocRef = doc(deliveryPricesCollection, state);
-      console.log("the price =====>"+statePrices[state] );
+      console.log("the price =====>" + statePrices[state]);
 
       // Update the Firestore database with statePrices[state]
       await setDoc(stateDocRef, {
@@ -488,19 +578,19 @@ async function updateDeliveryPricesFirestore(statePrices) {
       });
 
       console.log(`Delivery price for ${state} updated successfully!`);
-     
+
     } catch (error) {
       console.error(`Error updating delivery price for ${state}:`, error);
-      document.getElementById("updateDeliveryPricesBtn").textContent="Opps Failed please try again"
+      document.getElementById("updateDeliveryPricesBtn").textContent = "Opps Failed please try again"
       return;
     }
   }
-  document.getElementById("updateDeliveryPricesBtn").textContent="Done !!!"
+  document.getElementById("updateDeliveryPricesBtn").textContent = "Done !!!"
   setTimeout(() => {
     document.getElementById("updateDeliveryPricesBtn").textContent = "Update Delivery Prices";
   }, 2000); // You can adjust the delay as needed, here set to 0 for immediate execution
-  
-  
+
+
   console.log("All delivery prices updated successfully!");
 }
 
@@ -526,6 +616,10 @@ async function getExistingDeliveryPrices() {
     console.error("Error getting existing delivery prices:", error);
   }
 }
+
+
+
+
 
 
 
