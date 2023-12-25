@@ -681,7 +681,7 @@ function updatepromot(e) {
                     showSnackbar(`${promotTitle} promo updated successfully`, true);
                     setTimeout(() => {
                         location.reload();;
-                    }, 10000);
+                    }, 3000);
                     //  
                 })
                 .catch((error) => {
@@ -708,7 +708,7 @@ function updatepromot(e) {
                     showSnackbar(`${promotTitle} promo updated successfully`, true);
                     setTimeout(() => {
                         location.reload();;
-                    }, 10000);
+                    }, 3000);
                 })
                 .catch((error) => {
                     // Error occurred while updating the product
