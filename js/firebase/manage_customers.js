@@ -492,11 +492,12 @@ async function getCustomer(startDate,endDate) {
       document.getElementById("totalcustomerbirthday").innerHTML = countToday;
 
       if (countToday > 0) {
-        document.getElementById("sendBirthdayLink").style = "block";
-      }else{
-        document.getElementById("sendBirthdayLink").style = "none";
+        document.getElementById("sendBirthdayLink").style.display = "block";
+      } else {
+        document.getElementById("sendBirthdayLink").style.display = "none";
       }
-      console.log("=======>"+countToday);
+      
+     
       // Add click event listener to each row
       const rowsElements = document.querySelectorAll("#customerTable tr");
       rowsElements.forEach((row) => {
