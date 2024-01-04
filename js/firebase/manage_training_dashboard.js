@@ -52,7 +52,7 @@
   });
   const failureOkBtn = document.getElementById("failure-ok-btn");
   failureOkBtn.addEventListener("click", () => {
-    failureOkBtn.getElementById("failure-alert-modal").style.display = "none";
+    document.getElementById("failure-alert-modal").style.display = "none";
   });
   const confirmBtn = document.getElementById("yes-btn");
   const declineBtn = document.getElementById("no-btn");

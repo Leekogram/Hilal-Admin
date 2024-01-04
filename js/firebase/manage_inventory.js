@@ -12,7 +12,7 @@ import {
   query,
   onSnapshot,
   startAt,
-  endAt, where
+  endAt, where,updateDoc
 } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js";
 import {
   getStorage,
@@ -207,6 +207,7 @@ function addProduct(e) {
   var productPrice = getInputVal("productPrice");
   var productCat = getInputVal("productCat");
   var productQty = getInputVal("productQuantiy");
+  var productWeight = getInputVal("productWeight");
   var productDescription = getInputVal("productDescription");
   var isTopProduct = document.querySelector("input[type='radio'][name=topProductRadios]:checked").value;
 
@@ -239,6 +240,7 @@ function addProduct(e) {
             productPrice,
             productCat,
             productQty,
+            productWeight,
             productDescription,
             isTopProduct
           ),
@@ -256,7 +258,7 @@ successOkBtn.addEventListener("click", () => {
 });
 const failureOkBtn = document.getElementById("failure-ok-btn");
 failureOkBtn.addEventListener("click", () => {
-  failureOkBtn.getElementById("failure-alert-modal").style.display = "none";
+  document.getElementById("failure-alert-modal").style.display = "none";
 });
 
 
@@ -272,6 +274,7 @@ async function addProducts(
   productPrice,
   productCat,
   productQty,
+  productWeight,
   productDesc,
   isTopProduct
 ) {
@@ -282,6 +285,7 @@ async function addProducts(
     productPrice: productPrice,
     productCategory: productCat,
     productQty: productQty,
+    productWeight: productWeight,
     productDesc: productDesc,
     isTopProduct: isTopProduct,
     timestamp: serverTimestamp(),
@@ -327,7 +331,7 @@ async function addProducts(
 
 
 // Add an event listener to the form submit event
-/* const updateDeliveryFeeBtn = document.getElementById("updateDeliveryFeeBtn");
+ const updateDeliveryFeeBtn = document.getElementById("updateDeliveryFeeBtn");
 updateDeliveryFeeBtn.addEventListener("click", function (event) {
   event.preventDefault();
   document.getElementById("updateDeliveryFeeBtn").innerHTML="Updating..."; // Prevent the default form submission
@@ -339,7 +343,7 @@ function updateDeliveryPrice() {
 
   // Update the price in the Firebase database
   const deliveryFeeDocRef = doc(database, "deliveryFee", "deliveryprice");
-  updateDoc(deliveryFeeDocRef, {
+  setDoc(deliveryFeeDocRef, {
     price: deliveryPrice
   }) .then(() => {
     // Product updated successfully
@@ -364,7 +368,7 @@ function updateDeliveryPrice() {
 
 
  
-} */
+} 
 
 // Get the delivery prices container
 /* const deliveryPricesContainer = document.getElementById("deliveryPrices");
@@ -739,7 +743,7 @@ async function getNotifications() {
 }
 
 window.onload = function () {
-  createInputFields();
+ // createInputFields();
   getNotifications();
-  // getDeliveryPrice();
+ getDeliveryPrice();
 }

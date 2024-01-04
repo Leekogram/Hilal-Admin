@@ -200,7 +200,7 @@ successOkBtn.addEventListener("click", () => {
 });
 const failureOkBtn = document.getElementById("failure-ok-btn");
 failureOkBtn.addEventListener("click", () => {
-  failureOkBtn.getElementById("failure-alert-modal").style.display = "none";
+  document.getElementById("failure-alert-modal").style.display = "none";
 });
 
 const signOutBtn = document.getElementById("sign-out-btn");

@@ -79,6 +79,7 @@
             <td><img src="${data.productPicture}" class="image-zoom"  style="border-radius:5px;width:50px;heigth:120px"/></td>
             <td>${data.productName}</td>
             <td>${data.productPrice}</td>
+            <td>${data.productWeight} Kg</td>
             <td>${data.productQty}</td>
             <td><div class="section-des">${data.productDesc}</div> </td>
             <td><div class="section-des">${data.isTopProduct}</div> </td>
@@ -112,8 +113,8 @@
                 <h3 class="dropdown-header text-dark">Action</h3>
           
               
-<a class="dropdown-item update-action" data-docid="${doc.id}" data-productpic="${doc.data().productPicture}" data-productname="${doc.data().productName}" data-productcat="${doc.data().productCategory}" data-productprice="${doc.data().productPrice}" data-productdesc="${doc.data().productDesc}" data-topproduct="${doc.data().isTopProduct}" data-productqty="${doc.data().productQty}")">Edit</a>
-<a class="dropdown-item delete-action " data-docid="${doc.id}" data-productpic="${doc.data().productPicture}" data-productname="${doc.data().productName}" data-productcat="${doc.data().productCategory}" data-productprice="${doc.data().productPrice}" data-productdesc="${doc.data().productDesc}" data-topproduct="${doc.data().isTopProduct}" data-productqty="${doc.data().productQty}")">Delete</a>
+<a class="dropdown-item update-action" data-docid="${doc.id}" data-productpic="${doc.data().productPicture}" data-productname="${doc.data().productName}" data-productcat="${doc.data().productCategory}" data-productprice="${doc.data().productPrice}" data-productdesc="${doc.data().productDesc}" data-topproduct="${doc.data().isTopProduct}" data-productweight="${doc.data().productWeight}" data-productqty="${doc.data().productQty}")">Edit</a>
+<a class="dropdown-item delete-action " data-docid="${doc.id}" data-productpic="${doc.data().productPicture}" data-productname="${doc.data().productName}" data-productcat="${doc.data().productCategory}" data-productprice="${doc.data().productPrice}" data-productdesc="${doc.data().productDesc}" data-topproduct="${doc.data().isTopProduct}"  data-productweight="${doc.data().productWeight}" data-productqty="${doc.data().productQty}")">Delete</a>
 
                
             
@@ -136,6 +137,7 @@
             const productCat = event.target.dataset.productcat;
             const productPrice = event.target.dataset.productprice;
             const productQuantity = event.target.dataset.productqty;
+            const productWeight = event.target.dataset.productweight;
             const productDescription = event.target.dataset.productdesc;
             const isTopProduct = event.target.dataset.topproduct;
 
@@ -145,7 +147,7 @@
 
             confirmBtn.addEventListener("click", () => {
               confirmationModal.style.display = "none";
-              openModal(docId, productPicture, productTitle, productCat, productPrice, productQuantity, productDescription,isTopProduct);
+              openModal(docId, productPicture, productTitle, productCat, productPrice, productQuantity,productWeight, productDescription,isTopProduct);
             });
           
             
@@ -198,13 +200,14 @@
 
 
   // Add the openModal and closeModal functions
-  function openModal(docId, productImage, productTitle, productCat, productPrice, productQuantity, productDescription,topProduct) {
+  function openModal(docId, productImage, productTitle, productCat, productPrice, productQuantity,productWeight, productDescription,topProduct) {
 
     // Populate the modal with the data
     document.getElementById("productTitle").value = productTitle;
     document.getElementById("productCat").value = productCat;
     document.getElementById("productPrice").value = productPrice;
     document.getElementById("productQuantiy").value = productQuantity;
+    document.getElementById("productWeight").value = productWeight;
     document.getElementById("productDescription").value = productDescription;
     document.getElementById("documentId").value = docId;
     document.getElementById("imagePreview").setAttribute("src", productImage);
@@ -261,6 +264,7 @@
     var productPrice = getInputVal("productPrice");
     var productCat = getInputVal("productCat");
     var productQty = getInputVal("productQuantiy");
+    var productWeight = getInputVal("productWeight");
     var productDescription = getInputVal("productDescription");
     var documentId = getInputVal("documentId");
     var isTopProduct = document.querySelector("input[type='radio'][name=topProductRadios]:checked").value;
@@ -280,7 +284,7 @@
           // Update image fields and other corresponding fields
           if (oldImageDeleted) {
             // Old image deleted successfully
-            updateProducts(documentId, downloadURL, productTitle, productPrice, productCat, productQty, productDescription,isTopProduct);
+            updateProducts(documentId, downloadURL, productTitle, productPrice, productCat, productQty,productWeight, productDescription,isTopProduct);
           } else {
             // Failed to delete old image
             console.error("Failed to delete old image");
@@ -295,7 +299,7 @@
         });
     } else {
       // No new image selected, update other fields only
-      updateProducts(documentId, null, productTitle, productPrice, productCat, productQty, productDescription,isTopProduct);
+      updateProducts(documentId, null, productTitle, productPrice, productCat, productQty,productWeight, productDescription,isTopProduct);
     }
   }
 
@@ -305,11 +309,11 @@
   });
   const failureOkBtn = document.getElementById("failure-ok-btn");
   failureOkBtn.addEventListener("click", () => {
-    failureOkBtn.getElementById("failure-alert-modal").style.display = "none";
+    document.getElementById("failure-alert-modal").style.display = "none";
   });
 
 
-  function updateProducts(documentId, downloadURL, productTitle, productPrice, productCat, productQty, productDescription,isTopProd) {
+  function updateProducts(documentId, downloadURL, productTitle, productPrice, productCat, productQty,productWeight, productDescription,isTopProd) {
 
 
 
@@ -323,6 +327,7 @@
         productPrice: productPrice,
         productCategory: productCat,
         productQty: productQty,
+        productWeight:productWeight,
         productDesc: productDescription,
         isTopProduct: isTopProd
       })
@@ -361,6 +366,7 @@
         productPrice: productPrice,
         productCategory: productCat,
         productQty: productQty,
+        productWeight:productWeight,
         productDesc: productDescription,
         isTopProduct: isTopProd
       })
